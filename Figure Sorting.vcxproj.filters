@@ -282,8 +282,44 @@
     <Text Include="App\example\LICENSE.txt">
       <Filter>Resource Files\example</Filter>
     </Text>
-    <Text Include="Intermediate\Figure Sorting\Debug\Intermediate\Figure Sorting.log" />
-    <Text Include="Intermediate\Figure Sorting\Release\Intermediate\Figure Sorting.log" />
+    <Text Include="App\example\midi\test.mid" />
+    <Text Include="App\example\obj\blacksmith.mtl" />
+    <Text Include="App\example\obj\crystal1.mtl" />
+    <Text Include="App\example\obj\crystal2.mtl" />
+    <Text Include="App\example\obj\crystal3.mtl" />
+    <Text Include="App\example\obj\mill.mtl" />
+    <Text Include="App\example\obj\pine.mtl" />
+    <Text Include="App\example\obj\siv3d-kun.mtl" />
+    <Text Include="App\example\obj\tree.mtl" />
+    <Text Include="App\example\script\breakout.as" />
+    <Text Include="App\example\script\hello.as" />
+    <Text Include="App\example\script\paint.as" />
+    <Text Include="App\example\script\piano.as" />
+    <Text Include="App\example\script\test.as" />
+    <Text Include="App\example\shader\glsl\default2d.vert" />
+    <Text Include="App\example\shader\glsl\default2d_shape.frag" />
+    <Text Include="App\example\shader\glsl\default2d_texture.frag" />
+    <Text Include="App\example\shader\glsl\default3d_forward.frag" />
+    <Text Include="App\example\shader\glsl\default3d_forward.vert" />
+    <Text Include="App\example\shader\glsl\default3d_forward_shadow_depth.frag" />
+    <Text Include="App\example\shader\glsl\default3d_forward_shadow_shading.frag" />
+    <Text Include="App\example\shader\glsl\extract_bright_linear.frag" />
+    <Text Include="App\example\shader\glsl\multi_texture_blend.frag" />
+    <Text Include="App\example\shader\glsl\multi_texture_mask.frag" />
+    <Text Include="App\example\shader\glsl\poisson_disk.frag" />
+    <Text Include="App\example\shader\glsl\posterize.frag" />
+    <Text Include="App\example\shader\glsl\rgb_shift.frag" />
+    <Text Include="App\example\shader\glsl\rgb_to_bgr.frag" />
+    <Text Include="App\example\shader\glsl\soft_shape.frag" />
+    <Text Include="App\example\shader\glsl\swirl.frag" />
+    <Text Include="App\example\shader\glsl\terrain_forward.frag" />
+    <Text Include="App\example\shader\glsl\terrain_forward.vert" />
+    <Text Include="App\example\shader\glsl\terrain_normal.frag" />
+    <Text Include="App\example\svg\cat.svg" />
+    <Text Include="App\example\svg\turtle.svg" />
+    <Text Include="App\example\toml\config.toml" />
+    <Text Include="App\example\toml\test.toml" />
+    <Text Include="App\example\zip\zip_test.zip" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App\dll\soundtouch\SoundTouch_x64.dll">
@@ -478,12 +514,6 @@
     <None Include="App\engine\shader\glsl\forward3d.vert">
       <Filter>Resource Files\engine\shader\glsl</Filter>
     </None>
-    <None Include="App\engine\shader\glsl\fullscreen_triangle.frag">
-      <Filter>Resource Files\engine\shader\glsl</Filter>
-    </None>
-    <None Include="App\engine\shader\glsl\fullscreen_triangle.vert">
-      <Filter>Resource Files\engine\shader\glsl</Filter>
-    </None>
     <None Include="App\engine\shader\glsl\gaussian_blur_9.frag">
       <Filter>Resource Files\engine\shader\glsl</Filter>
     </None>
@@ -529,40 +559,7 @@
     <None Include="App\example\midi\test.mid">
       <Filter>Resource Files\example\midi</Filter>
     </None>
-    <None Include="App\example\svg\cat.svg">
-      <Filter>Resource Files\example\svg</Filter>
-    </None>
-    <None Include="App\example\svg\turtle.svg">
-      <Filter>Resource Files\example\svg</Filter>
-    </None>
-    <None Include="App\example\zip\zip_test.zip">
-      <Filter>Resource Files\example\zip</Filter>
-    </None>
     <None Include=".editorconfig" />
-    <None Include="App\example\obj\blacksmith.mtl">
-      <Filter>Resource Files\example\obj</Filter>
-    </None>
-    <None Include="App\example\obj\crystal1.mtl">
-      <Filter>Resource Files\example\obj</Filter>
-    </None>
-    <None Include="App\example\obj\crystal2.mtl">
-      <Filter>Resource Files\example\obj</Filter>
-    </None>
-    <None Include="App\example\obj\crystal3.mtl">
-      <Filter>Resource Files\example\obj</Filter>
-    </None>
-    <None Include="App\example\obj\mill.mtl">
-      <Filter>Resource Files\example\obj</Filter>
-    </None>
-    <None Include="App\example\obj\pine.mtl">
-      <Filter>Resource Files\example\obj</Filter>
-    </None>
-    <None Include="App\example\obj\siv3d-kun.mtl">
-      <Filter>Resource Files\example\obj</Filter>
-    </None>
-    <None Include="App\example\obj\tree.mtl">
-      <Filter>Resource Files\example\obj</Filter>
-    </None>
     <None Include="App\example\obj\blacksmith.obj">
       <Filter>Resource Files\example\obj</Filter>
     </None>
@@ -592,90 +589,6 @@
     </None>
     <None Include="App\example\ini\config.ini">
       <Filter>Resource Files\example\ini</Filter>
-    </None>
-    <None Include="App\example\script\paint.as">
-      <Filter>Resource Files\example\script</Filter>
-    </None>
-    <None Include="App\example\script\piano.as">
-      <Filter>Resource Files\example\script</Filter>
-    </None>
-    <None Include="App\example\script\test.as">
-      <Filter>Resource Files\example\script</Filter>
-    </None>
-    <None Include="App\example\script\breakout.as">
-      <Filter>Resource Files\example\script</Filter>
-    </None>
-    <None Include="App\example\script\hello.as">
-      <Filter>Resource Files\example\script</Filter>
-    </None>
-    <None Include="App\example\shader\glsl\game_of_life.frag">
-      <Filter>Resource Files\example\shader\glsl</Filter>
-    </None>
-    <None Include="App\example\shader\glsl\grayscale.frag">
-      <Filter>Resource Files\example\shader\glsl</Filter>
-    </None>
-    <None Include="App\example\shader\glsl\homography.frag">
-      <Filter>Resource Files\example\shader\glsl</Filter>
-    </None>
-    <None Include="App\example\shader\glsl\homography.vert">
-      <Filter>Resource Files\example\shader\glsl</Filter>
-    </None>
-    <None Include="App\example\shader\glsl\multi_texture_blend.frag">
-      <Filter>Resource Files\example\shader\glsl</Filter>
-    </None>
-    <None Include="App\example\shader\glsl\multi_texture_mask.frag">
-      <Filter>Resource Files\example\shader\glsl</Filter>
-    </None>
-    <None Include="App\example\shader\glsl\poisson_disk.frag">
-      <Filter>Resource Files\example\shader\glsl</Filter>
-    </None>
-    <None Include="App\example\shader\glsl\posterize.frag">
-      <Filter>Resource Files\example\shader\glsl</Filter>
-    </None>
-    <None Include="App\example\shader\glsl\rgb_shift.frag">
-      <Filter>Resource Files\example\shader\glsl</Filter>
-    </None>
-    <None Include="App\example\shader\glsl\rgb_to_bgr.frag">
-      <Filter>Resource Files\example\shader\glsl</Filter>
-    </None>
-    <None Include="App\example\shader\glsl\soft_shape.vert">
-      <Filter>Resource Files\example\shader\glsl</Filter>
-    </None>
-    <None Include="App\example\shader\glsl\swirl.frag">
-      <Filter>Resource Files\example\shader\glsl</Filter>
-    </None>
-    <None Include="App\example\shader\glsl\terrain_forward.frag">
-      <Filter>Resource Files\example\shader\glsl</Filter>
-    </None>
-    <None Include="App\example\shader\glsl\terrain_forward.vert">
-      <Filter>Resource Files\example\shader\glsl</Filter>
-    </None>
-    <None Include="App\example\shader\glsl\terrain_normal.frag">
-      <Filter>Resource Files\example\shader\glsl</Filter>
-    </None>
-    <None Include="App\example\shader\glsl\default2d.vert">
-      <Filter>Resource Files\example\shader\glsl</Filter>
-    </None>
-    <None Include="App\example\shader\glsl\default2d_shape.frag">
-      <Filter>Resource Files\example\shader\glsl</Filter>
-    </None>
-    <None Include="App\example\shader\glsl\default2d_texture.frag">
-      <Filter>Resource Files\example\shader\glsl</Filter>
-    </None>
-    <None Include="App\example\shader\glsl\default3d_forward.frag">
-      <Filter>Resource Files\example\shader\glsl</Filter>
-    </None>
-    <None Include="App\example\shader\glsl\default3d_forward.vert">
-      <Filter>Resource Files\example\shader\glsl</Filter>
-    </None>
-    <None Include="App\example\shader\glsl\extract_bright_linear.frag">
-      <Filter>Resource Files\example\shader\glsl</Filter>
-    </None>
-    <None Include="App\example\shader\glsl\forward_fog.frag">
-      <Filter>Resource Files\example\shader\glsl</Filter>
-    </None>
-    <None Include="App\example\shader\glsl\forward_triplanar.frag">
-      <Filter>Resource Files\example\shader\glsl</Filter>
     </None>
     <None Include="App\example\shader\hlsl\default2d.hlsl">
       <Filter>Resource Files\example\shader\hlsl</Filter>
@@ -731,23 +644,11 @@
     <None Include="App\example\shader\hlsl\terrain_normal.hlsl">
       <Filter>Resource Files\example\shader\hlsl</Filter>
     </None>
-    <None Include="App\example\toml\config.toml">
-      <Filter>Resource Files\example\toml</Filter>
-    </None>
-    <None Include="App\example\toml\test.toml">
-      <Filter>Resource Files\example\toml</Filter>
-    </None>
     <None Include="App\engine\font\min\LICENSE">
       <Filter>Resource Files\engine\font\min</Filter>
     </None>
     <None Include="App\engine\font\min\siv3d-min.woff">
       <Filter>Resource Files\engine\font\min</Filter>
-    </None>
-    <None Include="App\example\shader\glsl\default3d_forward_shadow_depth.frag">
-      <Filter>Resource Files\example\shader\glsl</Filter>
-    </None>
-    <None Include="App\example\shader\glsl\default3d_forward_shadow_shading.frag">
-      <Filter>Resource Files\example\shader\glsl</Filter>
     </None>
     <None Include="App\example\shader\hlsl\default3d_forward_shadow.hlsl">
       <Filter>Resource Files\example\shader\hlsl</Filter>
@@ -777,18 +678,14 @@
       <Filter>Resource Files\engine\shader\glsl</Filter>
     </None>
     <None Include=".gitignore" />
-    <None Include="App\Figure Sorting(debug).exe" />
-    <None Include="App\Figure Sorting.exe" />
-    <None Include="Intermediate\Figure Sorting\Debug\Intermediate\Figure Sorting(debug).exe.recipe" />
-    <None Include="Intermediate\Figure Sorting\Debug\Intermediate\Figure Sorting(debug).ilk" />
-    <None Include="Intermediate\Figure Sorting\Debug\Intermediate\vc143.idb" />
-    <None Include="Intermediate\Figure Sorting\Debug\Intermediate\vc143.pdb" />
-    <None Include="Intermediate\Figure Sorting\Release\Intermediate\Figure Sorting.exe.recipe" />
-    <None Include="Intermediate\Figure Sorting\Release\Intermediate\Figure Sorting.iobj" />
-    <None Include="Intermediate\Figure Sorting\Release\Intermediate\Figure Sorting.ipdb" />
-    <None Include="Intermediate\Figure Sorting\Release\Intermediate\Figure Sorting.pch" />
-    <None Include="Intermediate\Figure Sorting\Release\Intermediate\vc143.pdb" />
-    <None Include="Intermediate\Figure Sorting\Debug\Intermediate\Figure Sorting(debug).pch" />
+    <None Include="App\example\obj\blacksmith.obj" />
+    <None Include="App\example\obj\crystal1.obj" />
+    <None Include="App\example\obj\crystal2.obj" />
+    <None Include="App\example\obj\crystal3.obj" />
+    <None Include="App\example\obj\mill.obj" />
+    <None Include="App\example\obj\pine.obj" />
+    <None Include="App\example\obj\siv3d-kun.obj" />
+    <None Include="App\example\obj\tree.obj" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="App\example\test.mp3">
@@ -842,21 +739,5 @@
     <ClInclude Include="App\stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="Intermediate\Figure Sorting\Debug\Intermediate\Color.obj" />
-    <Object Include="Intermediate\Figure Sorting\Debug\Intermediate\Common.obj" />
-    <Object Include="Intermediate\Figure Sorting\Debug\Intermediate\Function.obj" />
-    <Object Include="Intermediate\Figure Sorting\Debug\Intermediate\Katati.obj" />
-    <Object Include="Intermediate\Figure Sorting\Debug\Intermediate\stdafx.obj" />
-    <Object Include="Intermediate\Figure Sorting\Release\Intermediate\Color.obj" />
-    <Object Include="Intermediate\Figure Sorting\Release\Intermediate\Common.obj" />
-    <Object Include="Intermediate\Figure Sorting\Release\Intermediate\Function.obj" />
-    <Object Include="Intermediate\Figure Sorting\Release\Intermediate\Main.obj" />
-    <Object Include="Intermediate\Figure Sorting\Release\Intermediate\stdafx.obj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Intermediate\Figure Sorting\Debug\Intermediate\Resource.res" />
-    <Resource Include="Intermediate\Figure Sorting\Release\Intermediate\Resource.res" />
   </ItemGroup>
 </Project>
