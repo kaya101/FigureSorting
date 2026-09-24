@@ -117,13 +117,13 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="App\Main.cpp" />
+    <ClCompile Include="App\src\Main.cpp" />
     <!-- stdafx.cpp を PCH 作成に設定 -->
-    <ClCompile Include="App\stdafx.cpp">
+    <ClCompile Include="App\src\stdafx.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="App\Common.cpp" />
-    <ClCompile Include="App\GameScene.cpp" />
+    <ClCompile Include="App\src\Common.cpp" />
+    <ClCompile Include="App\src\GameScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\engine\texture\box-shadow\128.png" />
@@ -404,9 +404,9 @@
     <Xml Include="App\example\xml\test.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="App\stdafx.h" />
-    <ClInclude Include="App\Common.h" />
-    <ClInclude Include="App\GameScene.h" />
+    <ClInclude Include="App\src\stdafx.h" />
+    <ClInclude Include="App\src\Common.h" />
+    <ClInclude Include="App\src\GameScene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App\example\obj\blacksmith.obj">

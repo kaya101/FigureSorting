@@ -138,16 +138,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="App\Common.cpp">
+    <ClCompile Include="App\src\Common.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="App\stdafx.cpp">
+    <ClCompile Include="App\src\stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="App\Main.cpp">
+    <ClCompile Include="App\src\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="App\GameScene.cpp">
+    <ClCompile Include="App\src\GameScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -732,13 +732,13 @@
     </Xml>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="App\Common.h">
+    <ClInclude Include="App\src\Common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="App\stdafx.h">
+    <ClInclude Include="App\src\stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="App\GameScene.h">
+    <ClInclude Include="App\src\GameScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
