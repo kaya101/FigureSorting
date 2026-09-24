@@ -1,6 +1,5 @@
 ﻿#include "stdafx.h"
 #include "GameScene.h"
-#include "Utils/Function.h"
 
 /*	Start Title Scene	********************************************************************************************************/
 

@@ -122,9 +122,7 @@
     <ClCompile Include="App\stdafx.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="App\Utils\Color.cpp" />
-    <ClCompile Include="App\Utils\Common.cpp" />
-    <ClCompile Include="App\Utils\Function.cpp" />
+    <ClCompile Include="App\Common.cpp" />
     <ClCompile Include="App\GameScene.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -407,9 +405,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App\stdafx.h" />
-    <ClInclude Include="App\Utils\Color.h" />
-    <ClInclude Include="App\Utils\Common.h" />
-    <ClInclude Include="App\Utils\Function.h" />
+    <ClInclude Include="App\Common.h" />
     <ClInclude Include="App\GameScene.h" />
   </ItemGroup>
   <ItemGroup>

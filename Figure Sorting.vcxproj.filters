@@ -138,13 +138,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="App\Utils\Common.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="App\Utils\Color.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="App\Utils\Function.cpp">
+    <ClCompile Include="App\Common.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="App\stdafx.cpp">
@@ -689,6 +683,14 @@
     <None Include="App\example\obj\pine.obj" />
     <None Include="App\example\obj\siv3d-kun.obj" />
     <None Include="App\example\obj\tree.obj" />
+    <None Include="App\example\obj\blacksmith.obj" />
+    <None Include="App\example\obj\crystal1.obj" />
+    <None Include="App\example\obj\crystal2.obj" />
+    <None Include="App\example\obj\crystal3.obj" />
+    <None Include="App\example\obj\mill.obj" />
+    <None Include="App\example\obj\pine.obj" />
+    <None Include="App\example\obj\siv3d-kun.obj" />
+    <None Include="App\example\obj\tree.obj" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="App\example\test.mp3">
@@ -730,13 +732,7 @@
     </Xml>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="App\Utils\Common.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="App\Utils\Color.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="App\Utils\Function.h">
+    <ClInclude Include="App\Common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="App\stdafx.h">
