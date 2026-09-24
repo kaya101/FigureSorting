@@ -125,6 +125,7 @@
     <ClCompile Include="App\Utils\Color.cpp" />
     <ClCompile Include="App\Utils\Common.cpp" />
     <ClCompile Include="App\Utils\Function.cpp" />
+    <ClCompile Include="App\GameScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\engine\texture\box-shadow\128.png" />
@@ -409,6 +410,7 @@
     <ClInclude Include="App\Utils\Color.h" />
     <ClInclude Include="App\Utils\Common.h" />
     <ClInclude Include="App\Utils\Function.h" />
+    <ClInclude Include="App\GameScene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App\example\obj\blacksmith.obj">
