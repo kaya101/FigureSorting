@@ -1,7 +1,28 @@
 ﻿#pragma once
 #include "Common.h"
+#include "Button.h"
 
-class Title : public App::Scene
+class GameScene
+{
+public:
+
+protected:
+	Array<std::unique_ptr<ButtonBase>> m_buttonPtrs;
+
+	std::unique_ptr<ButtonBase> makeButton(const ButtonCtx& ctx)
+	{
+		return std::make_unique<ButtonRect>(ctx);
+	}
+
+	std::unique_ptr<ButtonBase> makeButton(const ButtonCtx& ctx, const Vec2& from, const SecondsF delay, const std::function<double(double)> easing)
+	{
+		return std::make_unique<ButtonRectMove>(ctx, from, delay, easing);
+	}
+};
+
+class Title
+	: public App::Scene
+	, public GameScene
 {
 public:
 	explicit Title(const InitData& init);
@@ -18,10 +39,11 @@ public:
 
 private:
 	const String m_TitleName = U"仕分けゲーム";
-	const Font text{ FontMethod::SDF, 30, Typeface::Bold };
 };
 
-class Stage : public App::Scene
+class Stage
+	: public App::Scene
+	, public GameScene
 {
 public:
 	explicit Stage(const InitData& init);
@@ -38,7 +60,6 @@ public:
 
 private:
 	const String m_StageName = U"ステージ選択";
-	const Font text{ FontMethod::SDF, 30, Typeface::Bold };
 
 	const Circle m_sampleCircle = { stage01textback.x + stage01textback.w / 2, stage01textback.y - stage01textback.w / 4 - 10 , stage01textback.w / 4 };
 
@@ -51,7 +72,9 @@ private:
 	String m_explainSkipMark = U"";	// 説明スキップマーク.
 };
 
-class LetsPlay : public App::Scene
+class LetsPlay
+	: public App::Scene
+	, public GameScene
 {
 public:
 	// 正誤判定.
@@ -107,7 +130,9 @@ private:
 	int16 m_distance_y = 0;
 };
 
-class Result : public App::Scene
+class Result
+	: public App::Scene
+	, public GameScene
 {
 public:
 	explicit Result(const InitData& init);
@@ -123,12 +148,5 @@ public:
 	void drawFadeOut(double t) const override;
 
 private:
-	const Font text{ FontMethod::SDF, 30, Typeface::Bold };
-
 	Stopwatch m_resultwindow{ StartImmediately::Yes };
-
-	// 結果発表で遅れて文字が出てくるやつ.
-	Stopwatch m_resulttext01{ StartImmediately::No };
-	Stopwatch m_resulttext02{ StartImmediately::No };
-	Stopwatch m_resulttext03{ StartImmediately::No };
 };

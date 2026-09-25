@@ -124,6 +124,7 @@
     </ClCompile>
     <ClCompile Include="App\src\Common.cpp" />
     <ClCompile Include="App\src\GameScene.cpp" />
+    <ClCompile Include="App\src\Button.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\engine\texture\box-shadow\128.png" />
@@ -407,6 +408,7 @@
     <ClInclude Include="App\src\stdafx.h" />
     <ClInclude Include="App\src\Common.h" />
     <ClInclude Include="App\src\GameScene.h" />
+    <ClInclude Include="App\src\Button.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App\example\obj\blacksmith.obj">

@@ -1,5 +1,8 @@
 ﻿#pragma once
 
+static const String FontTitle = U"TitleFont";
+static const String FontButton = U"FontButton";
+
 // 背景の白.
 constexpr ColorF bg_shiro{ U"#fef4f4" };
 
@@ -562,33 +565,33 @@ static double easeOutQuad(double t) {
 
 
 //ボタン.
-static bool button(const RectF& rectf, const ColorF& colorf, const Font& font, const String& text, const ColorF& textcolor, const uint8& size, const ColorF& framecolor, const bool& enabled, const bool& notover) {
-
-	rectf.drawFrame(haba, framecolor);
-	if (enabled) {
-		if (not notover && rectf.mouseOver()) {
-			Cursor::RequestStyle(CursorStyle::Hand);
-			if (MouseL.pressed()) {
-				rectf.draw(colorf * 0.7 * 0.7);
-				font(text).drawAt(size, (rectf.x + rectf.w / 2), (rectf.y + rectf.h / 2), textcolor);
-			}
-			else {
-				rectf.draw(colorf * 0.7);
-				font(text).drawAt(size, (rectf.x + rectf.w / 2), (rectf.y + rectf.h / 2), textcolor);
-			}
-		}
-		else {
-			rectf.draw(colorf);
-			font(text).drawAt(size, (rectf.x + rectf.w / 2), (rectf.y + rectf.h / 2), textcolor);
-		}
-	}
-	else {
-		rectf.draw(haiiro);
-		font(text).drawAt(size, (rectf.x + rectf.w / 2), (rectf.y + rectf.h / 2), textcolor * 0.8);
-	}
-
-	return enabled && not notover && rectf.mouseOver() && MouseL.up();
-}
+//static bool button(const RectF& rectf, const ColorF& colorf, const Font& font, const String& text, const ColorF& textcolor, const uint8& size, const ColorF& framecolor, const bool& enabled, const bool& notover) {
+//
+//	rectf.drawFrame(haba, framecolor);
+//	if (enabled) {
+//		if (not notover && rectf.mouseOver()) {
+//			Cursor::RequestStyle(CursorStyle::Hand);
+//			if (MouseL.pressed()) {
+//				rectf.draw(colorf * 0.7 * 0.7);
+//				font(text).drawAt(size, (rectf.x + rectf.w / 2), (rectf.y + rectf.h / 2), textcolor);
+//			}
+//			else {
+//				rectf.draw(colorf * 0.7);
+//				font(text).drawAt(size, (rectf.x + rectf.w / 2), (rectf.y + rectf.h / 2), textcolor);
+//			}
+//		}
+//		else {
+//			rectf.draw(colorf);
+//			font(text).drawAt(size, (rectf.x + rectf.w / 2), (rectf.y + rectf.h / 2), textcolor);
+//		}
+//	}
+//	else {
+//		rectf.draw(haiiro);
+//		font(text).drawAt(size, (rectf.x + rectf.w / 2), (rectf.y + rectf.h / 2), textcolor * 0.8);
+//	}
+//
+//	return enabled && not notover && rectf.mouseOver() && MouseL.up();
+//}
 
 //左上頂点表示を変換して利用するタイプ.
 //四角の中心座標( x, y )を求める関数.
