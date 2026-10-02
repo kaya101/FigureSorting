@@ -57,11 +57,11 @@ enum class SceneSwitch
 };
 
 // 色が見にくいかどうか.
-enum class ColorSwitch
-{
-	Saisyo,			// デフォルト.
-	ColorChange,	// 見づらい.
-};
+//enum class ColorSwitch
+//{
+//	Saisyo,			// デフォルト.
+//	ColorChange,	// 見づらい.
+//};
 
 // 説明をスキップするかどうか.
 enum class ExplainSkip
@@ -143,7 +143,9 @@ public:
 	void resetComboNum() { m_comboNum = 0; }
 
 	void setCurrentScene(const SceneSwitch& scene) { m_currentScene = scene; }
-	void setColorMode(const ColorSwitch& scene) { m_currentColorMode = scene; }
+
+	void switchChangedColor() { m_isChangedColor = !m_isChangedColor; }
+
 	void setExplainSkip(const ExplainSkip& skip) { m_currentExplainSkip = skip; }
 	void setPauseSwitch(const PauseSwitch& pause) { m_currentPause = pause; }
 	void setCountSwitch(const CountSwitch& skip) { m_currentCount = skip; }
@@ -165,7 +167,7 @@ public:
 	void setTexts(const Array<String>& texts) { m_texts = texts; }
 
 	const SceneSwitch currentScene() const { return m_currentScene; }
-	const ColorSwitch currentColorMode() const { return m_currentColorMode; }
+	const bool isChangedColor() const { return m_isChangedColor; }
 	const ExplainSkip currentExplainSkip() const { return m_currentExplainSkip; }
 	const PauseSwitch currentPauseSwitch() const { return m_currentPause; }
 	const CountSwitch currentCountSwitch() const { return m_currentCount; }
@@ -194,7 +196,7 @@ public:
 private:
 	SceneSwitch m_currentScene = SceneSwitch::Title;
 
-	ColorSwitch m_currentColorMode = ColorSwitch::Saisyo;
+	bool m_isChangedColor = false;	// 色が見にくいかどうか.
 
 	ExplainSkip m_currentExplainSkip = ExplainSkip::Saisyo;
 

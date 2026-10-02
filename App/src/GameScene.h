@@ -5,6 +5,7 @@
 class GameScene
 {
 public:
+	void virtual drawUI() const = 0;
 
 protected:
 	Array<std::unique_ptr<ButtonBase>> m_buttonPtrs;
@@ -37,6 +38,8 @@ public:
 
 	void drawFadeOut(double t) const override;
 
+	void drawUI() const override;
+
 private:
 	const String m_TitleName = U"仕分けゲーム";
 };
@@ -57,6 +60,8 @@ public:
 	void drawFadeIn(double t) const override;
 
 	void drawFadeOut(double t) const override;
+
+	void drawUI() const override;
 
 private:
 	const String m_StageName = U"ステージ選択";
@@ -96,6 +101,8 @@ public:
 	void drawFadeIn(double t) const override;
 
 	void drawFadeOut(double t) const override;
+
+	void drawUI() const override;
 
 private:
 	const Font text{ FontMethod::SDF, 30, Typeface::Bold };
@@ -146,6 +153,8 @@ public:
 	void drawFadeIn(double t) const override;
 
 	void drawFadeOut(double t) const override;
+
+	void drawUI() const override;
 
 private:
 	Stopwatch m_resultwindow{ StartImmediately::Yes };

@@ -10,24 +10,26 @@ Title::Title(const InitData& init)
 
 	Scene::SetBackground(bg_shiro);
 
-	m_buttonPtrs.push_back(makeButton(
-		ButtonCtx(hajimeru.center(), hajimeru.size, botan * 1.4, U"はじめる", FontButton,
-			[&]()
+	auto ptr = makeButton(ButtonCtx(hajimeru.center(), hajimeru.size, botan * 1.4, U"はじめる", FontButton));
+	ptr->setWorkCallBack([&]()
 			{
 				getData().setCurrentScene(SceneSwitch::Stage);
 				changeScene(SceneSwitch::Stage, 0.0);
-			}
-		)
-	));
+			});
+	m_buttonPtrs.push_back(std::move(ptr));
 
-	m_buttonPtrs.push_back(makeButton(
-		ButtonCtx(yameru.center(), yameru.size, botan * 1.4, U"やめる", FontButton,
-			[&]()
+	ptr = makeButton(ButtonCtx(yameru.center(), yameru.size, botan * 1.4, U"やめる", FontButton));
+	ptr->setWorkCallBack([&]()
 			{
 				System::Exit();
-			}
-		)
-	));
+			});
+	m_buttonPtrs.push_back(std::move(ptr));
+
+	for (auto& it : m_buttonPtrs)
+	{
+		it->turnOnDraw();
+		it->turnOnPerform();
+	}
 }
 
 void Title::update()
@@ -42,12 +44,7 @@ void Title::update()
 
 void Title::draw() const
 {
-	FontAsset(FontTitle)(m_TitleName).drawAt(400, 100, ColorF{ 0.2 });
-
-	for (const auto& it : m_buttonPtrs)
-	{
-		if (it != nullptr) it->draw();
-	}
+	drawUI();
 }
 
 void Title::drawFadeIn(double t) const
@@ -56,6 +53,18 @@ void Title::drawFadeIn(double t) const
 
 void Title::drawFadeOut(double t) const
 {
+}
+
+void Title::drawUI() const
+{
+	FontAsset(FontTitle)(m_TitleName).drawAt(400, 100, ColorF{ 0.2 });
+
+	for (const auto& it : m_buttonPtrs)
+	{
+		if (it == nullptr) continue;
+
+		if (it->isDrawing()) it->draw();
+	}
 }
 
 /*	End Title Scene		********************************************************************************************************/
@@ -67,9 +76,8 @@ Stage::Stage(const InitData& init)
 {
 	Scene::SetBackground(bg_shiro);
 
-	m_buttonPtrs.push_back(makeButton(
-		ButtonCtx(stage01botan.center(), stage01botan.size, botan * 1.4, U"これ!!", FontButton,
-			[&]()
+	auto ptr = makeButton(ButtonCtx(stage01botan.center(), stage01botan.size, botan * 1.4, U"これ!!", FontButton));
+	ptr->setWorkCallBack([&]()
 			{
 				// ここのステージで使える素材の受け取り.
 				if (getData().colorChange())
@@ -87,13 +95,11 @@ Stage::Stage(const InitData& init)
 				getData().setScoreSwitch(ScoreSwitch::ShapeRule);
 				getData().setCurrentScene(SceneSwitch::Letsplay);
 				changeScene(SceneSwitch::Letsplay, 0.0);
-			}
-		)
-	));
-	
-	m_buttonPtrs.push_back(makeButton(
-		ButtonCtx(stage02botan.center(), stage02botan.size, botan * 1.4, U"これ!!", FontButton,
-			[&]()
+			});
+	m_buttonPtrs.push_back(std::move(ptr));
+
+	ptr = makeButton(ButtonCtx(stage02botan.center(), stage02botan.size, botan * 1.4, U"これ!!", FontButton));
+	ptr->setWorkCallBack([&]()
 			{
 				// ここのステージで使える素材の受け取り.
 				if (getData().colorChange())
@@ -122,13 +128,11 @@ Stage::Stage(const InitData& init)
 					getData().setCurrentScene(SceneSwitch::Letsplay);
 					changeScene(SceneSwitch::Letsplay, 0.0);
 				}
-			}
-		)
-	));
+			});
+	m_buttonPtrs.push_back(std::move(ptr));
 
-	m_buttonPtrs.push_back(makeButton(
-		ButtonCtx(stageMAXbotan.center(), stageMAXbotan.size, botan * 1.4, U"これ!!", FontButton,
-			[&]()
+	ptr = makeButton(ButtonCtx(stageMAXbotan.center(), stageMAXbotan.size, botan * 1.4, U"これ!!", FontButton));
+	ptr->setWorkCallBack([&]()
 			{
 				// ここのステージで使える素材の受け取り.
 				getData().setStageNum(STAGEMAX);
@@ -166,47 +170,35 @@ Stage::Stage(const InitData& init)
 					getData().setCurrentScene(SceneSwitch::Letsplay);
 					changeScene(SceneSwitch::Letsplay, 0.0);
 				}
-			}
-		)
-	));
+			});
+	m_buttonPtrs.push_back(std::move(ptr));
 
-	m_buttonPtrs.push_back(makeButton(
-		ButtonCtx(colorchangeBox.center(), colorchangeBox.size, bg_shiro, U"", FontButton,
-			[&]()
+	ptr = makeButton(ButtonCtx(colorchangeBox.center(), colorchangeBox.size, bg_shiro, U"", FontButton));
+	ptr->setWorkCallBack([&, p = ptr.get()]()
 			{
-				switch (getData().currentColorMode())
-				{
-				case ColorSwitch::Saisyo: //はじめの色彩設定のまま.
+				getData().switchChangedColor();
 
+				if (getData().isChangedColor())
+				{
 					// on にする.
 					getData().setColorChange(true);
-					m_colorChangeMark = U"〆";
+					p->setText(U"〆");
 					getData().setColors(SortingColorsChanged);
 					getData().setTexts(SortingTextsChanged);
-					getData().setColorMode(ColorSwitch::ColorChange);
-
-					break;
-
-				case ColorSwitch::ColorChange: //色を変えたとき.
-
+				}
+				else
+				{
 					// off にする.
 					getData().setColorChange(false);
-					m_colorChangeMark = U"";
+					p->setText(U"");
 					getData().setColors(SortingColorsDefault);
 					getData().setTexts(SortingTextsDefault);
-					getData().setColorMode(ColorSwitch::Saisyo);
-
-					break;
-				default:
-					break;
 				}
-			}
-		)
-	));
+			});
+	m_buttonPtrs.push_back(std::move(ptr));
 
-	m_buttonPtrs.push_back(makeButton(
-		ButtonCtx(explainskipBox.center(), explainskipBox.size, bg_shiro, U"", FontButton,
-			[&]()
+	ptr = makeButton(ButtonCtx(explainskipBox.center(), explainskipBox.size, bg_shiro, U"", FontButton));
+	ptr->setWorkCallBack([&]()
 			{
 				switch (getData().currentExplainSkip())
 				{
@@ -232,9 +224,8 @@ Stage::Stage(const InitData& init)
 				default:
 					break;
 				}
-			}
-		)
-	));
+			});
+	m_buttonPtrs.push_back(std::move(ptr));
 }
 
 void Stage::update()
@@ -248,6 +239,19 @@ void Stage::update()
 }
 
 void Stage::draw() const
+{
+	drawUI();
+}
+
+void Stage::drawFadeIn(double t) const
+{
+}
+
+void Stage::drawFadeOut(double t) const
+{
+}
+
+void Stage::drawUI() const
 {
 	// ステージの説明背景.
 	FontAsset(FontTitle)(m_StageName).draw(48, 50, 30, kuro);
@@ -295,14 +299,6 @@ void Stage::draw() const
 	}
 }
 
-void Stage::drawFadeIn(double t) const
-{
-}
-
-void Stage::drawFadeOut(double t) const
-{
-}
-
 /*	End Stage Scene		********************************************************************************************************/
 
 /*	Start LetsPlay Scene	********************************************************************************************************/
@@ -311,37 +307,30 @@ LetsPlay::LetsPlay(const InitData& init)
 	: IScene{ init }
 {
 	Scene::SetBackground(bg_shiro);
-	
-	m_buttonPtrs.push_back(makeButton(
-		ButtonCtx(explainNextButton.center(), explainNextButton.size, makuColor, U"→", FontButton,
-			[&]()
+
+	auto ptr = makeButton(ButtonCtx(explainNextButton.center(), explainNextButton.size, makuColor, U"→", FontButton));
+	ptr->setWorkCallBack([&]()
 			{
 				getData().setCountSwitch(CountSwitch::ExplainSousa);
-			}
-		)
-	));
-	
-	m_buttonPtrs.push_back(makeButton(
-		ButtonCtx(explainOK.center(), explainOK.size, makuColor, U"OK", FontButton,
-			[&]()
+			});
+	m_buttonPtrs.push_back(std::move(ptr));
+
+	ptr = makeButton(ButtonCtx(explainOK.center(), explainOK.size, makuColor, U"OK", FontButton));
+	ptr->setWorkCallBack([&]()
 			{
 				getData().setCountSwitch(CountSwitch::Start);
-			}
-		)
-	));
+			});
+	m_buttonPtrs.push_back(std::move(ptr));
 
-	m_buttonPtrs.push_back(makeButton(
-		ButtonCtx(explainBackButton.center(), explainBackButton.size, makuColor, U"←", FontButton,
-			[&]()
+	ptr = makeButton(ButtonCtx(explainBackButton.center(), explainBackButton.size, makuColor, U"←", FontButton));
+	ptr->setWorkCallBack([&]()
 			{
 				getData().setCountSwitch(CountSwitch::ExplainRule);
-			}
-		)
-	));
-	
-	m_buttonPtrs.push_back(makeButton(
-		ButtonCtx(startbotan.center(), startbotan.size, kuro, U"START", FontButton,
-			[&]()
+			});
+	m_buttonPtrs.push_back(std::move(ptr));
+
+	ptr = makeButton(ButtonCtx(startbotan.center(), startbotan.size, kuro, U"START", FontButton));
+	ptr->setWorkCallBack([&]()
 			{
 				// 仕分けルールを表示する.
 				getData().setRuleText(true);
@@ -352,25 +341,21 @@ LetsPlay::LetsPlay(const InitData& init)
 				getData().initialize();
 
 				getData().setCountSwitch(CountSwitch::Countdown);
-			}
-		)
-	));
-	
-	m_buttonPtrs.push_back(makeButton(
-		ButtonCtx(stopbotan.center(), stopbotan.size, murasaki, U"←", FontButton,
-			[&]()
+			});
+	m_buttonPtrs.push_back(std::move(ptr));
+
+	ptr = makeButton(ButtonCtx(stopbotan.center(), stopbotan.size, murasaki, U"←", FontButton));
+	ptr->setWorkCallBack([&]()
 			{
 				m_playtime.pause();
 				m_countdown.pause();
 				m_pause = true;
 				getData().setPauseSwitch(PauseSwitch::PauseWindow);
-			}
-		)
-	));
-	
-	m_buttonPtrs.push_back(makeButton(
-		ButtonCtx(pauseRetire.center(), pauseRetire.size, daidai, U"ステージに戻る", FontButton,
-			[&]()
+			});
+	m_buttonPtrs.push_back(std::move(ptr));
+
+	ptr = makeButton(ButtonCtx(pauseRetire.center(), pauseRetire.size, daidai, U"ステージに戻る", FontButton));
+	ptr->setWorkCallBack([&]()
 			{
 				getData().setCurrentScene(SceneSwitch::Stage);
 				if (getData().explainSkip())
@@ -390,13 +375,11 @@ LetsPlay::LetsPlay(const InitData& init)
 				m_pause = false;
 				getData().setPauseSwitch(PauseSwitch::BackButton);
 				changeScene(SceneSwitch::Stage, 0.0);
-			}
-		)
-	));
+			});
+	m_buttonPtrs.push_back(std::move(ptr));
 
-	m_buttonPtrs.push_back(makeButton(
-		ButtonCtx(pauseContinue.center(), pauseContinue.size, daidai, U"つづける", FontButton,
-			[&]()
+	ptr = makeButton(ButtonCtx(pauseContinue.center(), pauseContinue.size, daidai, U"つづける", FontButton));
+	ptr->setWorkCallBack([&]()
 			{
 				m_playtime.resume();
 				m_countdown.resume();
@@ -404,13 +387,11 @@ LetsPlay::LetsPlay(const InitData& init)
 				getData().setCurrentScene(SceneSwitch::Letsplay);
 				getData().setPauseSwitch(PauseSwitch::BackButton);
 				changeScene(SceneSwitch::Letsplay, 0.0);
-			}
-		)
-	));
+			});
+	m_buttonPtrs.push_back(std::move(ptr));
 
-	m_buttonPtrs.push_back(makeButton(
-		ButtonCtx(stopbotan.center(), stopbotan.size, murasaki, U"←", FontButton,
-			[&]()
+	ptr = makeButton(ButtonCtx(stopbotan.center(), stopbotan.size, murasaki, U"←", FontButton));
+	ptr->setWorkCallBack([&]()
 			{
 				m_playtime.resume();
 				m_countdown.resume();
@@ -418,9 +399,8 @@ LetsPlay::LetsPlay(const InitData& init)
 				getData().setCurrentScene(SceneSwitch::Letsplay);
 				getData().setPauseSwitch(PauseSwitch::BackButton);
 				changeScene(SceneSwitch::Letsplay, 0.0);
-			}
-		)
-	));
+			});
+	m_buttonPtrs.push_back(std::move(ptr));
 }
 
 void LetsPlay::update()
@@ -1050,10 +1030,7 @@ void LetsPlay::update()
 
 void LetsPlay::draw() const
 {
-	for (const auto& it : m_buttonPtrs)
-	{
-		if (it != nullptr) it->draw();
-	}
+	drawUI();
 }
 
 void LetsPlay::drawFadeIn(double t) const
@@ -1062,6 +1039,14 @@ void LetsPlay::drawFadeIn(double t) const
 
 void LetsPlay::drawFadeOut(double t) const
 {
+}
+
+void LetsPlay::drawUI() const
+{
+	for (const auto& it : m_buttonPtrs)
+	{
+		if (it != nullptr) it->draw();
+	}
 }
 
 /*	End LetsPlay Scene		********************************************************************************************************/
@@ -1075,9 +1060,11 @@ Result::Result(const InitData& init)
 	m_resultwindow.restart();
 
 	// 0 番目.
-	m_buttonPtrs.push_back(makeButton(
-		ButtonCtx(hajimeru.center(), hajimeru.size, kiiro, U"もう一回", FontButton,
-			[&]()
+	auto ptr = makeButton(
+		ButtonCtx(hajimeru.center(), hajimeru.size, kiiro, U"もう一回", FontButton),
+		onemoreAppearPoint, 1s, [](double t)->double { return easeOutExpo(t); }
+	);
+	ptr->setWorkCallBack([&]()
 			{
 				getData().setCurrentScene(SceneSwitch::Letsplay);
 
@@ -1097,15 +1084,15 @@ Result::Result(const InitData& init)
 				m_resulttext02.reset();
 				m_resulttext03.reset();*/
 				changeScene(SceneSwitch::Letsplay, 0.0);
-			}
-		),
-		onemoreAppearPoint, 1s, [](double t)->double { return easeOutExpo(t); }
-	));
+			});
+	m_buttonPtrs.push_back(std::move(ptr));
 
 	// 1 番目.
-	m_buttonPtrs.push_back(makeButton(
-		ButtonCtx(hajimeru.center(), hajimeru.size, kiiro, U"ステージへ", FontButton,
-			[&]()
+	ptr = makeButton(
+		ButtonCtx(hajimeru.center(), hajimeru.size, kiiro, U"ステージへ", FontButton),
+		backstageAppearPoint, 1.1s, [](double t)->double { return easeOutExpo(t); }
+	);
+	ptr->setWorkCallBack([&]()
 			{
 				getData().setCurrentScene(SceneSwitch::Stage);
 
@@ -1125,15 +1112,15 @@ Result::Result(const InitData& init)
 				m_resulttext02.reset();
 				m_resulttext03.reset();*/
 				changeScene(SceneSwitch::Stage, 0.0);
-			}
-		),
-		backstageAppearPoint, 1.1s, [](double t)->double { return easeOutExpo(t); }
-	));
+			});
+	m_buttonPtrs.push_back(std::move(ptr));
 
 	// 2 番目.
-	m_buttonPtrs.push_back(makeButton(
-		ButtonCtx(hajimeru.center(), hajimeru.size, murasaki * 1.4, U"タイトルへ", FontButton,
-			[&]()
+	ptr = makeButton(
+		ButtonCtx(hajimeru.center(), hajimeru.size, murasaki * 1.4, U"タイトルへ", FontButton),
+		backtitleAppearPoint, 1.2s, [](double t)->double { return easeOutExpo(t); }
+	);
+	ptr->setWorkCallBack([&]()
 			{
 				getData().setCurrentScene(SceneSwitch::Title);
 
@@ -1153,10 +1140,8 @@ Result::Result(const InitData& init)
 				m_resulttext02.reset();
 				m_resulttext03.reset();*/
 				changeScene(SceneSwitch::Title, 0.0);
-			}
-		),
-		backtitleAppearPoint, 1.2s, [](double t)->double { return easeOutExpo(t); }
-	));
+			});
+	m_buttonPtrs.push_back(std::move(ptr));
 }
 
 void Result::update()
@@ -1255,11 +1240,7 @@ void Result::draw() const
 		Print << U"Result: 2 番目のボタンは ButtonRectMove ではありません.";
 	}
 
-	// ボタンのレイヤーが上.
-	for (const auto& it : m_buttonPtrs)
-	{
-		if (it != nullptr) it->draw();
-	}
+	drawUI();
 }
 
 void Result::drawFadeIn(double t) const
@@ -1268,6 +1249,15 @@ void Result::drawFadeIn(double t) const
 
 void Result::drawFadeOut(double t) const
 {
+}
+
+void Result::drawUI() const
+{
+	// ボタンのレイヤーが上.
+	for (const auto& it : m_buttonPtrs)
+	{
+		if (it != nullptr) it->draw();
+	}
 }
 
 /*	End Result Scene		********************************************************************************************************/
