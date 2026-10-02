@@ -12,7 +12,11 @@ struct ButtonCtx
 
 	String fontName;
 
-	std::function<void()> work;
+	ButtonCtx(const Vec2& c, const SizeF& s, const ColorF& bc, const String& t, const String& fn)
+		: center(c), size(s), bodyColor(bc), text(t), fontName(fn) {}
+
+	ButtonCtx(const RectF& rect, const ColorF& bc, const String& t, const String& fn)
+		: center(rect.center()), size(rect.size), bodyColor(bc), text(t), fontName(fn) {}
 };
 
 class ButtonBase
@@ -22,11 +26,23 @@ public:
 
 	~ButtonBase() = default;
 
-	void virtual update(const double dt, const bool isCovered = false) = 0;
+	void virtual update(const double dt) = 0;
 
-	void virtual draw(const bool isCovered = false) const = 0;
+	void virtual draw() const = 0;
 
 	const bool virtual isReleased() const = 0;
+
+	void turnOnDraw() { m_isDrawing = true; }
+	void turnOffDraw() { m_isDrawing = false; }
+
+	void turnOnPerform() { m_canPerform = true; }
+	void turnOffPerform() { m_canPerform = false; }
+
+	void setText(const String& text) { m_text = text; }
+	void setWorkCallBack(const std::function<void()>& cb) { m_workCallBack = cb; }
+
+	const bool isDrawing() const { return m_isDrawing; }
+	const bool canPerform() const { return m_canPerform; }
 
 protected:
 	Vec2 m_center;
@@ -39,7 +55,9 @@ protected:
 
 	String m_fontName;
 
-	std::function<void()> m_work;
+	std::function<void()> m_workCallBack;	// 君が callback だったのか.
+
+	bool m_isDrawing;
 
 	bool m_canPerform;
 
@@ -47,7 +65,7 @@ protected:
 
 	const double textSize() const { return m_size.minComponent() * 0.5; }
 
-	void perform() const { m_work(); }
+	void perform() const { m_workCallBack(); }
 };
 
 // 静止した四角いボタン.
@@ -58,9 +76,9 @@ public:
 
 	~ButtonRect() = default;
 
-	void update(const double dt, const bool isCovered) override;
+	void update(const double dt) override;
 
-	void draw(const bool isCovered) const override;
+	void draw() const override;
 
 	const bool isReleased() const override;
 
@@ -76,9 +94,9 @@ public:
 
 	~ButtonRectMove() = default;
 
-	void update(const double dt, const bool isCovered) override;
+	void update(const double dt) override;
 
-	void draw(const bool isCovered) const override;
+	void draw() const override;
 
 	const bool isReleased() const override;
 

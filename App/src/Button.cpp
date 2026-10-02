@@ -9,9 +9,9 @@ ButtonBase::ButtonBase(const ButtonCtx& ctx)
 	, m_bodyColor(ctx.bodyColor)
 	, m_text(ctx.text)
 	, m_fontName(ctx.fontName)
-	, m_work(ctx.work)
 {
-	m_canPerform = false;
+	turnOffDraw();
+	turnOffPerform();
 }
 
 /*	End ButtonBase		********************************************************************************************************/
@@ -24,42 +24,29 @@ ButtonRect::ButtonRect(const ButtonCtx& ctx)
 	m_body = RectF(Arg::center(m_center), m_size);
 }
 
-void ButtonRect::update(const double dt, const bool isCovered)
+void ButtonRect::update(const double dt)
 {
-	// 上に何かが覆いかぶさっていたら仕事をしない.
-	if (isCovered) return;
+	if (isReleased() && m_isDrawing && m_canPerform) turnOnPerform();
 
-	if (isReleased())
-	{
-		m_canPerform = true;
-	}
-
-	if (m_canPerform)
-	{
-		perform();
-	}
+	if (m_canPerform) perform();
 }
 
-void ButtonRect::draw(const bool isCovered) const
+void ButtonRect::draw() const
 {
-	static constexpr double FrameWidth = 8.0;
-	static constexpr double FrameColorRate = 0.6;
+	if (!m_isDrawing) return;
+
+	constexpr double FrameWidth = 8.0;
+	constexpr double FrameColorRate = 0.6;
 
 	double darkness = 1.0;
 
-	if (!isCovered && m_body.mouseOver())
+	if (m_canPerform && m_body.mouseOver())
 	{
 		// カーソルを手の形にする.
 		Cursor::RequestStyle(CursorStyle::Hand);
 
-		if (MouseL.pressed())
-		{
-			darkness = 0.5;
-		}
-		else
-		{
-			darkness = 0.7;
-		}
+		if (MouseL.pressed()) darkness = 0.5;
+		else darkness = 0.7;
 	}
 	else
 	{
@@ -91,18 +78,18 @@ ButtonRectMove::ButtonRectMove(const ButtonCtx& ctx, const Vec2& from, const Sec
 	m_stopwatch.start();
 }
 
-void ButtonRectMove::update(const double dt, const bool isCovered)
+void ButtonRectMove::update(const double dt)
 {
-	// イージング関数で平行移動させる.
+	// イージング関数で移動させる.
 	m_body.pos = m_from + m_easing(rate()) * (m_body.pos - m_from);
 
 	// 移動した後で当たり判定を行う.
-	ButtonRect::update(dt, isCovered);
+	ButtonRect::update(dt);
 }
 
-void ButtonRectMove::draw(const bool isCovered) const
+void ButtonRectMove::draw() const
 {
-	ButtonRect::draw(isCovered);
+	ButtonRect::draw();
 }
 
 const bool ButtonRectMove::isReleased() const
