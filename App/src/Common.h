@@ -56,20 +56,6 @@ enum class SceneSwitch
 	Result,		// 結果発表.
 };
 
-// 色が見にくいかどうか.
-//enum class ColorSwitch
-//{
-//	Saisyo,			// デフォルト.
-//	ColorChange,	// 見づらい.
-//};
-
-// 説明をスキップするかどうか.
-//enum class ExplainSkip
-//{
-//	Saisyo,	// デフォルト.
-//	Skip,	// スキップする.
-//};
-
 // 中断するかどうか.
 enum class PauseSwitch
 {
@@ -142,16 +128,12 @@ public:
 
 	void resetComboNum() { m_comboNum = 0; }
 
-	//void setCurrentScene(const SceneSwitch& scene) { m_currentScene = scene; }
-
-	//void switchChangedColor() { m_isChangedColor = !m_isChangedColor; }
 	void turnOnChangedColor() { m_isChangedColor = true; }
 	void turnOffChangedColor() { m_isChangedColor = false; }
 
 	void turnOnSkippedExplain() { m_isSkippedExplain = true; }
 	void turnOffSkippedExplain() { m_isSkippedExplain = false; }
 
-	//void setExplainSkip(const ExplainSkip& skip) { m_currentExplainSkip = skip; }
 	void setPauseSwitch(const PauseSwitch& pause) { m_currentPause = pause; }
 	void setCountSwitch(const CountSwitch& skip) { m_currentCount = skip; }
 	void setScoreSwitch(const ScoreSwitch& skip) { m_currentScoreSwitch = skip; }
@@ -161,20 +143,12 @@ public:
 	void setFtext(const Array<String>& texts) { m_Ftext = texts; }
 	void setStageNum(const uint8 n) { m_stageNum = n; }
 	void setRuleText(const bool skip) { m_ruleText = skip; }
-	//void setExplainSkip(const bool skip) { m_explainSkip = skip; }
-	//void setColorChange(const bool skip) { m_colorChange = skip; }
 	void setNewRecord(const bool skip) { m_newRecord = skip; }
-	/*void setFigure(const Figure& f) { m_figure = f; }
-	void setCircle(const Circle& circle) { m_circle = circle; }
-	void setTriangle(const Triangle& t) { m_triangle = t; }
-	void setRect(const Rect& r) { m_rect = r; }*/
 	void setColors(const Array<ColorF>& colors) { m_colors = colors; }
 	void setTexts(const Array<String>& texts) { m_texts = texts; }
 
-	//const SceneSwitch currentScene() const { return m_currentScene; }
 	const bool isChangedColor() const { return m_isChangedColor; }
 	const bool isSkippedExplain() const { return m_isSkippedExplain; }
-	//const ExplainSkip currentExplainSkip() const { return m_currentExplainSkip; }
 	const PauseSwitch currentPauseSwitch() const { return m_currentPause; }
 	const CountSwitch currentCountSwitch() const { return m_currentCount; }
 	const ScoreSwitch currentScoreSwitch() const { return m_currentScoreSwitch; }
@@ -184,29 +158,19 @@ public:
 	const Array<String>& Ftext() const { return m_Ftext; }
 	const uint8 stageNum() const { return m_stageNum; }
 	const bool ruleText() const { return m_ruleText; }
-	//const bool explainSkip() const { return m_explainSkip; }
-	//const bool colorChange() const { return m_colorChange; }
 	const bool newRecord() const { return m_newRecord; }
 	const int16 score() const { return m_score; }
 	const uint8 classifyNum() const { return m_classifyNum; }
 	const uint8 correctNum() const { return m_correctNum; }
 	const uint8 missNum() const { return m_missNum; }
 	const uint8 comboNum() const { return m_comboNum; }
-	/*const Figure& figure() const { return m_figure; }
-	const Circle& circle() const { return m_circle; }
-	const Triangle& triangle() const { return m_triangle; }
-	const Rect& rect() const { return m_rect; }*/
 	const Array<ColorF>& colors() const { return m_colors; }
 	const Array<String>& texts() const { return m_texts; }
 
 private:
-	//SceneSwitch m_currentScene = SceneSwitch::Title;
-
 	bool m_isChangedColor = false;		// 色が見にくいかどうか.
 
 	bool m_isSkippedExplain = false;	// 説明をスキップするかどうか.
-
-	//ExplainSkip m_currentExplainSkip = ExplainSkip::Saisyo;
 
 	PauseSwitch m_currentPause = PauseSwitch::BackButton;
 
@@ -226,10 +190,6 @@ private:
 
 	bool m_ruleText = false;	// 仕分けルールの表示.
 
-	//bool m_explainSkip = false;	// 説明をスキップするかどうか.
-
-	//bool m_colorChange = false;	// 色が見づらかったかどうか.
-
 	bool m_newRecord = false;	// 記録を更新したかどうか.
 
 	int16 m_score = 0;
@@ -245,12 +205,6 @@ private:
 	Array<ColorF> m_colors = SortingColorsDefault;
 
 	Array<String> m_texts = SortingTextsDefault;
-
-	//// 動かす図形の素材の受け皿.
-	//Figure m_figure;
-	//Circle m_circle;
-	//Triangle m_triangle;
-	//Rect m_rect;
 };
 
 using App = SceneManager<SceneSwitch, GameData>;
@@ -571,37 +525,6 @@ static double easeOutExpo(double t) {
 static double easeOutQuad(double t) {
 	return 1 - (1 - t) * (1 - t);
 }
-
-
-
-//ボタン.
-//static bool button(const RectF& rectf, const ColorF& colorf, const Font& font, const String& text, const ColorF& textcolor, const uint8& size, const ColorF& framecolor, const bool& enabled, const bool& notover) {
-//
-//	rectf.drawFrame(haba, framecolor);
-//	if (enabled) {
-//		if (not notover && rectf.mouseOver()) {
-//			Cursor::RequestStyle(CursorStyle::Hand);
-//			if (MouseL.pressed()) {
-//				rectf.draw(colorf * 0.7 * 0.7);
-//				font(text).drawAt(size, (rectf.x + rectf.w / 2), (rectf.y + rectf.h / 2), textcolor);
-//			}
-//			else {
-//				rectf.draw(colorf * 0.7);
-//				font(text).drawAt(size, (rectf.x + rectf.w / 2), (rectf.y + rectf.h / 2), textcolor);
-//			}
-//		}
-//		else {
-//			rectf.draw(colorf);
-//			font(text).drawAt(size, (rectf.x + rectf.w / 2), (rectf.y + rectf.h / 2), textcolor);
-//		}
-//	}
-//	else {
-//		rectf.draw(haiiro);
-//		font(text).drawAt(size, (rectf.x + rectf.w / 2), (rectf.y + rectf.h / 2), textcolor * 0.8);
-//	}
-//
-//	return enabled && not notover && rectf.mouseOver() && MouseL.up();
-//}
 
 //左上頂点表示を変換して利用するタイプ.
 //四角の中心座標( x, y )を求める関数.

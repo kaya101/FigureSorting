@@ -16,7 +16,7 @@ void Main()
 	manager.add<LetsPlay>(SceneSwitch::Letsplay);
 	manager.add<Result>(SceneSwitch::Result);
 
-	manager.init(SceneSwitch::Title, 0s);// Title シーンから始めて, 0s 後に開始.
+	manager.init(SceneSwitch::Title, 0s);	// Title シーンから始めて, 0s 後に開始.
 
 	while (System::Update())
 	{

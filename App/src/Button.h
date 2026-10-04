@@ -57,7 +57,7 @@ protected:
 
 	String m_fontName;
 
-	Work m_workCallBack;	// 君が callback だったのか.
+	Work m_workCallBack;
 
 	bool m_isDrawing;
 
