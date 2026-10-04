@@ -74,7 +74,7 @@ void Title::initialize()
 		ButtonCtx(hajimeru, botan * 1.4, U"はじめる", FontButton),
 		[&](ButtonBase* self)
 		{
-			getData().setCurrentScene(SceneSwitch::Stage);
+			//getData().setCurrentScene(SceneSwitch::Stage);
 			changeScene(SceneSwitch::Stage, 0.0);
 		});
 
@@ -195,7 +195,7 @@ void Stage::initialize()
 
 			// 形でわける.
 			getData().setScoreSwitch(ScoreSwitch::ShapeRule);
-			getData().setCurrentScene(SceneSwitch::Letsplay);
+			//getData().setCurrentScene(SceneSwitch::Letsplay);
 			changeScene(SceneSwitch::Letsplay, 0.0);
 		});
 
@@ -220,14 +220,14 @@ void Stage::initialize()
 			{
 				// 色でわける.
 				getData().setScoreSwitch(ScoreSwitch::ColorRule);
-				getData().setCurrentScene(SceneSwitch::Letsplay);
+				//getData().setCurrentScene(SceneSwitch::Letsplay);
 				changeScene(SceneSwitch::Letsplay, 0.0);
 			}
 			else
 			{
 				// 形でわける.
 				getData().setScoreSwitch(ScoreSwitch::ShapeRule);
-				getData().setCurrentScene(SceneSwitch::Letsplay);
+				//getData().setCurrentScene(SceneSwitch::Letsplay);
 				changeScene(SceneSwitch::Letsplay, 0.0);
 			}
 		});
@@ -255,21 +255,21 @@ void Stage::initialize()
 			{
 				// 文字でわける.
 				getData().setScoreSwitch(ScoreSwitch::TextRule);
-				getData().setCurrentScene(SceneSwitch::Letsplay);
+				//getData().setCurrentScene(SceneSwitch::Letsplay);
 				changeScene(SceneSwitch::Letsplay, 0.0);
 			}
 			else if (ruleNum == 1)
 			{
 				// 色でわける.
 				getData().setScoreSwitch(ScoreSwitch::ColorRule);
-				getData().setCurrentScene(SceneSwitch::Letsplay);
+				//getData().setCurrentScene(SceneSwitch::Letsplay);
 				changeScene(SceneSwitch::Letsplay, 0.0);
 			}
 			else
 			{
 				// 形でわける.
 				getData().setScoreSwitch(ScoreSwitch::ShapeRule);
-				getData().setCurrentScene(SceneSwitch::Letsplay);
+				//getData().setCurrentScene(SceneSwitch::Letsplay);
 				changeScene(SceneSwitch::Letsplay, 0.0);
 			}
 		});
@@ -537,7 +537,7 @@ void LetsPlay::update()
 	{
 		m_playtime.reset();
 		m_gt = 0;
-		getData().setCurrentScene(SceneSwitch::Result);
+		//getData().setCurrentScene(SceneSwitch::Result);
 		//m_resultwindow.restart();
 
 		// ハイスコアを更新したかどうかの記録.
@@ -1039,7 +1039,7 @@ void LetsPlay::initialize()
 		ButtonCtx(pauseRetire, daidai, U"ステージに戻る", FontButton),
 		[&](ButtonBase* self)
 		{
-			getData().setCurrentScene(SceneSwitch::Stage);
+			//getData().setCurrentScene(SceneSwitch::Stage);
 			if (getData().explainSkip())
 			{
 				getData().setCountSwitch(CountSwitch::Start);
@@ -1066,7 +1066,7 @@ void LetsPlay::initialize()
 			m_playtime.resume();
 			m_countdown.resume();
 			m_pause = false;
-			getData().setCurrentScene(SceneSwitch::Letsplay);
+			//getData().setCurrentScene(SceneSwitch::Letsplay);
 			getData().setPauseSwitch(PauseSwitch::BackButton);
 			changeScene(SceneSwitch::Letsplay, 0.0);
 		});
@@ -1078,7 +1078,7 @@ void LetsPlay::initialize()
 			m_playtime.resume();
 			m_countdown.resume();
 			m_pause = false;
-			getData().setCurrentScene(SceneSwitch::Letsplay);
+			//getData().setCurrentScene(SceneSwitch::Letsplay);
 			getData().setPauseSwitch(PauseSwitch::BackButton);
 			changeScene(SceneSwitch::Letsplay, 0.0);
 		});
@@ -1220,7 +1220,7 @@ void Result::initialize()
 		ButtonCtx(hajimeru, kiiro, U"もう一回", FontButton),
 		[&](ButtonBase* self)
 		{
-			getData().setCurrentScene(SceneSwitch::Letsplay);
+			//getData().setCurrentScene(SceneSwitch::Letsplay);
 
 			if (getData().explainSkip())
 			{
@@ -1246,7 +1246,7 @@ void Result::initialize()
 		ButtonCtx(hajimeru, kiiro, U"ステージへ", FontButton),
 		[&](ButtonBase* self)
 		{
-			getData().setCurrentScene(SceneSwitch::Stage);
+			//getData().setCurrentScene(SceneSwitch::Stage);
 
 			if (getData().explainSkip())
 			{
@@ -1272,7 +1272,7 @@ void Result::initialize()
 		ButtonCtx(hajimeru, murasaki * 1.4, U"タイトルへ", FontButton),
 		[&](ButtonBase* self)
 		{
-			getData().setCurrentScene(SceneSwitch::Title);
+			//getData().setCurrentScene(SceneSwitch::Title);
 
 			if (getData().explainSkip())
 			{

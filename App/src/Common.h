@@ -142,7 +142,7 @@ public:
 
 	void resetComboNum() { m_comboNum = 0; }
 
-	void setCurrentScene(const SceneSwitch& scene) { m_currentScene = scene; }
+	//void setCurrentScene(const SceneSwitch& scene) { m_currentScene = scene; }
 
 	void switchChangedColor() { m_isChangedColor = !m_isChangedColor; }
 
@@ -166,7 +166,7 @@ public:
 	void setColors(const Array<ColorF>& colors) { m_colors = colors; }
 	void setTexts(const Array<String>& texts) { m_texts = texts; }
 
-	const SceneSwitch currentScene() const { return m_currentScene; }
+	//const SceneSwitch currentScene() const { return m_currentScene; }
 	const bool isChangedColor() const { return m_isChangedColor; }
 	const ExplainSkip currentExplainSkip() const { return m_currentExplainSkip; }
 	const PauseSwitch currentPauseSwitch() const { return m_currentPause; }
@@ -194,7 +194,7 @@ public:
 	const Array<String>& texts() const { return m_texts; }
 
 private:
-	SceneSwitch m_currentScene = SceneSwitch::Title;
+	//SceneSwitch m_currentScene = SceneSwitch::Title;
 
 	bool m_isChangedColor = false;	// 色が見にくいかどうか.
 
