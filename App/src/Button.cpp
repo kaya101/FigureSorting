@@ -26,9 +26,7 @@ ButtonRect::ButtonRect(const ButtonCtx& ctx)
 
 void ButtonRect::update(const double dt)
 {
-	if (isReleased() && m_isDrawing && m_canPerform) turnOnPerform();
-
-	if (m_canPerform) perform();
+	if (m_canPerform && isReleased()) perform();
 }
 
 void ButtonRect::draw() const
