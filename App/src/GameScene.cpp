@@ -92,14 +92,14 @@ void Title::initialize()
 	Scene::SetBackground(bg_shiro);
 
 	makeButton(
-		ButtonCtx(hajimeru, botan * 1.4, U"はじめる", FontButton),
+		ButtonCtx(m_gameStart, botan * 1.4, U"はじめる", FontButton),
 		[&](ButtonBase* self)
 		{
 			changeScene(SceneSwitch::Stage, 0.0);
 		});
 
 	makeButton(
-		ButtonCtx(yameru, botan * 1.4, U"やめる", FontButton),
+		ButtonCtx(m_quitGame, botan * 1.4, U"やめる", FontButton),
 		[&](ButtonBase* self)
 		{
 			System::Exit();
@@ -1064,6 +1064,28 @@ void LetsPlay::initialize()
 		});
 }
 
+void LetsPlay::effect_TrueOrFalse(double t, const uint8& comboNum, const ColorF& colorf, const Font& font, const uint8& textsize)
+{
+	const String combo3 = U"Perfect!!!";
+	const String combo2 = U"Great!!";
+	const String combo1 = U"Good!";
+	const String combo0 = U"Miss";
+	constexpr uint16 effect_X = 400;
+	constexpr uint16 effect_Y = 570;
+	if (comboNum >= 3) {
+		font(combo3.substr(0, t)).drawAt(textsize, effect_X, effect_Y, colorf);
+	}
+	else if (comboNum == 2) {
+		font(combo2.substr(0, t)).drawAt(textsize, effect_X, effect_Y, colorf);
+	}
+	else if (comboNum == 0) {
+		font(combo0.substr(0, t)).drawAt(textsize, effect_X, effect_Y, colorf);
+	}
+	else {
+		font(combo1.substr(0, t)).drawAt(textsize, effect_X, effect_Y, colorf);
+	}
+}
+
 /*	End LetsPlay Scene		********************************************************************************************************/
 
 /*	Start Result Scene	********************************************************************************************************/
@@ -1182,7 +1204,7 @@ void Result::initialize()
 
 	// 0 番目.
 	makeButton(
-		ButtonCtx(hajimeru, kiiro, U"もう一回", FontButton),
+		ButtonCtx(m_playAgain, kiiro, U"もう一回", FontButton),
 		[&](ButtonBase* self)
 		{
 			if (getData().isSkippedExplain())
@@ -1202,11 +1224,11 @@ void Result::initialize()
 			m_resulttext03.reset();*/
 			changeScene(SceneSwitch::Letsplay, 0.0);
 		},
-		onemoreAppearPoint, 1s, [](double t)->double { return easeOutExpo(t); });
+		m_playAgainAppearPoint, 1s, [](double t)->double { return easeOutExpo(t); });
 
 	// 1 番目.
 	makeButton(
-		ButtonCtx(hajimeru, kiiro, U"ステージへ", FontButton),
+		ButtonCtx(m_backStage, kiiro, U"ステージへ", FontButton),
 		[&](ButtonBase* self)
 		{
 			if (getData().isSkippedExplain())
@@ -1226,11 +1248,11 @@ void Result::initialize()
 			m_resulttext03.reset();*/
 			changeScene(SceneSwitch::Stage, 0.0);
 		},
-		backstageAppearPoint, 1.1s, [](double t)->double { return easeOutExpo(t); });
+		m_backStageAppearPoint, 1.1s, [](double t)->double { return easeOutExpo(t); });
 
 	// 2 番目.
 	makeButton(
-		ButtonCtx(hajimeru, murasaki * 1.4, U"タイトルへ", FontButton),
+		ButtonCtx(m_backTitle, murasaki * 1.4, U"タイトルへ", FontButton),
 		[&](ButtonBase* self)
 		{
 			if (getData().isSkippedExplain())
@@ -1250,7 +1272,7 @@ void Result::initialize()
 			m_resulttext03.reset();*/
 			changeScene(SceneSwitch::Title, 0.0);
 		},
-		backtitleAppearPoint, 1.2s, [](double t)->double { return easeOutExpo(t); });
+		m_backTitleAppearPoint, 1.2s, [](double t)->double { return easeOutExpo(t); });
 }
 
 /*	End Result Scene		********************************************************************************************************/
