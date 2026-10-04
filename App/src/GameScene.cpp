@@ -1111,13 +1111,13 @@ void Result::draw() const
 	box_under(ubox_rght, getData().Fcolor()[rght]);
 
 	// 図形たち.
-	getData().circle().draw(getData().figure().color);
+	/*getData().circle().draw(getData().figure().color);
 	getData().circle().drawFrame(haba, kuro);
 	getData().triangle().draw(getData().figure().color);
 	getData().triangle().drawFrame(haba, kuro);
 	getData().rect().draw(getData().figure().color);
 	getData().rect().drawFrame(haba, kuro);
-	FontAsset(FontButton)(getData().figure().text).drawAt(getData().figure().textSize, getData().figure().center, getData().figure().textcolor);
+	FontAsset(FontButton)(getData().figure().text).drawAt(getData().figure().textSize, getData().figure().center, getData().figure().textcolor);*/
 
 	// 分別はこ上側.
 	box_over(obox_left, getData().Fcolor()[left], FontAsset(FontButton), U"●");

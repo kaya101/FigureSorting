@@ -164,10 +164,10 @@ public:
 	//void setExplainSkip(const bool skip) { m_explainSkip = skip; }
 	//void setColorChange(const bool skip) { m_colorChange = skip; }
 	void setNewRecord(const bool skip) { m_newRecord = skip; }
-	void setFigure(const Figure& f) { m_figure = f; }
+	/*void setFigure(const Figure& f) { m_figure = f; }
 	void setCircle(const Circle& circle) { m_circle = circle; }
 	void setTriangle(const Triangle& t) { m_triangle = t; }
-	void setRect(const Rect& r) { m_rect = r; }
+	void setRect(const Rect& r) { m_rect = r; }*/
 	void setColors(const Array<ColorF>& colors) { m_colors = colors; }
 	void setTexts(const Array<String>& texts) { m_texts = texts; }
 
@@ -192,10 +192,10 @@ public:
 	const uint8 correctNum() const { return m_correctNum; }
 	const uint8 missNum() const { return m_missNum; }
 	const uint8 comboNum() const { return m_comboNum; }
-	const Figure& figure() const { return m_figure; }
+	/*const Figure& figure() const { return m_figure; }
 	const Circle& circle() const { return m_circle; }
 	const Triangle& triangle() const { return m_triangle; }
-	const Rect& rect() const { return m_rect; }
+	const Rect& rect() const { return m_rect; }*/
 	const Array<ColorF>& colors() const { return m_colors; }
 	const Array<String>& texts() const { return m_texts; }
 
@@ -246,11 +246,11 @@ private:
 
 	Array<String> m_texts = SortingTextsDefault;
 
-	// 動かす図形の素材の受け皿.
-	Figure m_figure;
-	Circle m_circle;
-	Triangle m_triangle;
-	Rect m_rect;
+	//// 動かす図形の素材の受け皿.
+	//Figure m_figure;
+	//Circle m_circle;
+	//Triangle m_triangle;
+	//Rect m_rect;
 };
 
 using App = SceneManager<SceneSwitch, GameData>;
