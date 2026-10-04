@@ -28,7 +28,7 @@ public:
 
 	~ButtonBase() = default;
 
-	void virtual update(const double dt) = 0;
+	void virtual update() = 0;
 
 	void virtual draw() const = 0;
 
@@ -78,7 +78,7 @@ public:
 
 	~ButtonRect() = default;
 
-	void update(const double dt) override;
+	void update() override;
 
 	void draw() const override;
 
@@ -98,7 +98,7 @@ public:
 
 	~ButtonRectMove() = default;
 
-	void update(const double dt) override;
+	void update() override;
 
 	void draw() const override;
 

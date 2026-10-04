@@ -21,6 +21,31 @@ void GameScene::makeButton(const ButtonCtx& ctx, ButtonWorkCallBack workCallBack
 	m_buttonPtrs.push_back(std::move(ptr));
 }
 
+void GameScene::updateButtons()
+{
+	for (auto& it : m_buttonPtrs)
+	{
+		if (it != nullptr) it->update();
+	}
+}
+
+void GameScene::drawButtons() const
+{
+	for (const auto& it : m_buttonPtrs)
+	{
+		if (it != nullptr) it->draw();
+	}
+}
+
+void GameScene::enableButtons()
+{
+	for (auto& it : m_buttonPtrs)
+	{
+		it->turnOnDraw();
+		it->turnOnPerform();
+	}
+}
+
 /*	End Game Scene		********************************************************************************************************/
 
 /*	Start Title Scene	********************************************************************************************************/
@@ -29,16 +54,15 @@ Title::Title(const InitData& init)
 	: IScene{ init }
 {
 	initialize();
+
+	enableButtons();
 }
 
 void Title::update()
 {
 	const double dt = Scene::DeltaTime();
 
-	for (auto& it : m_buttonPtrs)
-	{
-		if (it != nullptr) it->update(dt);
-	}
+	updateButtons();
 }
 
 void Title::draw() const
@@ -58,10 +82,7 @@ void Title::drawUI() const
 {
 	FontAsset(FontTitle)(m_TitleName).drawAt(400, 100, ColorF{ 0.2 });
 
-	for (const auto& it : m_buttonPtrs)
-	{
-		if (it != nullptr) it->draw();
-	}
+	drawButtons();
 }
 
 void Title::initialize()
@@ -84,12 +105,6 @@ void Title::initialize()
 		{
 			System::Exit();
 		});
-
-	for (auto& it : m_buttonPtrs)
-	{
-		it->turnOnDraw();
-		it->turnOnPerform();
-	}
 }
 
 /*	End Title Scene		********************************************************************************************************/
@@ -100,16 +115,15 @@ Stage::Stage(const InitData& init)
 	: IScene{ init }
 {
 	initialize();
+
+	enableButtons();
 }
 
 void Stage::update()
 {
 	const double dt = Scene::DeltaTime();
 
-	for (auto& it : m_buttonPtrs)
-	{
-		if (it != nullptr) it->update(dt);
-	}
+	updateButtons();
 }
 
 void Stage::draw() const
@@ -167,10 +181,7 @@ void Stage::drawUI() const
 	FontAsset(FontTitle)(U"{}"_fmt(m_explainSkipMark)).drawAt(16, explainskipBox.x + explainskipBox.w / 2, explainskipBox.y + explainskipBox.h / 2, kuro);
 
 	// ボタンのレイヤーが一番上.
-	for (const auto& it : m_buttonPtrs)
-	{
-		if (it != nullptr) it->draw();
-	}
+	drawButtons();
 }
 
 void Stage::initialize()
@@ -341,6 +352,8 @@ LetsPlay::LetsPlay(const InitData& init)
 
 void LetsPlay::update()
 {
+	updateButtons();
+
 	// 分別はこ下側.
 	box_under(ubox_left, getData().Fcolor()[left]);
 	box_under(ubox_mdle, getData().Fcolor()[mdle]);
@@ -979,10 +992,7 @@ void LetsPlay::drawFadeOut(double t) const
 
 void LetsPlay::drawUI() const
 {
-	for (const auto& it : m_buttonPtrs)
-	{
-		if (it != nullptr) it->draw();
-	}
+	drawButtons();
 }
 
 void LetsPlay::initialize()
@@ -1098,10 +1108,7 @@ void Result::update()
 {
 	const double dt = Scene::DeltaTime();
 
-	for (auto& it : m_buttonPtrs)
-	{
-		if (it != nullptr) it->update(dt);
-	}
+	updateButtons();
 }
 
 void Result::draw() const
@@ -1204,10 +1211,7 @@ void Result::drawFadeOut(double t) const
 void Result::drawUI() const
 {
 	// ボタンのレイヤーが上.
-	for (const auto& it : m_buttonPtrs)
-	{
-		if (it != nullptr) it->draw();
-	}
+	drawButtons();
 }
 
 void Result::initialize()

@@ -17,6 +17,12 @@ protected:
 	void makeButton(const ButtonCtx& ctx, ButtonWorkCallBack workCallBack);
 
 	void makeButton(const ButtonCtx& ctx, ButtonWorkCallBack workCallBack, const Vec2& from, const SecondsF delay, const ButtonRectMove::Easing& easing);
+
+	void updateButtons();
+
+	void drawButtons() const;
+
+	void enableButtons();
 };
 
 class Title

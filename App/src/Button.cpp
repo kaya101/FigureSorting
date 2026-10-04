@@ -24,7 +24,7 @@ ButtonRect::ButtonRect(const ButtonCtx& ctx)
 	m_body = RectF(Arg::center(m_center), m_size);
 }
 
-void ButtonRect::update(const double dt)
+void ButtonRect::update()
 {
 	if (m_canPerform && isReleased()) perform();
 }
@@ -76,13 +76,13 @@ ButtonRectMove::ButtonRectMove(const ButtonCtx& ctx, const Vec2& from, const Sec
 	m_stopwatch.start();
 }
 
-void ButtonRectMove::update(const double dt)
+void ButtonRectMove::update()
 {
 	// イージング関数で移動させる.
 	m_body.pos = m_from + m_easing(rate()) * (m_body.pos - m_from);
 
 	// 移動した後で当たり判定を行う.
-	ButtonRect::update(dt);
+	ButtonRect::update();
 }
 
 void ButtonRectMove::draw() const
