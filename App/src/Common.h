@@ -144,7 +144,9 @@ public:
 
 	//void setCurrentScene(const SceneSwitch& scene) { m_currentScene = scene; }
 
-	void switchChangedColor() { m_isChangedColor = !m_isChangedColor; }
+	//void switchChangedColor() { m_isChangedColor = !m_isChangedColor; }
+	void turnOnChangedColor() { m_isChangedColor = true; }
+	void turnOffChangedColor() { m_isChangedColor = false; }
 
 	void setExplainSkip(const ExplainSkip& skip) { m_currentExplainSkip = skip; }
 	void setPauseSwitch(const PauseSwitch& pause) { m_currentPause = pause; }
@@ -157,7 +159,7 @@ public:
 	void setStageNum(const uint8 n) { m_stageNum = n; }
 	void setRuleText(const bool skip) { m_ruleText = skip; }
 	void setExplainSkip(const bool skip) { m_explainSkip = skip; }
-	void setColorChange(const bool skip) { m_colorChange = skip; }
+	//void setColorChange(const bool skip) { m_colorChange = skip; }
 	void setNewRecord(const bool skip) { m_newRecord = skip; }
 	void setFigure(const Figure& f) { m_figure = f; }
 	void setCircle(const Circle& circle) { m_circle = circle; }
@@ -179,7 +181,7 @@ public:
 	const uint8 stageNum() const { return m_stageNum; }
 	const bool ruleText() const { return m_ruleText; }
 	const bool explainSkip() const { return m_explainSkip; }
-	const bool colorChange() const { return m_colorChange; }
+	//const bool colorChange() const { return m_colorChange; }
 	const bool newRecord() const { return m_newRecord; }
 	const int16 score() const { return m_score; }
 	const uint8 classifyNum() const { return m_classifyNum; }
@@ -220,7 +222,7 @@ private:
 
 	bool m_explainSkip = false;	// 説明をスキップするかどうか.
 
-	bool m_colorChange = false;	// 色が見づらかったかどうか.
+	//bool m_colorChange = false;	// 色が見づらかったかどうか.
 
 	bool m_newRecord = false;	// 記録を更新したかどうか.
 

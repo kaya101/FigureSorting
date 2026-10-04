@@ -80,9 +80,10 @@ private:
 
 	const Rect m_sampleRect = { Arg::center(stageMAXtextback.x + stageMAXtextback.w / 2, stageMAXtextback.y - stageMAXtextback.w / 2 + 40) , stageMAXtextback.w / 2 };
 	
-	String m_colorChangeMark = U"";	// 見づらいマーク.
-	
-	String m_explainSkipMark = U"";	// 説明スキップマーク.
+	//String m_colorChangeMark = U"";	// 見づらいマーク.
+	//
+	//String m_explainSkipMark = U"";	// 説明スキップマーク.
+	const String m_markedText = U"〆";
 };
 
 class LetsPlay

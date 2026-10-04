@@ -168,17 +168,17 @@ void Stage::drawUI() const
 	m_sampleRect.drawFrame(haba, kuro).draw(getData().colors()[2]);
 
 	// 色が見づらいかどうか.
-	FontAsset(FontTitle)(U"色が見づらい場合:").drawAt(16, colorchangeText, kuro);
+	FontAsset(FontTitle)(U"色が見づらい場合：").drawAt(16, colorchangeText, kuro);
 
 	// 今どっちに切り替えたかの印.
-	FontAsset(FontTitle)(U"{}"_fmt(m_colorChangeMark)).drawAt(16, colorchangeBox.x + colorchangeBox.w / 2, colorchangeBox.y + colorchangeBox.h / 2, kuro);
+	//FontAsset(FontTitle)(U"{}"_fmt(m_colorChangeMark)).drawAt(16, colorchangeBox.x + colorchangeBox.w / 2, colorchangeBox.y + colorchangeBox.h / 2, kuro);
 
 	// 説明をスキップするかどうか.
-	explainskipBox.drawFrame(haba, kuro);
-	FontAsset(FontTitle)(U"説明を飛ばすとき:").drawAt(16, explainskipText, kuro);
+	//explainskipBox.drawFrame(haba, kuro);
+	FontAsset(FontTitle)(U"説明を飛ばすとき：").drawAt(16, explainskipText, kuro);
 
 	// 今どっちに切り替えたかの印.
-	FontAsset(FontTitle)(U"{}"_fmt(m_explainSkipMark)).drawAt(16, explainskipBox.x + explainskipBox.w / 2, explainskipBox.y + explainskipBox.h / 2, kuro);
+	//FontAsset(FontTitle)(U"{}"_fmt(m_explainSkipMark)).drawAt(16, explainskipBox.x + explainskipBox.w / 2, explainskipBox.y + explainskipBox.h / 2, kuro);
 
 	// ボタンのレイヤーが一番上.
 	drawButtons();
@@ -193,7 +193,7 @@ void Stage::initialize()
 		[&](ButtonBase* self)
 		{
 			// ここのステージで使える素材の受け取り.
-			if (getData().colorChange())
+			if (getData().isChangedColor())
 			{
 				getData().setFcolor(colorchangecolor_Lv01);
 			}
@@ -215,7 +215,7 @@ void Stage::initialize()
 		[&](ButtonBase* self)
 		{
 			// ここのステージで使える素材の受け取り.
-			if (getData().colorChange())
+			if (getData().isChangedColor())
 			{
 				getData().setFcolor(colorchangecolor_Lv02);
 			}
@@ -249,7 +249,7 @@ void Stage::initialize()
 		{
 			// ここのステージで使える素材の受け取り.
 			getData().setStageNum(STAGEMAX);
-			if (getData().colorChange())
+			if (getData().isChangedColor())
 			{
 				getData().setFcolor(colorchangecolor_LvMAX);
 				getData().setFtext(colorchangetext);
@@ -289,20 +289,18 @@ void Stage::initialize()
 		ButtonCtx(colorchangeBox, bg_shiro, U"", FontButton),
 		[&](ButtonBase* self)
 		{
-			getData().switchChangedColor();
-
-			if (getData().isChangedColor())
+			if (!getData().isChangedColor())
 			{
 				// on にする.
-				getData().setColorChange(true);
-				self->setText(U"〆");
+				getData().turnOnChangedColor();
+				self->setText(m_markedText);
 				getData().setColors(SortingColorsChanged);
 				getData().setTexts(SortingTextsChanged);
 			}
 			else
 			{
 				// off にする.
-				getData().setColorChange(false);
+				getData().turnOffChangedColor();
 				self->setText(U"");
 				getData().setColors(SortingColorsDefault);
 				getData().setTexts(SortingTextsDefault);
@@ -319,7 +317,7 @@ void Stage::initialize()
 
 				// スキップする.
 				getData().setExplainSkip(true);
-				m_explainSkipMark = U"〆";
+				self->setText(m_markedText);
 				getData().setCountSwitch(CountSwitch::Start);
 				getData().setExplainSkip(ExplainSkip::Skip);
 
@@ -329,7 +327,7 @@ void Stage::initialize()
 
 				// スキップしない.
 				getData().setExplainSkip(false);
-				m_explainSkipMark = U"";
+				self->setText(U"");
 				getData().setCountSwitch(CountSwitch::ExplainRule);
 				getData().setExplainSkip(ExplainSkip::Saisyo);
 
@@ -409,8 +407,8 @@ void LetsPlay::update()
 		figure.textcolor = kuro;
 
 		// 図形の色と文字を決める.
-		decide_color(figure, getData().stageNum(), getData().colorChange());
-		decide_text(figure, getData().stageNum(), getData().colorChange());
+		decide_color(figure, getData().stageNum(), getData().isChangedColor());
+		decide_text(figure, getData().stageNum(), getData().isChangedColor());
 
 		// 図形の形を決める.
 		uint8 shapeNum = randInt() % 3;
@@ -679,7 +677,7 @@ void LetsPlay::update()
 		// left は,赤.
 		if (circle.intersects(ubox_left) || rect.intersects(ubox_left) || triangle.intersects(ubox_left))
 		{
-			if (figure.color == aka || (getData().colorChange() && figure.color == red))
+			if (figure.color == aka || (getData().isChangedColor() && figure.color == red))
 			{
 				getData().addScore(Score[getData().stageNum()][plus]);
 				getData().countCorrectNum();
@@ -704,7 +702,7 @@ void LetsPlay::update()
 		// mdle は,緑.
 		if (circle.intersects(ubox_mdle) || rect.intersects(ubox_mdle) || triangle.intersects(ubox_mdle))
 		{
-			if (figure.color == midori || (getData().colorChange() && figure.color == yelow))
+			if (figure.color == midori || (getData().isChangedColor() && figure.color == yelow))
 			{
 				getData().addScore(Score[getData().stageNum()][plus]);
 				getData().countCorrectNum();
@@ -728,7 +726,7 @@ void LetsPlay::update()
 		// right は,青.
 		if (circle.intersects(ubox_rght) || rect.intersects(ubox_rght) || triangle.intersects(ubox_rght))
 		{
-			if (figure.color == ao || (getData().colorChange() && figure.color == blue))
+			if (figure.color == ao || (getData().isChangedColor() && figure.color == blue))
 			{
 				getData().addScore(Score[getData().stageNum()][plus]);
 				getData().countCorrectNum();
@@ -762,7 +760,7 @@ void LetsPlay::update()
 		// left は,"あか".
 		if (circle.intersects(ubox_left) || rect.intersects(ubox_left) || triangle.intersects(ubox_left))
 		{
-			if (figure.text == U"あか" || (getData().colorChange() && figure.text == U"まる"))
+			if (figure.text == U"あか" || (getData().isChangedColor() && figure.text == U"まる"))
 			{
 				getData().addScore(Score[getData().stageNum()][plus]);
 				getData().countCorrectNum();
@@ -786,7 +784,7 @@ void LetsPlay::update()
 		// mdle は,"みどり".
 		if (circle.intersects(ubox_mdle) || rect.intersects(ubox_mdle) || triangle.intersects(ubox_mdle))
 		{
-			if (figure.text == U"みどり" || (getData().colorChange() && figure.text == U"さんかく"))
+			if (figure.text == U"みどり" || (getData().isChangedColor() && figure.text == U"さんかく"))
 			{
 				getData().addScore(Score[getData().stageNum()][plus]);
 				getData().countCorrectNum();
@@ -811,7 +809,7 @@ void LetsPlay::update()
 		// right は,"あお".
 		if (circle.intersects(ubox_rght) || rect.intersects(ubox_rght) || triangle.intersects(ubox_rght))
 		{
-			if (figure.text == U"あお" || (getData().colorChange() && figure.text == U"しかく"))
+			if (figure.text == U"あお" || (getData().isChangedColor() && figure.text == U"しかく"))
 			{
 				getData().addScore(Score[getData().stageNum()][plus]);
 				getData().countCorrectNum();
