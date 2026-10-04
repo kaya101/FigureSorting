@@ -64,11 +64,11 @@ enum class SceneSwitch
 //};
 
 // 説明をスキップするかどうか.
-enum class ExplainSkip
-{
-	Saisyo,	// デフォルト.
-	Skip,	// スキップする.
-};
+//enum class ExplainSkip
+//{
+//	Saisyo,	// デフォルト.
+//	Skip,	// スキップする.
+//};
 
 // 中断するかどうか.
 enum class PauseSwitch
@@ -148,7 +148,10 @@ public:
 	void turnOnChangedColor() { m_isChangedColor = true; }
 	void turnOffChangedColor() { m_isChangedColor = false; }
 
-	void setExplainSkip(const ExplainSkip& skip) { m_currentExplainSkip = skip; }
+	void turnOnSkippedExplain() { m_isSkippedExplain = true; }
+	void turnOffSkippedExplain() { m_isSkippedExplain = false; }
+
+	//void setExplainSkip(const ExplainSkip& skip) { m_currentExplainSkip = skip; }
 	void setPauseSwitch(const PauseSwitch& pause) { m_currentPause = pause; }
 	void setCountSwitch(const CountSwitch& skip) { m_currentCount = skip; }
 	void setScoreSwitch(const ScoreSwitch& skip) { m_currentScoreSwitch = skip; }
@@ -158,7 +161,7 @@ public:
 	void setFtext(const Array<String>& texts) { m_Ftext = texts; }
 	void setStageNum(const uint8 n) { m_stageNum = n; }
 	void setRuleText(const bool skip) { m_ruleText = skip; }
-	void setExplainSkip(const bool skip) { m_explainSkip = skip; }
+	//void setExplainSkip(const bool skip) { m_explainSkip = skip; }
 	//void setColorChange(const bool skip) { m_colorChange = skip; }
 	void setNewRecord(const bool skip) { m_newRecord = skip; }
 	void setFigure(const Figure& f) { m_figure = f; }
@@ -170,7 +173,8 @@ public:
 
 	//const SceneSwitch currentScene() const { return m_currentScene; }
 	const bool isChangedColor() const { return m_isChangedColor; }
-	const ExplainSkip currentExplainSkip() const { return m_currentExplainSkip; }
+	const bool isSkippedExplain() const { return m_isSkippedExplain; }
+	//const ExplainSkip currentExplainSkip() const { return m_currentExplainSkip; }
 	const PauseSwitch currentPauseSwitch() const { return m_currentPause; }
 	const CountSwitch currentCountSwitch() const { return m_currentCount; }
 	const ScoreSwitch currentScoreSwitch() const { return m_currentScoreSwitch; }
@@ -180,7 +184,7 @@ public:
 	const Array<String>& Ftext() const { return m_Ftext; }
 	const uint8 stageNum() const { return m_stageNum; }
 	const bool ruleText() const { return m_ruleText; }
-	const bool explainSkip() const { return m_explainSkip; }
+	//const bool explainSkip() const { return m_explainSkip; }
 	//const bool colorChange() const { return m_colorChange; }
 	const bool newRecord() const { return m_newRecord; }
 	const int16 score() const { return m_score; }
@@ -198,9 +202,11 @@ public:
 private:
 	//SceneSwitch m_currentScene = SceneSwitch::Title;
 
-	bool m_isChangedColor = false;	// 色が見にくいかどうか.
+	bool m_isChangedColor = false;		// 色が見にくいかどうか.
 
-	ExplainSkip m_currentExplainSkip = ExplainSkip::Saisyo;
+	bool m_isSkippedExplain = false;	// 説明をスキップするかどうか.
+
+	//ExplainSkip m_currentExplainSkip = ExplainSkip::Saisyo;
 
 	PauseSwitch m_currentPause = PauseSwitch::BackButton;
 
@@ -220,7 +226,7 @@ private:
 
 	bool m_ruleText = false;	// 仕分けルールの表示.
 
-	bool m_explainSkip = false;	// 説明をスキップするかどうか.
+	//bool m_explainSkip = false;	// 説明をスキップするかどうか.
 
 	//bool m_colorChange = false;	// 色が見づらかったかどうか.
 

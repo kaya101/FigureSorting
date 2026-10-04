@@ -311,29 +311,19 @@ void Stage::initialize()
 		ButtonCtx(explainskipBox, bg_shiro, U"", FontButton),
 		[&](ButtonBase* self)
 		{
-			switch (getData().currentExplainSkip())
+			if (!getData().isSkippedExplain())
 			{
-			case ExplainSkip::Saisyo: //説明し続ける場合.
-
 				// スキップする.
-				getData().setExplainSkip(true);
+				getData().turnOnSkippedExplain();
 				self->setText(m_markedText);
 				getData().setCountSwitch(CountSwitch::Start);
-				getData().setExplainSkip(ExplainSkip::Skip);
-
-				break;
-
-			case ExplainSkip::Skip: //説明をスキップする場合.
-
+			}
+			else
+			{
 				// スキップしない.
-				getData().setExplainSkip(false);
+				getData().turnOffSkippedExplain();
 				self->setText(U"");
 				getData().setCountSwitch(CountSwitch::ExplainRule);
-				getData().setExplainSkip(ExplainSkip::Saisyo);
-
-				break;
-			default:
-				break;
 			}
 		});
 }
@@ -1048,7 +1038,7 @@ void LetsPlay::initialize()
 		[&](ButtonBase* self)
 		{
 			//getData().setCurrentScene(SceneSwitch::Stage);
-			if (getData().explainSkip())
+			if (getData().isSkippedExplain())
 			{
 				getData().setCountSwitch(CountSwitch::Start);
 			}
@@ -1224,7 +1214,7 @@ void Result::initialize()
 		{
 			//getData().setCurrentScene(SceneSwitch::Letsplay);
 
-			if (getData().explainSkip())
+			if (getData().isSkippedExplain())
 			{
 				getData().setCountSwitch(CountSwitch::Start);
 			}
@@ -1250,7 +1240,7 @@ void Result::initialize()
 		{
 			//getData().setCurrentScene(SceneSwitch::Stage);
 
-			if (getData().explainSkip())
+			if (getData().isSkippedExplain())
 			{
 				getData().setCountSwitch(CountSwitch::Start);
 			}
@@ -1276,7 +1266,7 @@ void Result::initialize()
 		{
 			//getData().setCurrentScene(SceneSwitch::Title);
 
-			if (getData().explainSkip())
+			if (getData().isSkippedExplain())
 			{
 				getData().setCountSwitch(CountSwitch::Start);
 			}
