@@ -64,7 +64,7 @@ const bool ButtonRect::isReleased() const
 
 /*	Start ButtonRectMove	********************************************************************************************************/
 
-ButtonRectMove::ButtonRectMove(const ButtonCtx& ctx, const Vec2& from, const SecondsF delay, const std::function<double(double)> easing)
+ButtonRectMove::ButtonRectMove(const ButtonCtx& ctx, const Vec2& from, const SecondsF delay, const Easing& easing)
 	: ButtonRect(ctx)
 	, m_from(from)
 	, m_delay(delay)

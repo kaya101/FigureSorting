@@ -5,20 +5,18 @@
 class GameScene
 {
 public:
+	using ButtonWorkCallBack = std::function<void(ButtonBase* self)>;
+
 	void virtual drawUI() const = 0;
+
+	void virtual initialize() = 0;
 
 protected:
 	Array<std::unique_ptr<ButtonBase>> m_buttonPtrs;
 
-	std::unique_ptr<ButtonBase> makeButton(const ButtonCtx& ctx)
-	{
-		return std::make_unique<ButtonRect>(ctx);
-	}
+	void makeButton(const ButtonCtx& ctx, ButtonWorkCallBack workCallBack);
 
-	std::unique_ptr<ButtonBase> makeButton(const ButtonCtx& ctx, const Vec2& from, const SecondsF delay, const std::function<double(double)> easing)
-	{
-		return std::make_unique<ButtonRectMove>(ctx, from, delay, easing);
-	}
+	void makeButton(const ButtonCtx& ctx, ButtonWorkCallBack workCallBack, const Vec2& from, const SecondsF delay, const ButtonRectMove::Easing& easing);
 };
 
 class Title
@@ -39,6 +37,8 @@ public:
 	void drawFadeOut(double t) const override;
 
 	void drawUI() const override;
+
+	void initialize() override;
 
 private:
 	const String m_TitleName = U"仕分けゲーム";
@@ -62,6 +62,8 @@ public:
 	void drawFadeOut(double t) const override;
 
 	void drawUI() const override;
+
+	void initialize() override;
 
 private:
 	const String m_StageName = U"ステージ選択";
@@ -103,6 +105,8 @@ public:
 	void drawFadeOut(double t) const override;
 
 	void drawUI() const override;
+
+	void initialize() override;
 
 private:
 	const Font text{ FontMethod::SDF, 30, Typeface::Bold };
@@ -155,6 +159,8 @@ public:
 	void drawFadeOut(double t) const override;
 
 	void drawUI() const override;
+
+	void initialize() override;
 
 private:
 	Stopwatch m_resultwindow{ StartImmediately::Yes };

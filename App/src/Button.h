@@ -22,6 +22,8 @@ struct ButtonCtx
 class ButtonBase
 {
 public:
+	using Work = std::function<void()>;
+
 	explicit ButtonBase(const ButtonCtx& ctx);
 
 	~ButtonBase() = default;
@@ -39,7 +41,7 @@ public:
 	void turnOffPerform() { m_canPerform = false; }
 
 	void setText(const String& text) { m_text = text; }
-	void setWorkCallBack(const std::function<void()>& cb) { m_workCallBack = cb; }
+	void setWorkCallBack(const Work& cb) { m_workCallBack = cb; }
 
 	const bool isDrawing() const { return m_isDrawing; }
 	const bool canPerform() const { return m_canPerform; }
@@ -55,7 +57,7 @@ protected:
 
 	String m_fontName;
 
-	std::function<void()> m_workCallBack;	// 君が callback だったのか.
+	Work m_workCallBack;	// 君が callback だったのか.
 
 	bool m_isDrawing;
 
@@ -90,7 +92,9 @@ protected:
 class ButtonRectMove : public ButtonRect
 {
 public:
-	explicit ButtonRectMove(const ButtonCtx& ctx, const Vec2& from, const SecondsF delay, const std::function<double(double)> easing);
+	using Easing = std::function<double(double)>;
+
+	explicit ButtonRectMove(const ButtonCtx& ctx, const Vec2& from, const SecondsF delay, const Easing& easing);
 
 	~ButtonRectMove() = default;
 
@@ -107,7 +111,7 @@ private:
 
 	SecondsF m_delay;
 
-	std::function<double(double)> m_easing;
+	Easing m_easing;
 
 	Stopwatch m_stopwatch{ StartImmediately::No };
 };
