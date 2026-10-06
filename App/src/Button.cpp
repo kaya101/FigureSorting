@@ -71,9 +71,7 @@ ButtonRectMove::ButtonRectMove(const ButtonCtx& ctx, const Vec2& from, const Sec
 	, m_easing(easing)
 {
 	// delay 秒だけ遅延させる.
-	m_stopwatch.set(-delay);
-
-	m_stopwatch.start();
+	m_stopwatch.set(delay);
 }
 
 void ButtonRectMove::update()
@@ -83,6 +81,8 @@ void ButtonRectMove::update()
 
 	// 移動した後で当たり判定を行う.
 	ButtonRect::update();
+
+	Print << U"is started: {}"_fmt(m_stopwatch.isStarted());
 }
 
 void ButtonRectMove::draw() const

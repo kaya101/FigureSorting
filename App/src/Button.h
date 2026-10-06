@@ -106,6 +106,8 @@ public:
 
 	const double rate() const { return Min(1.0, Max(0.0, m_stopwatch.sF())); }
 
+	void startStopwatch() { m_stopwatch.start(); }
+
 private:
 	Vec2 m_from;	// 出現点.
 

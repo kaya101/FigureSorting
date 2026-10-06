@@ -322,6 +322,8 @@ LetsPlay::LetsPlay(const InitData& init)
 	: IScene{ init }
 {
 	initialize();
+
+	enableButtons();
 }
 
 void LetsPlay::update()
@@ -1094,6 +1096,18 @@ Result::Result(const InitData& init)
 	: IScene{ init }
 {
 	initialize();
+
+	enableButtons();
+
+	for (auto& button : m_buttonPtrs)
+	{
+		if (button == nullptr) continue;
+
+		if (const auto& it = dynamic_cast<ButtonRectMove*>(button.get()))
+		{
+			it->startStopwatch();
+		}
+	}
 }
 
 void Result::update()
