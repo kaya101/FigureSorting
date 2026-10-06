@@ -7,22 +7,25 @@ class GameScene
 public:
 	using ButtonWorkCallBack = std::function<void(ButtonBase* self)>;
 
+	using ButtonTableKey = int16;
+
 	void virtual drawUI() const = 0;
 
 	void virtual initialize() = 0;
 
 protected:
-	Array<std::unique_ptr<ButtonBase>> m_buttonPtrs;
+	//Array<std::unique_ptr<ButtonBase>> m_buttonPtrs;
+	HashTable<ButtonTableKey, Array<std::unique_ptr<ButtonBase>>> m_buttonTable;
 
-	void makeButton(const ButtonCtx& ctx, ButtonWorkCallBack workCallBack);
+	void makeButton(const ButtonTableKey key, const ButtonCtx& ctx, ButtonWorkCallBack workCallBack);
 
-	void makeButton(const ButtonCtx& ctx, ButtonWorkCallBack workCallBack, const Vec2& from, const double delay, ButtonRectMove::Easing easing);
+	void makeButton(const ButtonTableKey key, const ButtonCtx& ctx, ButtonWorkCallBack workCallBack, const Vec2& from, const double delay, ButtonRectMove::Easing easing);
 
-	void updateButtons();
+	void updateButtonsAt(const ButtonTableKey key);
 
-	void drawButtons() const;
+	void drawButtonsAt(const ButtonTableKey key) const;
 
-	void enableButtons();
+	void enableButtonsAt(const ButtonTableKey key);
 };
 
 class Title
@@ -30,6 +33,11 @@ class Title
 	, public GameScene
 {
 public:
+	enum class TitleFlow : ButtonTableKey
+	{
+		Default,
+	};
+
 	explicit Title(const InitData& init);
 
 	~Title() = default;
@@ -59,6 +67,11 @@ class Stage
 	, public GameScene
 {
 public:
+	enum class StageFlow : ButtonTableKey
+	{
+		Default,
+	};
+
 	explicit Stage(const InitData& init);
 
 	~Stage() = default;
@@ -136,6 +149,14 @@ class LetsPlay
 	, public GameScene
 {
 public:
+	enum class LetsPlayFlow : ButtonTableKey
+	{
+		Default,
+		Explain,	// ルール/操作方法の説明.
+		Start,		// はじめるボタンを押すまで.
+		Pause,		// 中断ウィンドウが出てる画面.
+	};
+
 	// 正誤判定.
 	enum class TrueOrFalse
 	{
@@ -294,6 +315,8 @@ private:
 	int16 m_distance_x = 0;
 	int16 m_distance_y = 0;
 
+	LetsPlayFlow m_currentFlow = LetsPlayFlow::Default;
+
 	// 図形の色を決める関数.
 	void decide_color(Figure& figure, const uint8& stageNum, const bool& colorchange) const
 	{
@@ -375,6 +398,11 @@ class Result
 	, public GameScene
 {
 public:
+	enum class ResultFlow : ButtonTableKey
+	{
+		Default,
+	};
+
 	explicit Result(const InitData& init);
 
 	~Result() = default;

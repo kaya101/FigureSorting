@@ -3,43 +3,59 @@
 
 /*	Start Game Scene	********************************************************************************************************/
 
-void GameScene::makeButton(const ButtonCtx& ctx, ButtonWorkCallBack workCallBack)
+void GameScene::makeButton(const ButtonTableKey key, const ButtonCtx& ctx, ButtonWorkCallBack workCallBack)
 {
 	auto ptr = std::make_unique<ButtonRect>(ctx);
 
 	ptr->setWorkCallBack([workCallBack, p = ptr.get()]() { workCallBack(p); });
 
-	m_buttonPtrs.push_back(std::move(ptr));
+	//m_buttonPtrs.push_back(std::move(ptr));
+	m_buttonTable[key].push_back(std::move(ptr));
 }
 
-void GameScene::makeButton(const ButtonCtx& ctx, ButtonWorkCallBack workCallBack, const Vec2& from, const double delay, ButtonRectMove::Easing easing)
+void GameScene::makeButton(const ButtonTableKey key, const ButtonCtx& ctx, ButtonWorkCallBack workCallBack, const Vec2& from, const double delay, ButtonRectMove::Easing easing)
 {
 	auto ptr = std::make_unique<ButtonRectMove>(ctx, from, delay, easing);
 
 	ptr->setWorkCallBack([workCallBack, p = ptr.get()]() { workCallBack(p); });
 
-	m_buttonPtrs.push_back(std::move(ptr));
+	//m_buttonPtrs.push_back(std::move(ptr));
+	m_buttonTable[key].push_back(std::move(ptr));
 }
 
-void GameScene::updateButtons()
+void GameScene::updateButtonsAt(const ButtonTableKey key)
 {
-	for (auto& it : m_buttonPtrs)
+	auto it = m_buttonTable.find(key);	// .at() ではエラー落ちするので調べておく.
+	if (it == m_buttonTable.end())
 	{
-		if (it != nullptr) it->update();
+		Print << U"updateButtonsAt: 未登録の key {} です."_fmt(key);
+		return;
+	}
+
+	for (auto& button : it->second)
+	{
+		if (button != nullptr) button->update();
 	}
 }
 
-void GameScene::drawButtons() const
+void GameScene::drawButtonsAt(const ButtonTableKey key) const
 {
-	for (const auto& it : m_buttonPtrs)
+	const auto& it = m_buttonTable.find(key);
+	if (it == m_buttonTable.end())
 	{
-		if (it != nullptr) it->draw();
+		Print << U"drawButtonsAt: 未登録の key {} です."_fmt(key);
+		return;
+	}
+
+	for (const auto& button : it->second)
+	{
+		if (button != nullptr) button->draw();
 	}
 }
 
-void GameScene::enableButtons()
+void GameScene::enableButtonsAt(const ButtonTableKey key)
 {
-	for (auto& it : m_buttonPtrs)
+	for (auto& it : m_buttonTable[key])
 	{
 		it->turnOnDraw();
 		it->turnOnPerform();
@@ -55,14 +71,14 @@ Title::Title(const InitData& init)
 {
 	initialize();
 
-	enableButtons();
+	enableButtonsAt(static_cast<ButtonTableKey>(TitleFlow::Default));
 }
 
 void Title::update()
 {
 	const double dt = Scene::DeltaTime();
 
-	updateButtons();
+	updateButtonsAt(static_cast<ButtonTableKey>(TitleFlow::Default));
 }
 
 void Title::draw() const
@@ -82,7 +98,7 @@ void Title::drawUI() const
 {
 	FontAsset(FontTitle)(m_TitleName).drawAt(400, 100, ColorF{ 0.2 });
 
-	drawButtons();
+	drawButtonsAt(static_cast<ButtonTableKey>(TitleFlow::Default));
 }
 
 void Title::initialize()
@@ -92,6 +108,7 @@ void Title::initialize()
 	Scene::SetBackground(bg_shiro);
 
 	makeButton(
+		static_cast<ButtonTableKey>(TitleFlow::Default),
 		ButtonCtx(m_gameStart, botan * 1.4, U"はじめる", FontButton),
 		[&](ButtonBase* self)
 		{
@@ -99,6 +116,7 @@ void Title::initialize()
 		});
 
 	makeButton(
+		static_cast<ButtonTableKey>(TitleFlow::Default),
 		ButtonCtx(m_quitGame, botan * 1.4, U"やめる", FontButton),
 		[&](ButtonBase* self)
 		{
@@ -115,14 +133,14 @@ Stage::Stage(const InitData& init)
 {
 	initialize();
 
-	enableButtons();
+	enableButtonsAt(static_cast<ButtonTableKey>(StageFlow::Default));
 }
 
 void Stage::update()
 {
 	const double dt = Scene::DeltaTime();
 
-	updateButtons();
+	updateButtonsAt(static_cast<ButtonTableKey>(StageFlow::Default));
 }
 
 void Stage::draw() const
@@ -173,7 +191,7 @@ void Stage::drawUI() const
 	FontAsset(FontTitle)(U"説明を飛ばすとき：").drawAt(16, explainskipText, kuro);
 
 	// ボタンのレイヤーが一番上.
-	drawButtons();
+	drawButtonsAt(static_cast<ButtonTableKey>(StageFlow::Default));
 }
 
 void Stage::initialize()
@@ -181,6 +199,7 @@ void Stage::initialize()
 	Scene::SetBackground(bg_shiro);
 
 	makeButton(
+		static_cast<ButtonTableKey>(StageFlow::Default),
 		ButtonCtx(stage01botan, botan * 1.4, U"これ!!", FontButton),
 		[&](ButtonBase* self)
 		{
@@ -202,6 +221,7 @@ void Stage::initialize()
 		});
 
 	makeButton(
+		static_cast<ButtonTableKey>(StageFlow::Default),
 		ButtonCtx(stage02botan, botan * 1.4, U"これ!!", FontButton),
 		[&](ButtonBase* self)
 		{
@@ -233,6 +253,7 @@ void Stage::initialize()
 		});
 
 	makeButton(
+		static_cast<ButtonTableKey>(StageFlow::Default),
 		ButtonCtx(stageMAXbotan, botan * 1.4, U"これ!!", FontButton),
 		[&](ButtonBase* self)
 		{
@@ -272,6 +293,7 @@ void Stage::initialize()
 		});
 
 	makeButton(
+		static_cast<ButtonTableKey>(StageFlow::Default),
 		ButtonCtx(colorchangeBox, bg_shiro, U"", FontButton),
 		[&](ButtonBase* self)
 		{
@@ -294,6 +316,7 @@ void Stage::initialize()
 		});
 
 	makeButton(
+		static_cast<ButtonTableKey>(StageFlow::Default),
 		ButtonCtx(explainskipBox, bg_shiro, U"", FontButton),
 		[&](ButtonBase* self)
 		{
@@ -323,12 +346,48 @@ LetsPlay::LetsPlay(const InitData& init)
 {
 	initialize();
 
-	enableButtons();
+	if (getData().isSkippedExplain())
+	{
+		enableButtonsAt(static_cast<ButtonTableKey>(LetsPlayFlow::Start));
+		m_currentFlow = LetsPlayFlow::Start;
+	}
+	else
+	{
+		enableButtonsAt(static_cast<ButtonTableKey>(LetsPlayFlow::Explain));
+		m_currentFlow = LetsPlayFlow::Explain;
+	}
 }
 
 void LetsPlay::update()
 {
-	updateButtons();
+	switch (m_currentFlow)
+	{
+	case LetsPlayFlow::Default:
+
+		updateButtonsAt(static_cast<ButtonTableKey>(LetsPlayFlow::Default));
+
+		break;
+
+	case LetsPlayFlow::Explain:
+
+		updateButtonsAt(static_cast<ButtonTableKey>(LetsPlayFlow::Explain));
+
+		break;
+
+	case LetsPlayFlow::Start:
+
+		updateButtonsAt(static_cast<ButtonTableKey>(LetsPlayFlow::Start));
+
+		break;
+
+	case LetsPlayFlow::Pause:
+
+		updateButtonsAt(static_cast<ButtonTableKey>(LetsPlayFlow::Pause));
+
+		break;
+	default:
+		break;
+	}
 
 	// 分別はこ下側.
 	box_under(ubox_left, getData().Fcolor()[left]);
@@ -967,7 +1026,34 @@ void LetsPlay::drawFadeOut(double t) const
 
 void LetsPlay::drawUI() const
 {
-	drawButtons();
+	switch (m_currentFlow)
+	{
+	case LetsPlayFlow::Default:
+
+		drawButtonsAt(static_cast<ButtonTableKey>(LetsPlayFlow::Default));
+
+		break;
+
+	case LetsPlayFlow::Explain:
+
+		drawButtonsAt(static_cast<ButtonTableKey>(LetsPlayFlow::Explain));
+
+		break;
+
+	case LetsPlayFlow::Start:
+
+		drawButtonsAt(static_cast<ButtonTableKey>(LetsPlayFlow::Start));
+
+		break;
+
+	case LetsPlayFlow::Pause:
+
+		drawButtonsAt(static_cast<ButtonTableKey>(LetsPlayFlow::Pause));
+
+		break;
+	default:
+		break;
+	}
 }
 
 void LetsPlay::initialize()
@@ -975,6 +1061,7 @@ void LetsPlay::initialize()
 	Scene::SetBackground(bg_shiro);
 
 	makeButton(
+		static_cast<ButtonTableKey>(LetsPlayFlow::Explain),
 		ButtonCtx(explainNextButton, makuColor, U"→", FontButton),
 		[&](ButtonBase* self)
 		{
@@ -982,13 +1069,17 @@ void LetsPlay::initialize()
 		});
 
 	makeButton(
+		static_cast<ButtonTableKey>(LetsPlayFlow::Explain),
 		ButtonCtx(explainOK, makuColor, U"OK", FontButton),
 		[&](ButtonBase* self)
 		{
 			getData().setCountSwitch(CountSwitch::Start);
+			m_currentFlow = LetsPlayFlow::Start;
+			enableButtonsAt(static_cast<ButtonTableKey>(LetsPlayFlow::Start));
 		});
 
 	makeButton(
+		static_cast<ButtonTableKey>(LetsPlayFlow::Explain),
 		ButtonCtx(explainBackButton, makuColor, U"←", FontButton),
 		[&](ButtonBase* self)
 		{
@@ -996,6 +1087,7 @@ void LetsPlay::initialize()
 		});
 
 	makeButton(
+		static_cast<ButtonTableKey>(LetsPlayFlow::Start),
 		ButtonCtx(startbotan, kuro, U"START", FontButton),
 		[&](ButtonBase* self)
 		{
@@ -1004,6 +1096,9 @@ void LetsPlay::initialize()
 			m_countdown.restart();
 			m_playtime.reset();
 
+			m_currentFlow = LetsPlayFlow::Default;
+			enableButtonsAt(static_cast<ButtonTableKey>(LetsPlayFlow::Default));
+
 			// 初期化.
 			getData().initialize();
 
@@ -1011,6 +1106,7 @@ void LetsPlay::initialize()
 		});
 
 	makeButton(
+		static_cast<ButtonTableKey>(LetsPlayFlow::Default),
 		ButtonCtx(stopbotan, murasaki, U"←", FontButton),
 		[&](ButtonBase* self)
 		{
@@ -1018,9 +1114,12 @@ void LetsPlay::initialize()
 			m_countdown.pause();
 			m_pause = true;
 			getData().setPauseSwitch(PauseSwitch::PauseWindow);
+			m_currentFlow = LetsPlayFlow::Pause;
+			enableButtonsAt(static_cast<ButtonTableKey>(LetsPlayFlow::Pause));
 		});
 
 	makeButton(
+		static_cast<ButtonTableKey>(LetsPlayFlow::Pause),
 		ButtonCtx(pauseRetire, daidai, U"ステージに戻る", FontButton),
 		[&](ButtonBase* self)
 		{
@@ -1044,6 +1143,7 @@ void LetsPlay::initialize()
 		});
 
 	makeButton(
+		static_cast<ButtonTableKey>(LetsPlayFlow::Pause),
 		ButtonCtx(pauseContinue, daidai, U"つづける", FontButton),
 		[&](ButtonBase* self)
 		{
@@ -1052,9 +1152,12 @@ void LetsPlay::initialize()
 			m_pause = false;
 			getData().setPauseSwitch(PauseSwitch::BackButton);
 			changeScene(SceneSwitch::Letsplay, 0.0);
+			m_currentFlow = LetsPlayFlow::Default;
+			enableButtonsAt(static_cast<ButtonTableKey>(LetsPlayFlow::Default));
 		});
 
 	makeButton(
+		static_cast<ButtonTableKey>(LetsPlayFlow::Pause),
 		ButtonCtx(stopbotan, murasaki, U"←", FontButton),
 		[&](ButtonBase* self)
 		{
@@ -1063,6 +1166,8 @@ void LetsPlay::initialize()
 			m_pause = false;
 			getData().setPauseSwitch(PauseSwitch::BackButton);
 			changeScene(SceneSwitch::Letsplay, 0.0);
+			m_currentFlow = LetsPlayFlow::Default;
+			enableButtonsAt(static_cast<ButtonTableKey>(LetsPlayFlow::Default));
 		});
 }
 
@@ -1097,15 +1202,24 @@ Result::Result(const InitData& init)
 {
 	initialize();
 
-	enableButtons();
+	enableButtonsAt(static_cast<ButtonTableKey>(ResultFlow::Default));
 
-	for (auto& button : m_buttonPtrs)
+	const auto key = static_cast<ButtonTableKey>(ResultFlow::Default);
+	const auto& it = m_buttonTable.find(key);
+	if (it == m_buttonTable.end())
 	{
-		if (button == nullptr) continue;
-
-		if (const auto& it = dynamic_cast<ButtonRectMove*>(button.get()))
+		Print << U"Result::Result: 未登録の key {} です."_fmt(key);
+	}
+	else
+	{
+		for (auto& button : it->second)
 		{
-			it->startStopwatch();
+			if (button == nullptr) continue;
+
+			if (const auto& btn = dynamic_cast<ButtonRectMove*>(button.get()))
+			{
+				btn->startStopwatch();
+			}
 		}
 	}
 }
@@ -1114,7 +1228,7 @@ void Result::update()
 {
 	const double dt = Scene::DeltaTime();
 
-	updateButtons();
+	updateButtonsAt(static_cast<ButtonTableKey>(ResultFlow::Default));
 }
 
 void Result::draw() const
@@ -1158,40 +1272,54 @@ void Result::draw() const
 	// 最大コンボ数.
 	//m_textOutExpo_aap(t_rt01, sortedTextAppearPoint, sortedText, kuro, text, U"combo:{}"_fmt(comboNum), 30);
 
-	// 何個仕分けをしたか.
-	//m_textOutExpo_aap(t_rt01, sortedTextAppearPoint, sortedText, kuro, FontAsset(FontButton), U"sorted:{}"_fmt(getData().classifyNum() - 1), 30);
-	const auto sortedPtr = dynamic_cast<ButtonRectMove*>(m_buttonPtrs.at(0).get());
-	if (sortedPtr != nullptr)
+	const auto key = static_cast<ButtonTableKey>(ResultFlow::Default);
+	const auto& table = m_buttonTable.find(key);
+	if (table == m_buttonTable.end())
 	{
-		m_textOutExpo_aap(sortedPtr->rate(), sortedTextAppearPoint, sortedText, kuro, FontAsset(FontButton), U"sorted:{}"_fmt(getData().classifyNum() - 1), 30);
+		Print << U"Result.draw: 未登録の key {} です."_fmt(key);
 	}
 	else
 	{
-		Print << U"Result: 0 番目のボタンは ButtonRectMove ではありません.";
-	}
+		const auto& buttons = table->second;
 
-	// 何個仕分けを正しくできたか.
-	//m_textOutExpo_aap(t_rt02, trueTextAppearPoint, trueText, kuro, FontAsset(FontButton), U"true:{}"_fmt(getData().correctNum()), 30);
-	const auto truePtr = dynamic_cast<ButtonRectMove*>(m_buttonPtrs.at(1).get());
-	if (truePtr != nullptr)
-	{
-		m_textOutExpo_aap(truePtr->rate(), trueTextAppearPoint, trueText, kuro, FontAsset(FontButton), U"true:{}"_fmt(getData().correctNum()), 30);
-	}
-	else
-	{
-		Print << U"Result: 1 番目のボタンは ButtonRectMove ではありません.";
-	}
+		// 何個仕分けをしたか.
+		if (const auto& sortedPtr = dynamic_cast<ButtonRectMove*>(buttons[0].get()))
+		{
+			if (sortedPtr == nullptr)
+			{
+				Print << U"Result: 0 番目のボタンは ButtonRectMove ではありません.";
+			}
+			else
+			{
+				m_textOutExpo_aap(sortedPtr->rate(), sortedTextAppearPoint, sortedText, kuro, FontAsset(FontButton), U"sorted:{}"_fmt(getData().classifyNum() - 1), 30);
+			}
+		}
 
-	// 何個ミスをしたか.
-	//m_textOutExpo_aap(t_rt03, missTextAppearPoint, missText, kuro, FontAsset(FontButton), U"miss:{}"_fmt(getData().missNum()), 30);
-	const auto missPtr = dynamic_cast<ButtonRectMove*>(m_buttonPtrs.at(2).get());
-	if (missPtr != nullptr)
-	{
-		m_textOutExpo_aap(missPtr->rate(), missTextAppearPoint, missText, kuro, FontAsset(FontButton), U"miss:{}"_fmt(getData().missNum()), 30);
-	}
-	else
-	{
-		Print << U"Result: 2 番目のボタンは ButtonRectMove ではありません.";
+		// 何個仕分けを正しくできたか.
+		if (const auto& truePtr = dynamic_cast<ButtonRectMove*>(buttons[1].get()))
+		{
+			if (truePtr != nullptr)
+			{
+				m_textOutExpo_aap(truePtr->rate(), trueTextAppearPoint, trueText, kuro, FontAsset(FontButton), U"true:{}"_fmt(getData().correctNum()), 30);
+			}
+			else
+			{
+				Print << U"Result: 1 番目のボタンは ButtonRectMove ではありません.";
+			}
+		}
+
+		// 何個ミスをしたか.
+		if (const auto missPtr = dynamic_cast<ButtonRectMove*>(buttons[2].get()))
+		{
+			if (missPtr != nullptr)
+			{
+				m_textOutExpo_aap(missPtr->rate(), missTextAppearPoint, missText, kuro, FontAsset(FontButton), U"miss:{}"_fmt(getData().missNum()), 30);
+			}
+			else
+			{
+				Print << U"Result: 2 番目のボタンは ButtonRectMove ではありません.";
+			}
+		}
 	}
 
 	drawUI();
@@ -1208,7 +1336,7 @@ void Result::drawFadeOut(double t) const
 void Result::drawUI() const
 {
 	// ボタンのレイヤーが上.
-	drawButtons();
+	drawButtonsAt(static_cast<ButtonTableKey>(ResultFlow::Default));
 }
 
 void Result::initialize()
@@ -1218,6 +1346,7 @@ void Result::initialize()
 
 	// 0 番目.
 	makeButton(
+		static_cast<ButtonTableKey>(ResultFlow::Default),
 		ButtonCtx(m_playAgain, kiiro, U"もう一回", FontButton),
 		[&](ButtonBase* self)
 		{
@@ -1242,6 +1371,7 @@ void Result::initialize()
 
 	// 1 番目.
 	makeButton(
+		static_cast<ButtonTableKey>(ResultFlow::Default),
 		ButtonCtx(m_backStage, kiiro, U"ステージへ", FontButton),
 		[&](ButtonBase* self)
 		{
@@ -1266,6 +1396,7 @@ void Result::initialize()
 
 	// 2 番目.
 	makeButton(
+		static_cast<ButtonTableKey>(ResultFlow::Default),
 		ButtonCtx(m_backTitle, murasaki * 1.4, U"タイトルへ", FontButton),
 		[&](ButtonBase* self)
 		{
