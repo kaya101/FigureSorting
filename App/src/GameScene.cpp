@@ -12,7 +12,7 @@ void GameScene::makeButton(const ButtonCtx& ctx, ButtonWorkCallBack workCallBack
 	m_buttonPtrs.push_back(std::move(ptr));
 }
 
-void GameScene::makeButton(const ButtonCtx& ctx, ButtonWorkCallBack workCallBack, const Vec2& from, const SecondsF delay, const ButtonRectMove::Easing& easing)
+void GameScene::makeButton(const ButtonCtx& ctx, ButtonWorkCallBack workCallBack, const Vec2& from, const double delay, ButtonRectMove::Easing easing)
 {
 	auto ptr = std::make_unique<ButtonRectMove>(ctx, from, delay, easing);
 
@@ -1238,7 +1238,7 @@ void Result::initialize()
 			m_resulttext03.reset();*/
 			changeScene(SceneSwitch::Letsplay, 0.0);
 		},
-		m_playAgainAppearPoint, 1s, [](double t)->double { return easeOutExpo(t); });
+		m_playAgainAppearPoint, 1.0, easeOutExpo);
 
 	// 1 番目.
 	makeButton(
@@ -1262,7 +1262,7 @@ void Result::initialize()
 			m_resulttext03.reset();*/
 			changeScene(SceneSwitch::Stage, 0.0);
 		},
-		m_backStageAppearPoint, 1.1s, [](double t)->double { return easeOutExpo(t); });
+		m_backStageAppearPoint, 1.1, easeOutExpo);
 
 	// 2 番目.
 	makeButton(
@@ -1286,7 +1286,7 @@ void Result::initialize()
 			m_resulttext03.reset();*/
 			changeScene(SceneSwitch::Title, 0.0);
 		},
-		m_backTitleAppearPoint, 1.2s, [](double t)->double { return easeOutExpo(t); });
+		m_backTitleAppearPoint, 1.2, easeOutExpo);
 }
 
 /*	End Result Scene		********************************************************************************************************/

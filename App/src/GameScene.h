@@ -16,7 +16,7 @@ protected:
 
 	void makeButton(const ButtonCtx& ctx, ButtonWorkCallBack workCallBack);
 
-	void makeButton(const ButtonCtx& ctx, ButtonWorkCallBack workCallBack, const Vec2& from, const SecondsF delay, const ButtonRectMove::Easing& easing);
+	void makeButton(const ButtonCtx& ctx, ButtonWorkCallBack workCallBack, const Vec2& from, const double delay, ButtonRectMove::Easing easing);
 
 	void updateButtons();
 
@@ -266,7 +266,8 @@ private:
 
 	double m_t_cd = 0.0;		// カウントダウンの時間.
 	
-	uint8 m_timelimit = 15;	// 制限時間.
+	//uint8 m_timelimit = 15;	// 制限時間.
+	uint8 m_timelimit = 3;	// 制限時間.
 	
 	uint8 m_gt = 0;			// 制限時間のカウントダウン時間.
 

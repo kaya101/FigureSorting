@@ -64,25 +64,26 @@ const bool ButtonRect::isReleased() const
 
 /*	Start ButtonRectMove	********************************************************************************************************/
 
-ButtonRectMove::ButtonRectMove(const ButtonCtx& ctx, const Vec2& from, const SecondsF delay, const Easing& easing)
+ButtonRectMove::ButtonRectMove(const ButtonCtx& ctx, const Vec2& from, const double delay, const Easing& easing)
 	: ButtonRect(ctx)
+	, m_to(m_body.pos)
 	, m_from(from)
 	, m_delay(delay)
 	, m_easing(easing)
 {
-	// delay 秒だけ遅延させる.
-	m_stopwatch.set(delay);
+	m_stopwatch.start();
 }
 
 void ButtonRectMove::update()
 {
 	// イージング関数で移動させる.
-	m_body.pos = m_from + m_easing(rate()) * (m_body.pos - m_from);
+	m_body.pos = m_from + m_easing(rate()) * (m_to - m_from);
+
+	// ボタンのテキストも移動させる.
+	m_center = m_body.center();
 
 	// 移動した後で当たり判定を行う.
 	ButtonRect::update();
-
-	Print << U"is started: {}"_fmt(m_stopwatch.isStarted());
 }
 
 void ButtonRectMove::draw() const

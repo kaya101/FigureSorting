@@ -94,7 +94,7 @@ class ButtonRectMove : public ButtonRect
 public:
 	using Easing = std::function<double(double)>;
 
-	explicit ButtonRectMove(const ButtonCtx& ctx, const Vec2& from, const SecondsF delay, const Easing& easing);
+	explicit ButtonRectMove(const ButtonCtx& ctx, const Vec2& from, const double delay, const Easing& easing);
 
 	~ButtonRectMove() = default;
 
@@ -104,14 +104,16 @@ public:
 
 	const bool isReleased() const override;
 
-	const double rate() const { return Min(1.0, Max(0.0, m_stopwatch.sF())); }
+	const double rate() const { return Min(1.0, Max(0.0, m_stopwatch.sF() - m_delay)); }
 
 	void startStopwatch() { m_stopwatch.start(); }
 
 private:
+	Vec2 m_to;		// 到達点.
+
 	Vec2 m_from;	// 出現点.
 
-	SecondsF m_delay;
+	double m_delay;
 
 	Easing m_easing;
 
