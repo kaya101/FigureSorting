@@ -7,13 +7,16 @@
 
 void Main()
 {
+	FontAsset::Register(FontTitle, 60, Typeface::Heavy);
+	FontAsset::Register(FontButton, FontMethod::SDF, 30, Typeface::Bold);
+
 	App manager;
 	manager.add<Title>(SceneSwitch::Title);
 	manager.add<Stage>(SceneSwitch::Stage);
 	manager.add<LetsPlay>(SceneSwitch::Letsplay);
 	manager.add<Result>(SceneSwitch::Result);
 
-	manager.init(SceneSwitch::Title, 0s);// Title シーンから始めて, 0s 後に開始.
+	manager.init(SceneSwitch::Title, 0s);	// Title シーンから始めて, 0s 後に開始.
 
 	while (System::Update())
 	{
