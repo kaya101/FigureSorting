@@ -133,14 +133,14 @@ Stage::Stage(const InitData& init)
 {
 	initialize();
 
-	enableButtonsAt(static_cast<ButtonTableKey>(StageFlow::Default));
+	enableButtonsAt(static_cast<ButtonTableKey>(UILayer::Default));
 }
 
 void Stage::update()
 {
 	const double dt = Scene::DeltaTime();
 
-	updateButtonsAt(static_cast<ButtonTableKey>(StageFlow::Default));
+	updateButtonsAt(static_cast<ButtonTableKey>(UILayer::Default));
 }
 
 void Stage::draw() const
@@ -191,7 +191,7 @@ void Stage::drawUI() const
 	FontAsset(FontTitle)(U"説明を飛ばすとき：").drawAt(16, explainskipText, kuro);
 
 	// ボタンのレイヤーが一番上.
-	drawButtonsAt(static_cast<ButtonTableKey>(StageFlow::Default));
+	drawButtonsAt(static_cast<ButtonTableKey>(UILayer::Default));
 }
 
 void Stage::initialize()
@@ -199,7 +199,7 @@ void Stage::initialize()
 	Scene::SetBackground(bg_shiro);
 
 	makeButton(
-		static_cast<ButtonTableKey>(StageFlow::Default),
+		static_cast<ButtonTableKey>(UILayer::Default),
 		ButtonCtx(stage01botan, botan * 1.4, U"これ!!", FontButton),
 		[&](ButtonBase* self)
 		{
@@ -221,7 +221,7 @@ void Stage::initialize()
 		});
 
 	makeButton(
-		static_cast<ButtonTableKey>(StageFlow::Default),
+		static_cast<ButtonTableKey>(UILayer::Default),
 		ButtonCtx(stage02botan, botan * 1.4, U"これ!!", FontButton),
 		[&](ButtonBase* self)
 		{
@@ -253,7 +253,7 @@ void Stage::initialize()
 		});
 
 	makeButton(
-		static_cast<ButtonTableKey>(StageFlow::Default),
+		static_cast<ButtonTableKey>(UILayer::Default),
 		ButtonCtx(stageMAXbotan, botan * 1.4, U"これ!!", FontButton),
 		[&](ButtonBase* self)
 		{
@@ -293,7 +293,7 @@ void Stage::initialize()
 		});
 
 	makeButton(
-		static_cast<ButtonTableKey>(StageFlow::Default),
+		static_cast<ButtonTableKey>(UILayer::Default),
 		ButtonCtx(colorchangeBox, bg_shiro, U"", FontButton),
 		[&](ButtonBase* self)
 		{
@@ -316,7 +316,7 @@ void Stage::initialize()
 		});
 
 	makeButton(
-		static_cast<ButtonTableKey>(StageFlow::Default),
+		static_cast<ButtonTableKey>(UILayer::Default),
 		ButtonCtx(explainskipBox, bg_shiro, U"", FontButton),
 		[&](ButtonBase* self)
 		{

@@ -67,7 +67,7 @@ class Stage
 	, public GameScene
 {
 public:
-	enum class StageFlow : ButtonTableKey
+	enum class UILayer : ButtonTableKey
 	{
 		Default,
 	};
