@@ -158,10 +158,12 @@ class LetsPlay
 public:
 	enum class LetsPlayFlow : ButtonTableKey
 	{
-		Default,
-		Explain,	// ルール/操作方法の説明.
-		Start,		// はじめるボタンを押すまで.
-		Pause,		// 中断ウィンドウが出てる画面.
+		ExplainPage1,	// ルールの説明.
+		ExplainPage2,	// 操作方法の説明.
+		Start,			// はじめるボタンを押すまで.
+		CountDown,		// 開始直後の幕開け.
+		Play,			// 遊びの画面.
+		Pause,			// 中断ウィンドウが出てる画面.
 	};
 
 	// 正誤判定.
@@ -322,7 +324,9 @@ private:
 	int16 m_distance_x = 0;
 	int16 m_distance_y = 0;
 
-	LetsPlayFlow m_currentFlow = LetsPlayFlow::Default;
+	LetsPlayFlow m_currentFlow;
+
+	void MoveNextFlow(const LetsPlayFlow next);
 
 	// 図形の色を決める関数.
 	void decide_color(Figure& figure, const uint8& stageNum, const bool& colorchange) const
