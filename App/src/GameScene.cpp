@@ -138,8 +138,6 @@ Stage::Stage(const InitData& init)
 
 void Stage::update()
 {
-	const double dt = Scene::DeltaTime();
-
 	updateButtonsAt(static_cast<ButtonTableKey>(UILayer::Default));
 }
 
@@ -162,32 +160,27 @@ void Stage::drawUI() const
 	FontAsset(FontTitle)(m_StageName).draw(48, 50, 30, kuro);
 
 	// 01.
-	stage01textback.draw(haiiro);
-	stage01textback.drawFrame(haba, kuro);
+	stage01textback.drawFrame(haba, kuro).draw(haiiro);
 	FontAsset(FontTitle)(U"Lv.1").drawAt(stagetextSize, stage01text);
-	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける"_fmt(getData().highScores()[STAGE01])).draw(stagetextsubSize, stage01textsub);
+	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける"_fmt(getData().highScores()[static_cast<StageLevelValue>(StageLevel::Level01)])).draw(stagetextsubSize, stage01textsub);
 
 	// 02.
-	stage02textback.draw(haiiro);
-	stage02textback.drawFrame(haba, kuro);
+	stage02textback.drawFrame(haba, kuro).draw(haiiro);
 	FontAsset(FontTitle)(U"Lv.2").drawAt(stagetextSize, stage02text);
-	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける\n・色でわける"_fmt(getData().highScores()[STAGE02])).draw(stagetextsubSize, stage02textsub);
+	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける\n・色でわける"_fmt(getData().highScores()[static_cast<StageLevelValue>(StageLevel::Level02)])).draw(stagetextsubSize, stage02textsub);
 
 	// MAX.
-	stageMAXtextback.draw(haiiro);
-	stageMAXtextback.drawFrame(haba, kuro);
+	stageMAXtextback.drawFrame(haba, kuro).draw(haiiro);
 	FontAsset(FontTitle)(U"Lv.3").drawAt(stagetextSize, stageMAXtext);
-	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける\n・色でわける\n・文字でわける"_fmt(getData().highScores()[STAGEMAX])).draw(stagetextsubSize, stageMAXtextsub);
+	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける\n・色でわける\n・文字でわける"_fmt(getData().highScores()[static_cast<StageLevelValue>(StageLevel::LevelMAX)])).draw(stagetextsubSize, stageMAXtextsub);
 
 	// 図形の見本.
 	m_sampleCircle.drawFrame(haba, kuro).draw(getData().colors()[0]);
 	m_sampleTriangle.drawFrame(haba, kuro).draw(getData().colors()[1]);
 	m_sampleRect.drawFrame(haba, kuro).draw(getData().colors()[2]);
 
-	// 色が見づらいかどうか.
 	FontAsset(FontTitle)(U"色が見づらい場合：").drawAt(16, colorchangeText, kuro);
 
-	// 説明をスキップするかどうか.
 	FontAsset(FontTitle)(U"説明を飛ばすとき：").drawAt(16, explainskipText, kuro);
 
 	// ボタンのレイヤーが一番上.
@@ -198,25 +191,14 @@ void Stage::initialize()
 {
 	Scene::SetBackground(bg_shiro);
 
+	m_isChangedColor = false;
+
 	makeButton(
 		static_cast<ButtonTableKey>(UILayer::Default),
 		ButtonCtx(stage01botan, botan * 1.4, U"これ!!", FontButton),
 		[&](ButtonBase* self)
 		{
-			// ここのステージで使える素材の受け取り.
-			if (getData().isChangedColor())
-			{
-				getData().setFcolor(colorchangecolor_Lv01);
-			}
-			else
-			{
-				getData().setFcolor(color_Lv01);
-			}
-			getData().setFtext(text_Lv01);
-			getData().setStageNum(STAGE01);
-
-			// 形でわける.
-			getData().setScoreSwitch(ScoreSwitch::ShapeRule);
+			setupGameData(StageLevel::Level01, getData());
 			changeScene(SceneSwitch::Letsplay, 0.0);
 		});
 
@@ -225,31 +207,8 @@ void Stage::initialize()
 		ButtonCtx(stage02botan, botan * 1.4, U"これ!!", FontButton),
 		[&](ButtonBase* self)
 		{
-			// ここのステージで使える素材の受け取り.
-			if (getData().isChangedColor())
-			{
-				getData().setFcolor(colorchangecolor_Lv02);
-			}
-			else
-			{
-				getData().setFcolor(color_Lv02);
-			}
-			getData().setFtext(text_Lv02);
-			getData().setStageNum(STAGE02);
-
-			// ルール決め.
-			if (randInt() % 2)
-			{
-				// 色でわける.
-				getData().setScoreSwitch(ScoreSwitch::ColorRule);
-				changeScene(SceneSwitch::Letsplay, 0.0);
-			}
-			else
-			{
-				// 形でわける.
-				getData().setScoreSwitch(ScoreSwitch::ShapeRule);
-				changeScene(SceneSwitch::Letsplay, 0.0);
-			}
+			setupGameData(StageLevel::Level02, getData());
+			changeScene(SceneSwitch::Letsplay, 0.0);
 		});
 
 	makeButton(
@@ -257,39 +216,8 @@ void Stage::initialize()
 		ButtonCtx(stageMAXbotan, botan * 1.4, U"これ!!", FontButton),
 		[&](ButtonBase* self)
 		{
-			// ここのステージで使える素材の受け取り.
-			getData().setStageNum(STAGEMAX);
-			if (getData().isChangedColor())
-			{
-				getData().setFcolor(colorchangecolor_LvMAX);
-				getData().setFtext(colorchangetext);
-			}
-			else
-			{
-				getData().setFcolor(color_LvMAX);
-				getData().setFtext(text_LvMAX);
-			}
-
-			// ルール決め.
-			uint8 ruleNum = randInt() % 3;
-			if (ruleNum == 0)
-			{
-				// 文字でわける.
-				getData().setScoreSwitch(ScoreSwitch::TextRule);
-				changeScene(SceneSwitch::Letsplay, 0.0);
-			}
-			else if (ruleNum == 1)
-			{
-				// 色でわける.
-				getData().setScoreSwitch(ScoreSwitch::ColorRule);
-				changeScene(SceneSwitch::Letsplay, 0.0);
-			}
-			else
-			{
-				// 形でわける.
-				getData().setScoreSwitch(ScoreSwitch::ShapeRule);
-				changeScene(SceneSwitch::Letsplay, 0.0);
-			}
+			setupGameData(StageLevel::LevelMAX, getData());
+			changeScene(SceneSwitch::Letsplay, 0.0);
 		});
 
 	makeButton(
@@ -335,6 +263,63 @@ void Stage::initialize()
 				getData().setCountSwitch(CountSwitch::ExplainRule);
 			}
 		});
+}
+
+void Stage::setupGameData(const StageLevel level, GameData& gd) const
+{
+	const size_t idx = static_cast<StageLevelValue>(level);
+
+	// 素材の準備.
+	gd.setStageNum(idx);
+
+	if (m_isChangedColor)
+	{
+		gd.setFcolor(colorchangecolor[idx]);
+		gd.setFtext((level == StageLevel::LevelMAX) ? colorchangetext : text_Lv01);
+	}
+	else
+	{
+		gd.setFcolor(color[idx]);
+		gd.setFtext(teXt[idx]);
+	}
+
+	// ルール決め.
+	if (level == StageLevel::Level01)
+	{
+		gd.setScoreSwitch(ScoreSwitch::ShapeRule);
+	}
+	else if (level == StageLevel::Level02)
+	{
+		if (randInt() % 2)
+		{
+			// 色でわける.
+			gd.setScoreSwitch(ScoreSwitch::ColorRule);
+		}
+		else
+		{
+			// 形でわける.
+			gd.setScoreSwitch(ScoreSwitch::ShapeRule);
+		}
+	}
+	else
+	{
+		uint8 ruleNum = randInt() % 3;
+		if (ruleNum == 0)
+		{
+			// 文字でわける.
+			gd.setScoreSwitch(ScoreSwitch::TextRule);
+		}
+		else if (ruleNum == 1)
+		{
+			// 色でわける.
+			gd.setScoreSwitch(ScoreSwitch::ColorRule);
+		}
+		else
+		{
+			// 形でわける.
+			gd.setScoreSwitch(ScoreSwitch::ShapeRule);
+		}
+	}
 }
 
 /*	End Stage Scene		********************************************************************************************************/

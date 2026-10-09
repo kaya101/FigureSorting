@@ -209,14 +209,6 @@ private:
 
 using App = SceneManager<SceneSwitch, GameData>;
 
-//各ステージの番号.
-constexpr uint8 STAGE01 = 0;
-constexpr uint8 STAGE02 = 1;
-constexpr uint8 STAGEMAX = 2;
-
-
-
-
 //幕.
 constexpr Rect makuSize = { 0, 0, 800, 600 };
 

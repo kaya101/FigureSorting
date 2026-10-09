@@ -72,6 +72,15 @@ public:
 		Default,
 	};
 
+	using StageLevelValue = size_t;
+	enum class StageLevel : StageLevelValue
+	{
+		Level01 = 0,
+		Level02 = 1,
+		LevelMAX = 2,
+		Count = 3		// 要素数.
+	};
+
 	explicit Stage(const InitData& init);
 
 	~Stage() = default;
@@ -97,24 +106,18 @@ private:
 	
 	static constexpr uint8 stagetextSize = 5 * stage01textback.size.x / 22;
 
-	//static constexpr Vec2 stage01text = { stage01textback.pos.x + stage01textback.w / 2, stage01textback.y + stagetextSize };
 	static constexpr Vec2 stage01text = stage01textback.pos + Vec2(stage01textback.size.x * 0.5, stagetextSize);
 	
-	//static constexpr Vec2 stage02text = { stage02textback.pos.x + stage02textback.w / 2, stage02textback.y + stagetextSize };
 	static constexpr Vec2 stage02text = stage02textback.pos + Vec2(stage02textback.size.x * 0.5, stagetextSize);
 	
-	//static constexpr Vec2 stageMAXtext = { stageMAXtextback.pos.x + stageMAXtextback.w / 2, stageMAXtextback.y + stagetextSize };
 	static constexpr Vec2 stageMAXtext = stageMAXtextback.pos + Vec2(stageMAXtextback.size.x * 0.5, stagetextSize);
 	
 	static constexpr uint8 stagetextsubSize = stage01textback.size.x / 11;
 	
-	//static constexpr Vec2 stage01textsub = { stage01textback.x + 10, stage01textback.y + 5 * stage01textback.w / 22 + 30 };
 	static constexpr Vec2 stage01textsub = stage01textback.pos + Vec2(10, 5 * stage01textback.size.x / 22 + 30);
 	
-	//static constexpr Vec2 stage02textsub = { stage02textback.x + 10, stage02textback.y + 5 * stage02textback.w / 22 + 30 };
 	static constexpr Vec2 stage02textsub = stage02textback.pos + Vec2(10, 5 * stage02textback.size.x / 22 + 30);
 	
-	//static constexpr Vec2 stageMAXtextsub = { stageMAXtextback.x + 10, stageMAXtextback.y + 5 * stageMAXtextback.w / 22 + 30 };
 	static constexpr Vec2 stageMAXtextsub = stageMAXtextback.pos + Vec2(10, 5 * stageMAXtextback.size.x / 22 + 30);
 	
 	static constexpr RectF stage01botan = { Arg::center(stage01textback.pos.x + stage01textback.size.x / 2, (int16)(stage01textback.pos.y + 7 * stage01textback.size.y / 8)), (stage01textback.size.x - 20), (int16)(8 * stage01textback.size.y / 45) };
@@ -142,6 +145,10 @@ private:
 	const RectF m_sampleRect = { Arg::center(stageMAXtextback.x + stageMAXtextback.w / 2, stageMAXtextback.y - stageMAXtextback.w / 2 + 40) , stageMAXtextback.w / 2 };
 	
 	const String m_markedText = U"〆";
+
+	bool m_isChangedColor;
+
+	void setupGameData(const StageLevel level, GameData& gd) const;
 };
 
 class LetsPlay
@@ -340,7 +347,7 @@ private:
 		uint8 num = randInt() % kinds[stageNum][TEXT];
 
 		// 色を変更しているとき.
-		if (colorchange && stageNum == STAGEMAX) {
+		if (colorchange && stageNum == static_cast<Stage::StageLevelValue>(Stage::StageLevel::LevelMAX)) {
 			figure.text = colorchangetext[num];
 		}
 		// 最初のまま.
