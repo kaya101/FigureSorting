@@ -63,16 +63,6 @@ enum class PauseSwitch
 	PauseWindow,	// 中断ウィンドウが出てる画面.
 };
 
-//// カウントダウン画面管理.
-//enum class CountSwitch
-//{
-//	ExplainRule,	// ルールの説明文.
-//	ExplainSousa,	// 操作方法の説明.
-//	Start,			// はじめるボタンを押すまで.
-//	Countdown,		// カウントダウン.
-//	Break,			// 待機.
-//};
-
 // 分類ルール.
 enum class ScoreSwitch
 {
@@ -135,7 +125,6 @@ public:
 	void turnOffSkippedExplain() { m_isSkippedExplain = false; }
 
 	void setPauseSwitch(const PauseSwitch& pause) { m_currentPause = pause; }
-	//void setCountSwitch(const CountSwitch& skip) { m_currentCount = skip; }
 	void setScoreSwitch(const ScoreSwitch& skip) { m_currentScoreSwitch = skip; }
 	void setFigureSwitch(const FigureSwitch& skip) { m_currentFigureSwitch = skip; }
 	void setHighScore(const size_t idx, const int16 score) { m_highScores[idx] = score; }
@@ -150,7 +139,6 @@ public:
 	const bool isChangedColor() const { return m_isChangedColor; }
 	const bool isSkippedExplain() const { return m_isSkippedExplain; }
 	const PauseSwitch currentPauseSwitch() const { return m_currentPause; }
-	//const CountSwitch currentCountSwitch() const { return m_currentCount; }
 	const ScoreSwitch currentScoreSwitch() const { return m_currentScoreSwitch; }
 	const FigureSwitch currentFigureSwitch() const { return m_currentFigureSwitch; }
 	const Array<int16>& highScores() const { return m_highScores; }
@@ -173,8 +161,6 @@ private:
 	bool m_isSkippedExplain = false;	// 説明をスキップするかどうか.
 
 	PauseSwitch m_currentPause = PauseSwitch::BackButton;
-
-	//CountSwitch m_currentCount = CountSwitch::ExplainRule;
 
 	ScoreSwitch m_currentScoreSwitch = ScoreSwitch::ShapeRule;	// 得点計算.
 

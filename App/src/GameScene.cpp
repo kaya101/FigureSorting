@@ -829,123 +829,6 @@ void LetsPlay::update()
 		break;
 	}
 
-	//// 説明とカウントダウン画面.
-	//switch (getData().currentCountSwitch())
-	//{
-	//case CountSwitch::Break: // 待機画面.
-	//	break;
-
-	//case CountSwitch::ExplainRule: // 仕分けルール説明.
-
-	//	// ちょっと暗くする.
-	//	makuSize.draw(makuColor);
-
-	//	// 説明窓.
-	//	explainWindow.draw(shiro);
-	//	explainWindow.drawFrame(haba, kuro);
-	//	text(U"-ルール説明-").draw(30, explainMain, kuro);
-	//	text(U"「かたち」は\n図形の形").drawAt(26, explainSubShape, kuro);
-	//	text(U"「いろ」は\n図形の色").drawAt(26, explainSubColor, kuro);
-	//	text(U"「もじ」は\n図形の文字").drawAt(26, explainSubText, kuro);
-
-	//	// 区切りの線.
-	//	Line{ explainLineLeftBegin, explainLineLeftEnd }.draw(haba, kuro);
-	//	Line{ explainLineRightBegin, explainLineRightEnd }.draw(haba, kuro);
-
-	//	// 飾りの図形.
-	//	explainShapeCircle.draw(getData().colors()[1]);
-	//	explainShapeCircle.drawFrame(haba, kuro);
-	//	explainShapeTriangle.draw(getData().colors()[1]);
-	//	explainShapeTriangle.drawFrame(haba, kuro);
-	//	explainShapeRect.draw(getData().colors()[1]);
-	//	explainShapeRect.drawFrame(haba, kuro);
-
-	//	explainColorCircle.draw(getData().colors()[0]);
-	//	explainColorCircle.drawFrame(haba, kuro);
-	//	explainColorTriangle.draw(getData().colors()[1]);
-	//	explainColorTriangle.drawFrame(haba, kuro);
-	//	explainColorRect.draw(getData().colors()[2]);
-	//	explainColorRect.drawFrame(haba, kuro);
-
-	//	text(getData().texts()[0]).draw(30, explainTextmaru, kuro);
-	//	text(getData().texts()[1]).draw(30, explainTextsankaku, kuro);
-	//	text(getData().texts()[2]).draw(30, explainTextshikaku, kuro);
-
-	//	break;
-
-	//case CountSwitch::ExplainSousa: // 図形の動かし方の説明.
-
-	//	// ちょっと暗くする.
-	//	makuSize.draw(makuColor);
-
-	//	// 説明窓.
-	//	explainWindow.draw(shiro);
-	//	explainWindow.drawFrame(haba, kuro);
-	//	text(U"-操作方法-").draw(30, explainMain, kuro);
-	//	text(U"左クリックでつかんで移動!!").drawAt(30, 400, 300, kuro);
-
-	//	break;
-
-	//case CountSwitch::Start: // スタートボタンを押す.
-
-	//	// ちょっと暗くする.
-	//	makuSize.draw(makuColor);
-
-	//	// START ボタンがクリックできることを分かりやすく.
-	//	text(U"クリックしてスタート").drawAt(16, 400, 340, kuro);
-
-	//	break;
-
-	//case CountSwitch::Countdown: // スタートのカウントダウン.
-	//{
-	//	m_t_cd = m_countdown.sF();
-	//	const double t_cdmaku = Min(m_countdown.sF() / 2, 1.0);
-
-	//	// 開幕演出.
-	//	m_boxOutQuad_adu(t_cdmaku, makuSize, makuColor);
-	//	if (m_t_cd <= 1)
-	//	{
-	//		text(U"3").drawAt(countdownsize, countdownpoint, kuro);
-
-	//		// ルールの読み忘れを無くす矢印.
-	//		text(U"↑").drawAt(50, yondeyoLeft, kuro);
-	//		text(U"↑").drawAt(50, yondeyoRight, kuro);
-	//		break;
-	//	}
-	//	else if (1 < m_t_cd && m_t_cd <= 2)
-	//	{
-	//		text(U"2").drawAt(countdownsize, countdownpoint, kuro);
-	//		break;
-	//	}
-	//	else if (2 < m_t_cd && m_t_cd <= 3)
-	//	{
-	//		text(U"1").drawAt(countdownsize, countdownpoint, kuro);
-
-	//		// ルールの読み忘れを無くす矢印.
-	//		text(U"↑").drawAt(50, yondeyoLeft, kuro);
-	//		text(U"↑").drawAt(50, yondeyoRight, kuro);
-	//		break;
-	//	}
-	//	else if (3 < m_t_cd && m_t_cd <= 4)
-	//	{
-	//		text(U"START!!").drawAt(countdownsize, countdownpoint, kuro);
-	//	}
-	//	if (4 < m_t_cd)
-	//	{
-	//		m_countdown.reset();
-	//		m_t_cd = 0.0;
-	//		//getData().setCountSwitch(CountSwitch::Break);
-	//		getData().setFigureSwitch(FigureSwitch::MakeFigure);
-
-	//		// 制限時間の開始.
-	//		m_playtime.restart();
-	//		break;
-	//	}
-	//	break;
-	//}
-	//default:
-	//	break;
-	//}
 	// 説明とカウントダウン画面.
 	switch (m_currentFlow)
 	{
@@ -1041,7 +924,6 @@ void LetsPlay::update()
 		{
 			m_countdown.reset();
 			m_t_cd = 0.0;
-			//getData().setCountSwitch(CountSwitch::Break);
 			getData().setFigureSwitch(FigureSwitch::MakeFigure);
 
 			// 制限時間の開始.
@@ -1099,34 +981,6 @@ void LetsPlay::drawFadeOut(double t) const
 
 void LetsPlay::drawUI() const
 {
-	/*switch (m_currentFlow)
-	{
-	case LetsPlayFlow::Default:
-
-		drawButtonsAt(static_cast<ButtonTableKey>(LetsPlayFlow::Default));
-
-		break;
-
-	case LetsPlayFlow::Explain:
-
-		drawButtonsAt(static_cast<ButtonTableKey>(LetsPlayFlow::Explain));
-
-		break;
-
-	case LetsPlayFlow::Start:
-
-		drawButtonsAt(static_cast<ButtonTableKey>(LetsPlayFlow::Start));
-
-		break;
-
-	case LetsPlayFlow::Pause:
-
-		drawButtonsAt(static_cast<ButtonTableKey>(LetsPlayFlow::Pause));
-
-		break;
-	default:
-		break;
-	}*/
 	drawButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
 }
 
@@ -1139,7 +993,6 @@ void LetsPlay::initialize()
 		ButtonCtx(explainNextButton, makuColor, U"→", FontButton),
 		[&](ButtonBase* self)
 		{
-			//getData().setCountSwitch(CountSwitch::ExplainSousa);
 			MoveNextFlow(LetsPlayFlow::ExplainPage2);
 		});
 
@@ -1148,9 +1001,6 @@ void LetsPlay::initialize()
 		ButtonCtx(explainOK, makuColor, U"OK", FontButton),
 		[&](ButtonBase* self)
 		{
-			//getData().setCountSwitch(CountSwitch::Start);
-			/*m_currentFlow = LetsPlayFlow::Start;
-			enableButtonsAt(static_cast<ButtonTableKey>(LetsPlayFlow::Start));*/
 			MoveNextFlow(LetsPlayFlow::Start);
 		});
 
@@ -1159,7 +1009,6 @@ void LetsPlay::initialize()
 		ButtonCtx(explainBackButton, makuColor, U"←", FontButton),
 		[&](ButtonBase* self)
 		{
-			//getData().setCountSwitch(CountSwitch::ExplainRule);
 			MoveNextFlow(LetsPlayFlow::ExplainPage1);
 		});
 
@@ -1173,14 +1022,10 @@ void LetsPlay::initialize()
 			m_countdown.restart();
 			m_playtime.reset();
 
-			/*m_currentFlow = LetsPlayFlow::Play;
-			enableButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));*/
 			MoveNextFlow(LetsPlayFlow::CountDown);
 
 			// 初期化.
 			getData().initialize();
-
-			//getData().setCountSwitch(CountSwitch::Countdown);
 		});
 
 	makeButton(
@@ -1192,8 +1037,7 @@ void LetsPlay::initialize()
 			m_countdown.pause();
 			m_pause = true;
 			getData().setPauseSwitch(PauseSwitch::PauseWindow);
-			/*m_currentFlow = LetsPlayFlow::Pause;
-			enableButtonsAt(static_cast<ButtonTableKey>(LetsPlayFlow::Pause));*/
+
 			MoveNextFlow(LetsPlayFlow::Pause);
 		});
 
@@ -1202,14 +1046,6 @@ void LetsPlay::initialize()
 		ButtonCtx(pauseRetire, daidai, U"ステージに戻る", FontButton),
 		[&](ButtonBase* self)
 		{
-			if (getData().isSkippedExplain())
-			{
-				//getData().setCountSwitch(CountSwitch::Start);
-			}
-			else
-			{
-				//getData().setCountSwitch(CountSwitch::ExplainRule);
-			}
 			getData().setFigureSwitch(FigureSwitch::Break);
 			getData().initialize();
 			m_gt = 0;
@@ -1231,8 +1067,7 @@ void LetsPlay::initialize()
 			m_pause = false;
 			getData().setPauseSwitch(PauseSwitch::BackButton);
 			changeScene(SceneSwitch::Letsplay, 0.0);
-			/*m_currentFlow = LetsPlayFlow::Default;
-			enableButtonsAt(static_cast<ButtonTableKey>(LetsPlayFlow::Default));*/
+			
 			MoveNextFlow(LetsPlayFlow::Play);
 		});
 
@@ -1246,8 +1081,7 @@ void LetsPlay::initialize()
 			m_pause = false;
 			getData().setPauseSwitch(PauseSwitch::BackButton);
 			changeScene(SceneSwitch::Letsplay, 0.0);
-			/*m_currentFlow = LetsPlayFlow::Default;
-			enableButtonsAt(static_cast<ButtonTableKey>(LetsPlayFlow::Default));*/
+			
 			MoveNextFlow(LetsPlayFlow::Play);
 		});
 }
