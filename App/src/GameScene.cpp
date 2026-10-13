@@ -354,7 +354,7 @@ void LetsPlay::update()
 	case TrueOrFalse::TrueSort: // 正解した時.
 
 		// 正解したエフェクト.
-		effect_TrueOrFalse(t_tf, getData().comboNum(), kuro, text, 30);
+		effect_TrueOrFalse(t_tf, getData().comboNum(), kuro, FontAsset(FontText), 30);
 
 		// 時間経過で消す.
 		if (t_tf > 20)
@@ -368,7 +368,7 @@ void LetsPlay::update()
 	case TrueOrFalse::FalseSort: // 間違えたとき.
 
 		// 間違えた時のエフェクト.
-		effect_TrueOrFalse(t_tf, getData().comboNum(), kuro, text, 30);
+		effect_TrueOrFalse(t_tf, getData().comboNum(), kuro, FontAsset(FontText), 30);
 
 		if (t_tf > 20)
 		{
@@ -499,7 +499,7 @@ void LetsPlay::update()
 
 	// 制限時間.
 	m_gt = m_playtime.s();
-	text(U"time(s):{}"_fmt(m_timelimit - m_gt)).draw(20, 60, kuro);
+	FontAsset(FontText)(U"time(s):{}"_fmt(m_timelimit - m_gt)).draw(20, 60, kuro);
 
 	// 時間切れになったとき.
 	if (m_timelimit - m_gt <= 0)
@@ -528,7 +528,7 @@ void LetsPlay::update()
 
 		if (m_canDisplayRule)
 		{
-			text(U"かたちで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
+			FontAsset(FontText)(U"かたちで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
 		}
 		
 		// left は,まる.
@@ -627,7 +627,7 @@ void LetsPlay::update()
 
 		if (m_canDisplayRule)
 		{
-			text(U"いろで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
+			FontAsset(FontText)(U"いろで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
 		}
 		
 		// left は,赤.
@@ -710,7 +710,7 @@ void LetsPlay::update()
 
 		if (m_canDisplayRule)
 		{
-			text(U"もじで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
+			FontAsset(FontText)(U"もじで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
 		}
 
 		// left は,"あか".
@@ -838,7 +838,7 @@ void LetsPlay::draw() const
 		circle.drawFrame(haba, kuro).draw(figure.color);
 		triangle.drawFrame(haba, kuro).draw(figure.color);
 		rect.drawFrame(haba, kuro).draw(figure.color);
-		text(figure.text).drawAt(figure.textSize, figure.center, figure.textcolor);
+		FontAsset(FontText)(figure.text).drawAt(figure.textSize, figure.center, figure.textcolor);
 
 		break;
 
@@ -850,7 +850,7 @@ void LetsPlay::draw() const
 			Circle{ check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), circle.r }.drawFrame(haba, kuro).draw(figure.color);
 			Triangle{ (double)check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), (double)check_wally(wally, Cursor::Pos().y + m_distance_y, figure), culc_Length(triangle) }.drawFrame(haba, kuro).draw(figure.color);
 			RectF{ Arg::center(check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure)), rect.size }.drawFrame(haba, kuro).draw(figure.color);
-			text(figure.text).drawAt(figure.textSize, check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), figure.textcolor);
+			FontAsset(FontText)(figure.text).drawAt(figure.textSize, check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), figure.textcolor);
 		}
 
 		// 図形を離したとき.
@@ -860,7 +860,7 @@ void LetsPlay::draw() const
 			Circle{ check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), circle.r }.drawFrame(haba, kuro).draw(figure.color);
 			Triangle{ (double)check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), (double)check_wally(wally, Cursor::Pos().y + m_distance_y, figure), culc_Length(triangle) }.drawFrame(haba, kuro).draw(figure.color);
 			RectF{ Arg::center(check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure)), rect.size }.drawFrame(haba, kuro).draw(figure.color);
-			text(figure.text).drawAt(figure.textSize, check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), figure.textcolor);
+			FontAsset(FontText)(figure.text).drawAt(figure.textSize, check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), figure.textcolor);
 
 			break;
 		}
@@ -870,12 +870,12 @@ void LetsPlay::draw() const
 	}
 
 	// 分別はこ上側.
-	box_over(obox_left, getData().Fcolor()[left], text, U"●");
-	text(U"\n{}"_fmt(getData().Ftext()[left])).drawAt(obox_left.x + obox_left.w / 2, obox_left.y + obox_left.h * 3 / 5, kuro);
-	box_over(obox_mdle, getData().Fcolor()[mdle], text, U"▲");
-	text(U"\n{}"_fmt(getData().Ftext()[mdle])).drawAt(obox_mdle.x + obox_mdle.w / 2, obox_mdle.y + obox_mdle.h * 3 / 5, kuro);
-	box_over(obox_rght, getData().Fcolor()[rght], text, U"■");
-	text(U"\n{}"_fmt(getData().Ftext()[rght])).drawAt(obox_rght.x + obox_rght.w / 2, obox_rght.y + obox_rght.h * 3 / 5, kuro);
+	box_over(obox_left, getData().Fcolor()[left], FontAsset(FontText), U"●");
+	FontAsset(FontText)(U"\n{}"_fmt(getData().Ftext()[left])).drawAt(obox_left.x + obox_left.w / 2, obox_left.y + obox_left.h * 3 / 5, kuro);
+	box_over(obox_mdle, getData().Fcolor()[mdle], FontAsset(FontText), U"▲");
+	FontAsset(FontText)(U"\n{}"_fmt(getData().Ftext()[mdle])).drawAt(obox_mdle.x + obox_mdle.w / 2, obox_mdle.y + obox_mdle.h * 3 / 5, kuro);
+	box_over(obox_rght, getData().Fcolor()[rght], FontAsset(FontText), U"■");
+	FontAsset(FontText)(U"\n{}"_fmt(getData().Ftext()[rght])).drawAt(obox_rght.x + obox_rght.w / 2, obox_rght.y + obox_rght.h * 3 / 5, kuro);
 
 	drawUI();
 }
@@ -900,10 +900,10 @@ void LetsPlay::drawUI() const
 
 		// 説明窓.
 		explainWindow.drawFrame(haba, kuro).draw(shiro);
-		text(U"-ルール説明-").draw(30, explainMain, kuro);
-		text(U"「かたち」は\n図形の形").drawAt(26, explainSubShape, kuro);
-		text(U"「いろ」は\n図形の色").drawAt(26, explainSubColor, kuro);
-		text(U"「もじ」は\n図形の文字").drawAt(26, explainSubText, kuro);
+		FontAsset(FontText)(U"-ルール説明-").draw(30, explainMain, kuro);
+		FontAsset(FontText)(U"「かたち」は\n図形の形").drawAt(26, explainSubShape, kuro);
+		FontAsset(FontText)(U"「いろ」は\n図形の色").drawAt(26, explainSubColor, kuro);
+		FontAsset(FontText)(U"「もじ」は\n図形の文字").drawAt(26, explainSubText, kuro);
 
 		// 区切りの線.
 		Line{ explainLineLeftBegin, explainLineLeftEnd }.draw(haba, kuro);
@@ -918,9 +918,9 @@ void LetsPlay::drawUI() const
 		explainColorTriangle.drawFrame(haba, kuro).draw(getData().colors()[1]);
 		explainColorRect.drawFrame(haba, kuro).draw(getData().colors()[2]);
 
-		text(getData().texts()[0]).draw(30, explainTextmaru, kuro);
-		text(getData().texts()[1]).draw(30, explainTextsankaku, kuro);
-		text(getData().texts()[2]).draw(30, explainTextshikaku, kuro);
+		FontAsset(FontText)(getData().texts()[0]).draw(30, explainTextmaru, kuro);
+		FontAsset(FontText)(getData().texts()[1]).draw(30, explainTextsankaku, kuro);
+		FontAsset(FontText)(getData().texts()[2]).draw(30, explainTextshikaku, kuro);
 
 		break;
 
@@ -931,8 +931,8 @@ void LetsPlay::drawUI() const
 
 		// 説明窓.
 		explainWindow.drawFrame(haba, kuro).draw(shiro);
-		text(U"-操作方法-").draw(30, explainMain, kuro);
-		text(U"左クリックでつかんで移動!!").drawAt(30, 400, 300, kuro);
+		FontAsset(FontText)(U"-操作方法-").draw(30, explainMain, kuro);
+		FontAsset(FontText)(U"左クリックでつかんで移動!!").drawAt(30, 400, 300, kuro);
 
 		break;
 
@@ -942,7 +942,7 @@ void LetsPlay::drawUI() const
 		makuSize.draw(makuColor);
 
 		// START ボタンがクリックできることを分かりやすく.
-		text(U"クリックしてスタート").drawAt(16, 400, 340, kuro);
+		FontAsset(FontText)(U"クリックしてスタート").drawAt(16, 400, 340, kuro);
 
 		break;
 
@@ -955,30 +955,30 @@ void LetsPlay::drawUI() const
 		m_boxOutQuad_adu(t_cdmaku, makuSize, makuColor);
 		if (m_t_cd <= 1)
 		{
-			text(U"3").drawAt(countdownsize, countdownpoint, kuro);
+			FontAsset(FontText)(U"3").drawAt(countdownsize, countdownpoint, kuro);
 
 			// ルールの読み忘れを無くす矢印.
-			text(U"↑").drawAt(50, yondeyoLeft, kuro);
-			text(U"↑").drawAt(50, yondeyoRight, kuro);
+			FontAsset(FontText)(U"↑").drawAt(50, yondeyoLeft, kuro);
+			FontAsset(FontText)(U"↑").drawAt(50, yondeyoRight, kuro);
 			break;
 		}
 		else if (1 < m_t_cd && m_t_cd <= 2)
 		{
-			text(U"2").drawAt(countdownsize, countdownpoint, kuro);
+			FontAsset(FontText)(U"2").drawAt(countdownsize, countdownpoint, kuro);
 			break;
 		}
 		else if (2 < m_t_cd && m_t_cd <= 3)
 		{
-			text(U"1").drawAt(countdownsize, countdownpoint, kuro);
+			FontAsset(FontText)(U"1").drawAt(countdownsize, countdownpoint, kuro);
 
 			// ルールの読み忘れを無くす矢印.
-			text(U"↑").drawAt(50, yondeyoLeft, kuro);
-			text(U"↑").drawAt(50, yondeyoRight, kuro);
+			FontAsset(FontText)(U"↑").drawAt(50, yondeyoLeft, kuro);
+			FontAsset(FontText)(U"↑").drawAt(50, yondeyoRight, kuro);
 			break;
 		}
 		else if (3 < m_t_cd && m_t_cd <= 4)
 		{
-			text(U"START!!").drawAt(countdownsize, countdownpoint, kuro);
+			FontAsset(FontText)(U"START!!").drawAt(countdownsize, countdownpoint, kuro);
 		}
 	}
 	break;
@@ -997,7 +997,7 @@ void LetsPlay::drawUI() const
 	{
 		// 一時停止のウィンドウ.
 		pauseWindow.drawFrame(haba, kuro).draw(ColorF{ 0.7, 0.7, 0.7, 0.8 });
-		text(U"--PAUSE--").drawAt(40, (pauseWindow.x + pauseWindow.w / 2), (pauseWindow.y + pauseWindow.h / 3), kuro);
+		FontAsset(FontText)(U"--PAUSE--").drawAt(40, (pauseWindow.x + pauseWindow.w / 2), (pauseWindow.y + pauseWindow.h / 3), kuro);
 	}
 
 	drawButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));

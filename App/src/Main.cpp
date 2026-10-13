@@ -9,6 +9,7 @@ void Main()
 {
 	FontAsset::Register(FontTitle, 60, Typeface::Heavy);
 	FontAsset::Register(FontButton, FontMethod::SDF, 30, Typeface::Bold);
+	FontAsset::Register(FontText, FontMethod::SDF, 30, Typeface::Bold);
 
 	App manager;
 	manager.add<Title>(SceneSwitch::Title);

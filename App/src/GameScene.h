@@ -301,8 +301,6 @@ private:
 	const Array<uint16> wallx = { 50, 750 };
 	const Array<uint16> wally = { 130, 530 };
 
-	const Font text{ FontMethod::SDF, 30, Typeface::Bold };
-
 	double m_t_cd = 0.0;		// カウントダウンの時間.
 	
 	uint8 m_timelimit = 15;	// 制限時間.
