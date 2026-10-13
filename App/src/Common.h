@@ -315,31 +315,38 @@ static unsigned int randInt() {
 
 
 
-//イージング.
-//何度か跳ねるやつ.
-static double easeOutBounce(double t) {
+// イージング関数.
+// 何度か跳ねるやつ.
+static constexpr double easeOutBounce(double t)
+{
 	const double n1 = 7.5625;
 	const double d1 = 2.75;
 
-	if (t < 1 / d1) {
+	if (t < 1 / d1)
+	{
 		return n1 * t * t;
 	}
-	else if (t < 2 / d1) {
+	else if (t < 2 / d1)
+	{
 		return n1 * (t -= 1.5 / d1) * t + 0.75;
 	}
-	else if (t < 2.5 / d1) {
+	else if (t < 2.5 / d1)
+	{
 		return n1 * (t -= 2.25 / d1) * t + 0.9375;
 	}
-	else {
+	else
+	{
 		return n1 * (t -= 2.625 / d1) * t + 0.984375;
 	}
 }
-//ぎゅっと最初に動く.
-static double easeOutExpo(double t) {
+// ぎゅっと最初に動く.
+static constexpr double easeOutExpo(double t)
+{
 	return t == 1 ? 1 : 1 - pow(2, -10 * t);
 }
-//大体一定の速度で動く.
-static double easeOutQuad(double t) {
+// 大体一定の速度で動く.
+static constexpr double easeOutQuad(double t)
+{
 	return 1 - (1 - t) * (1 - t);
 }
 
@@ -354,16 +361,15 @@ static double easeOutQuad(double t) {
 
 // 分類箱.
 static constexpr uint8 haba = 3;	// 図形の枠.
-static void box_under(const Rect& box, const ColorF& colorf)
+static constexpr void box_under(const Rect& box, const ColorF& colorf)
 {
-	box.draw(colorf * 0.8);
-	box.drawFrame(haba, kuro);
+	box.drawFrame(haba, kuro).draw(colorf * 0.8);
 }
-static void box_over(const Rect& box, const ColorF& colorf, const Font& font, const String& string)
+static constexpr void box_over(const Rect& box, const ColorF& colorf, const Font& font, const String& string)
 {
-	box.draw(colorf);
-	box.drawFrame(haba, kuro);
-	font(U"{}"_fmt(string)).drawAt((box.x + box.w / 2), (box.y + box.h / 2), kuro);
+	box.drawFrame(haba, kuro).draw(colorf);
+	//font(U"{}"_fmt(string)).drawAt((box.x + box.w / 2), (box.y + box.h / 2), kuro);
+	font(U"{}"_fmt(string)).drawAt(box.center(), kuro);
 }
 
 //それのボタンバージョン, 当たり判定付き.

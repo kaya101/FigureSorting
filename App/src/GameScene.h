@@ -348,11 +348,13 @@ private:
 		uint8 num = randInt() % kinds[stageNum][COLOR];
 
 		// 色を変更しているとき.
-		if (colorchange) {
+		if (colorchange)
+		{
 			figure.color = colorchangecolor[stageNum][num];
 		}
 		// 最初の状態のまま.
-		else {
+		else
+		{
 			figure.color = color[stageNum][num];
 		}
 	}
@@ -364,11 +366,13 @@ private:
 		uint8 num = randInt() % kinds[stageNum][TEXT];
 
 		// 色を変更しているとき.
-		if (colorchange && stageNum == static_cast<Stage::StageLevelValue>(Stage::StageLevel::LevelMAX)) {
+		if (colorchange && stageNum == static_cast<Stage::StageLevelValue>(Stage::StageLevel::LevelMAX))
+		{
 			figure.text = colorchangetext[num];
 		}
 		// 最初のまま.
-		else {
+		else
+		{
 			figure.text = teXt[stageNum][num];
 		}
 	}
@@ -384,25 +388,31 @@ private:
 	// 任意の座標成分より,図形の中心がはみ出ないようにする関数.
 	const double check_wallx(const Array<uint16>& wall, const int16& point_x, const Figure& figure) const
 	{
-		if (point_x - figure.size / 2 <= wall[0]) {
+		if (point_x - figure.size / 2 <= wall[0])
+		{
 			return wall[0] + figure.size / 2;
 		}
-		else if (wall[1] <= point_x + figure.size / 2) {
+		else if (wall[1] <= point_x + figure.size / 2)
+		{
 			return wall[1] - figure.size / 2;
 		}
-		else {
+		else
+		{
 			return point_x;
 		}
 	}
 	const double check_wally(const Array<uint16>& wall, const int16& point_y, const Figure& figure) const
 	{
-		if (point_y - figure.size / 2 <= wall[0]) {
+		if (point_y - figure.size / 2 <= wall[0])
+		{
 			return wall[0] + figure.size / 2;
 		}
-		else if (wall[1] <= point_y + figure.size / 2) {
+		else if (wall[1] <= point_y + figure.size / 2)
+		{
 			return wall[1] - figure.size / 2;
 		}
-		else {
+		else
+		{
 			return point_y;
 		}
 	}

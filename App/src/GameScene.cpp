@@ -348,32 +348,38 @@ void LetsPlay::update()
 	// 正誤判定.
 	// 時間という概念？の取得.
 	int32 t_tf = (m_truefalse.ms() / 30);
-	switch (m_tof) {
+	switch (m_tof)
+	{
 	case TrueOrFalse::WaitSort: // 仕分け待ち.
 		break;
 
 	case TrueOrFalse::TrueSort: // 正解した時.
-	{
+
 		// 正解したエフェクト.
 		effect_TrueOrFalse(t_tf, getData().comboNum(), kuro, text, 30);
 
 		// 時間経過で消す.
-		if (t_tf > 20) {
+		if (t_tf > 20)
+		{
 			m_truefalse.reset();
 			m_tof = TrueOrFalse::WaitSort;
 		}
+
 		break;
-	}
+
 	case TrueOrFalse::FalseSort: // 間違えたとき.
-	{
+
 		// 間違えた時のエフェクト.
 		effect_TrueOrFalse(t_tf, getData().comboNum(), kuro, text, 30);
-		if (t_tf > 20) {
+
+		if (t_tf > 20)
+		{
 			m_truefalse.reset();
 			m_tof = TrueOrFalse::WaitSort;
 		}
+
 		break;
-	}
+
 	default:
 		break;
 	}
