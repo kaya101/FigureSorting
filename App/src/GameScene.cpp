@@ -464,7 +464,7 @@ void LetsPlay::update()
 		Print << U"triangle" << triangle.mouseOver();
 		Print << U"rectr" << rect.mouseOver();*/
 		// triangle の一辺が 0 だと,当たり判定が常に true になるバグあり.
-		if ((circle.mouseOver() || (triangle.mouseOver() && culc_Length(triangle) != 0) || rect.mouseOver()) && not m_pause)
+		if ((circle.mouseOver() || (triangle.mouseOver() && culc_Length(triangle) != 0) || rect.mouseOver()) && not m_isPaused)
 		{
 			// 手にする.
 			Cursor::RequestStyle(CursorStyle::Hand);
@@ -945,25 +945,6 @@ void LetsPlay::update()
 	default:
 		break;
 	}
-
-	// 中断するボタン.
-	switch (getData().currentPauseSwitch())
-	{
-	case PauseSwitch::BackButton: // 一時停止ボタン.
-
-		break;
-
-	case PauseSwitch::PauseWindow: // 中断ボタンを押したとき.
-
-		// 一時停止のウィンドウ.
-		pauseWindow.draw(ColorF{ 0.7, 0.7, 0.7, 0.8 });
-		pauseWindow.drawFrame(haba, kuro);
-		text(U"--PAUSE--").drawAt(40, (pauseWindow.x + pauseWindow.w / 2), (pauseWindow.y + pauseWindow.h / 3), kuro);
-
-		break;
-	default:
-		break;
-	}
 }
 
 void LetsPlay::draw() const
@@ -981,6 +962,13 @@ void LetsPlay::drawFadeOut(double t) const
 
 void LetsPlay::drawUI() const
 {
+	if (m_isPaused)
+	{
+		// 一時停止のウィンドウ.
+		pauseWindow.drawFrame(haba, kuro).draw(ColorF{ 0.7, 0.7, 0.7, 0.8 });
+		text(U"--PAUSE--").drawAt(40, (pauseWindow.x + pauseWindow.w / 2), (pauseWindow.y + pauseWindow.h / 3), kuro);
+	}
+
 	drawButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
 }
 
@@ -1035,8 +1023,8 @@ void LetsPlay::initialize()
 		{
 			m_playtime.pause();
 			m_countdown.pause();
-			m_pause = true;
-			getData().setPauseSwitch(PauseSwitch::PauseWindow);
+			m_isPaused = true;
+			//getData().setPauseSwitch(PauseSwitch::PauseWindow);
 
 			MoveNextFlow(LetsPlayFlow::Pause);
 		});
@@ -1052,8 +1040,8 @@ void LetsPlay::initialize()
 			m_playtime.reset();
 			m_countdown.reset();
 			getData().setRuleText(false);
-			m_pause = false;
-			getData().setPauseSwitch(PauseSwitch::BackButton);
+			m_isPaused = false;
+			//getData().setPauseSwitch(PauseSwitch::BackButton);
 			changeScene(SceneSwitch::Stage, 0.0);
 		});
 
@@ -1064,8 +1052,8 @@ void LetsPlay::initialize()
 		{
 			m_playtime.resume();
 			m_countdown.resume();
-			m_pause = false;
-			getData().setPauseSwitch(PauseSwitch::BackButton);
+			m_isPaused = false;
+			//getData().setPauseSwitch(PauseSwitch::BackButton);
 			changeScene(SceneSwitch::Letsplay, 0.0);
 			
 			MoveNextFlow(LetsPlayFlow::Play);
@@ -1078,8 +1066,8 @@ void LetsPlay::initialize()
 		{
 			m_playtime.resume();
 			m_countdown.resume();
-			m_pause = false;
-			getData().setPauseSwitch(PauseSwitch::BackButton);
+			m_isPaused = false;
+			//getData().setPauseSwitch(PauseSwitch::BackButton);
 			changeScene(SceneSwitch::Letsplay, 0.0);
 			
 			MoveNextFlow(LetsPlayFlow::Play);

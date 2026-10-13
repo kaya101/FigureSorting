@@ -301,7 +301,7 @@ private:
 	
 	uint8 m_gt = 0;			// 制限時間のカウントダウン時間.
 
-	bool m_pause = false;
+	bool m_isPaused = false;
 
 	TrueOrFalse m_tof = TrueOrFalse::WaitSort;	// 正誤判定.
 

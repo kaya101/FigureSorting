@@ -57,11 +57,11 @@ enum class SceneSwitch
 };
 
 // 中断するかどうか.
-enum class PauseSwitch
-{
-	BackButton,		// 中断ボタンを押すまで.
-	PauseWindow,	// 中断ウィンドウが出てる画面.
-};
+//enum class PauseSwitch
+//{
+//	BackButton,		// 中断ボタンを押すまで.
+//	PauseWindow,	// 中断ウィンドウが出てる画面.
+//};
 
 // 分類ルール.
 enum class ScoreSwitch
@@ -124,7 +124,7 @@ public:
 	void turnOnSkippedExplain() { m_isSkippedExplain = true; }
 	void turnOffSkippedExplain() { m_isSkippedExplain = false; }
 
-	void setPauseSwitch(const PauseSwitch& pause) { m_currentPause = pause; }
+	//void setPauseSwitch(const PauseSwitch& pause) { m_currentPause = pause; }
 	void setScoreSwitch(const ScoreSwitch& skip) { m_currentScoreSwitch = skip; }
 	void setFigureSwitch(const FigureSwitch& skip) { m_currentFigureSwitch = skip; }
 	void setHighScore(const size_t idx, const int16 score) { m_highScores[idx] = score; }
@@ -138,7 +138,7 @@ public:
 
 	const bool isChangedColor() const { return m_isChangedColor; }
 	const bool isSkippedExplain() const { return m_isSkippedExplain; }
-	const PauseSwitch currentPauseSwitch() const { return m_currentPause; }
+	//const PauseSwitch currentPauseSwitch() const { return m_currentPause; }
 	const ScoreSwitch currentScoreSwitch() const { return m_currentScoreSwitch; }
 	const FigureSwitch currentFigureSwitch() const { return m_currentFigureSwitch; }
 	const Array<int16>& highScores() const { return m_highScores; }
@@ -160,7 +160,7 @@ private:
 
 	bool m_isSkippedExplain = false;	// 説明をスキップするかどうか.
 
-	PauseSwitch m_currentPause = PauseSwitch::BackButton;
+	//PauseSwitch m_currentPause = PauseSwitch::BackButton;
 
 	ScoreSwitch m_currentScoreSwitch = ScoreSwitch::ShapeRule;	// 得点計算.
 
