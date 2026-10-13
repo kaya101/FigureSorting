@@ -253,14 +253,12 @@ void Stage::initialize()
 				// スキップする.
 				getData().turnOnSkippedExplain();
 				self->setText(m_markedText);
-				//getData().setCountSwitch(CountSwitch::Start);
 			}
 			else
 			{
 				// スキップしない.
 				getData().turnOffSkippedExplain();
 				self->setText(U"");
-				//getData().setCountSwitch(CountSwitch::ExplainRule);
 			}
 		});
 }
@@ -384,137 +382,6 @@ void LetsPlay::update()
 		break;
 	}
 
-	//// 動かす図形.
-	//switch (getData().currentFigureSwitch()) {
-	//case FigureSwitch::Break: // 待機画面.
-	//	break;
-
-	//case FigureSwitch::MakeFigure: // 図形生成.
-	//{
-	//	// 生成した回数の記録.
-	//	getData().countClassifyNum();
-
-	//	// 図形の出現座標と大きさの代入.
-	//	figure.center = center;
-	//	figure.size = size;
-	//	figure.textSize = textSize;
-	//	figure.textcolor = kuro;
-
-	//	// 図形の色と文字を決める.
-	//	decide_color(figure, getData().stageNum(), getData().isChangedColor());
-	//	decide_text(figure, getData().stageNum(), getData().isChangedColor());
-
-	//	// 図形の形を決める.
-	//	uint8 shapeNum = randInt() % 3;
-	//	if (shapeNum == 0)
-	//	{
-	//		// まる.
-	//		circle = { figure.center, figure.size / 2 };
-
-	//		// さんかく,しかくはなんもなし描画をする.
-	//		triangle = { figure.center.x, figure.center.y, 0 };
-	//		rect = { Arg::center(center_X, center_Y), 0 };
-	//		getData().setFigureSwitch(FigureSwitch::Release);
-	//		break;
-	//	}
-	//	else if (shapeNum == 1)
-	//	{
-	//		// さんかく.
-	//		// ちょっと大きくする.
-	//		figure.size *= 1.3;
-	//		triangle = { center_X, center_Y, (double)figure.size };
-
-	//		// まる,しかくはなんもなし描写をする.
-	//		circle = { figure.center, 0 };
-	//		rect = { Arg::center(center_X, center_Y), 0 };
-
-	//		// さんかくの時だけ文字の大きさを小さくする.
-	//		figure.textSize *= 0.8;
-	//		getData().setFigureSwitch(FigureSwitch::Release);
-	//		break;
-	//	}
-	//	else if (shapeNum == 2)
-	//	{
-	//		// しかく.
-	//		rect = { Arg::center(center_X, center_Y), figure.size };
-
-	//		// まる,さんかくはなんもなし描写をする.
-	//		circle = { figure.center, 0 };
-	//		triangle = { figure.center.x, figure.center.y, 0 };
-	//		getData().setFigureSwitch(FigureSwitch::Release);
-	//		break;
-	//	}
-
-	//	break;
-	//}
-
-
-	//case FigureSwitch::Release: // 図形をつかんでないとき.
-
-	//	// 落とした場所に図形を描写する.
-	//	circle.drawFrame(haba, kuro).draw(figure.color);
-	//	triangle.drawFrame(haba, kuro).draw(figure.color);
-	//	rect.drawFrame(haba, kuro).draw(figure.color);
-	//	text(figure.text).drawAt(figure.textSize, figure.center, figure.textcolor);
-
-	//	// 図形をつかんだとき.
-	//	/*Print <<U"circle" << circle.mouseOver();
-	//	Print << U"triangle" << triangle.mouseOver();
-	//	Print << U"rectr" << rect.mouseOver();*/
-	//	// triangle の一辺が 0 だと,当たり判定が常に true になるバグあり.
-	//	if ((circle.mouseOver() || (triangle.mouseOver() && culc_Length(triangle) != 0) || rect.mouseOver()) && not m_isPaused)
-	//	{
-	//		// 手にする.
-	//		Cursor::RequestStyle(CursorStyle::Hand);
-
-	//		if (MouseL.pressed())
-	//		{
-	//			// カーソルと図形の中心座標の差をとる.
-	//			m_distance_x = figure.center.x - Cursor::Pos().x;
-	//			m_distance_y = figure.center.y - Cursor::Pos().y;
-
-	//			getData().setFigureSwitch(FigureSwitch::Catch);
-	//		}
-	//	}
-
-	//	break;
-
-	//case FigureSwitch::Catch: // 図形をつかんで運ぶとき.
-
-	//	Cursor::RequestStyle(CursorStyle::Hand);
-
-	//	// 移動させる.
-	//	if (MouseL.pressed())
-	//	{
-	//		Circle{ check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), circle.r }.drawFrame(haba, kuro).draw(figure.color);
-	//		Triangle{ (double)check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), (double)check_wally(wally, Cursor::Pos().y + m_distance_y, figure), culc_Length(triangle) }.drawFrame(haba, kuro).draw(figure.color);
-	//		RectF{ Arg::center(check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure)), rect.size }.drawFrame(haba, kuro).draw(figure.color);
-	//		text(figure.text).drawAt(figure.textSize, check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), figure.textcolor);
-	//	}
-
-	//	// 図形を離したとき.
-	//	if (MouseL.up())
-	//	{
-	//		// 図形を書いて穴埋め.
-	//		Circle{ check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), circle.r }.drawFrame(haba, kuro).draw(figure.color);
-	//		Triangle{ (double)check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), (double)check_wally(wally, Cursor::Pos().y + m_distance_y, figure), culc_Length(triangle) }.drawFrame(haba, kuro).draw(figure.color);
-	//		RectF{ Arg::center(check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure)), rect.size }.drawFrame(haba, kuro).draw(figure.color);
-	//		text(figure.text).drawAt(figure.textSize, check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), figure.textcolor);
-
-	//		// 図形の中心座標を離した座標に更新.
-	//		figure.center.x = check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure);
-	//		figure.center.y = check_wally(wally, Cursor::Pos().y + m_distance_y, figure);
-	//		circle.center = figure.center;
-	//		triangle = { figure.center, culc_Length(triangle) };
-	//		rect.x = culc_lx(figure);
-	//		rect.y = culc_ly(figure);
-	//		getData().setFigureSwitch(FigureSwitch::Release);
-	//		break;
-	//	}
-	//	break;
-	//default:
-	//	break;
-	//}
 	// 動かす図形.
 	switch (m_currentFigureSwitch)
 	{
@@ -546,7 +413,6 @@ void LetsPlay::update()
 			// さんかく,しかくはなんもなし描画をする.
 			triangle = { figure.center.x, figure.center.y, 0 };
 			rect = { Arg::center(center_X, center_Y), 0 };
-			//getData().setFigureSwitch(FigureSwitch::Release);
 			m_currentFigureSwitch = FigureSwitch::Release;
 
 			break;
@@ -564,7 +430,6 @@ void LetsPlay::update()
 
 			// さんかくの時だけ文字の大きさを小さくする.
 			figure.textSize *= 0.8;
-			//getData().setFigureSwitch(FigureSwitch::Release);
 			m_currentFigureSwitch = FigureSwitch::Release;
 
 			break;
@@ -577,7 +442,6 @@ void LetsPlay::update()
 			// まる,さんかくはなんもなし描写をする.
 			circle = { figure.center, 0 };
 			triangle = { figure.center.x, figure.center.y, 0 };
-			//getData().setFigureSwitch(FigureSwitch::Release);
 			m_currentFigureSwitch = FigureSwitch::Release;
 
 			break;
@@ -604,7 +468,6 @@ void LetsPlay::update()
 				m_distance_x = figure.center.x - Cursor::Pos().x;
 				m_distance_y = figure.center.y - Cursor::Pos().y;
 
-				//getData().setFigureSwitch(FigureSwitch::Catch);
 				m_currentFigureSwitch = FigureSwitch::Catch;
 			}
 		}
@@ -625,7 +488,6 @@ void LetsPlay::update()
 			triangle = { figure.center, culc_Length(triangle) };
 			rect.x = culc_lx(figure);
 			rect.y = culc_ly(figure);
-			//getData().setFigureSwitch(FigureSwitch::Release);
 			m_currentFigureSwitch = FigureSwitch::Release;
 
 			break;
@@ -644,7 +506,6 @@ void LetsPlay::update()
 	{
 		m_playtime.reset();
 		m_gt = 0;
-		//m_resultwindow.restart();
 
 		// ハイスコアを更新したかどうかの記録.
 		if (getData().highScores()[getData().stageNum()] < getData().score())
@@ -669,11 +530,7 @@ void LetsPlay::update()
 		{
 			text(U"かたちで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
 		}
-		/*if (getData().ruleText())
-		{
-			text(U"かたちで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
-		}*/
-
+		
 		// left は,まる.
 		if (circle.intersects(ubox_left) || rect.intersects(ubox_left) || triangle.intersects(ubox_left))
 		{
@@ -707,7 +564,6 @@ void LetsPlay::update()
 			}
 
 			// 新たに図形を作る.
-			//getData().setFigureSwitch(FigureSwitch::MakeFigure);
 			m_currentFigureSwitch = FigureSwitch::MakeFigure;
 
 			// 正誤判定の動きの再始動.
@@ -733,7 +589,6 @@ void LetsPlay::update()
 				getData().resetComboNum();
 				m_tof = TrueOrFalse::FalseSort;
 			}
-			//getData().setFigureSwitch(FigureSwitch::MakeFigure);
 			m_currentFigureSwitch = FigureSwitch::MakeFigure;
 
 			// 正誤判定の動きの再始動.
@@ -759,7 +614,6 @@ void LetsPlay::update()
 				getData().resetComboNum();
 				m_tof = TrueOrFalse::FalseSort;
 			}
-			//getData().setFigureSwitch(FigureSwitch::MakeFigure);
 			m_currentFigureSwitch = FigureSwitch::MakeFigure;
 
 			// 正誤判定の動きの再始動.
@@ -775,11 +629,7 @@ void LetsPlay::update()
 		{
 			text(U"いろで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
 		}
-		/*if (getData().ruleText())
-		{
-			text(U"いろで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
-		}*/
-
+		
 		// left は,赤.
 		if (circle.intersects(ubox_left) || rect.intersects(ubox_left) || triangle.intersects(ubox_left))
 		{
@@ -797,7 +647,6 @@ void LetsPlay::update()
 				getData().resetComboNum();
 				m_tof = TrueOrFalse::FalseSort;
 			}
-			//getData().setFigureSwitch(FigureSwitch::MakeFigure);
 			m_currentFigureSwitch = FigureSwitch::MakeFigure;
 
 			// 正誤判定の動きの再始動.
@@ -823,7 +672,6 @@ void LetsPlay::update()
 				getData().resetComboNum();
 				m_tof = TrueOrFalse::FalseSort;
 			}
-			//getData().setFigureSwitch(FigureSwitch::MakeFigure);
 			m_currentFigureSwitch = FigureSwitch::MakeFigure;
 
 			// 正誤判定の動きの再始動.
@@ -848,7 +696,6 @@ void LetsPlay::update()
 				getData().resetComboNum();
 				m_tof = TrueOrFalse::FalseSort;
 			}
-			//getData().setFigureSwitch(FigureSwitch::MakeFigure);
 			m_currentFigureSwitch = FigureSwitch::MakeFigure;
 
 			// 正誤判定の動きの再始動.
@@ -865,10 +712,6 @@ void LetsPlay::update()
 		{
 			text(U"もじで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
 		}
-		/*if (getData().ruleText())
-		{
-			text(U"もじで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
-		}*/
 
 		// left は,"あか".
 		if (circle.intersects(ubox_left) || rect.intersects(ubox_left) || triangle.intersects(ubox_left))
@@ -887,7 +730,6 @@ void LetsPlay::update()
 				getData().resetComboNum();
 				m_tof = TrueOrFalse::FalseSort;
 			}
-			//getData().setFigureSwitch(FigureSwitch::MakeFigure);
 			m_currentFigureSwitch = FigureSwitch::MakeFigure;
 
 			// 正誤判定の動きの再始動.
@@ -912,7 +754,6 @@ void LetsPlay::update()
 				getData().resetComboNum();
 				m_tof = TrueOrFalse::FalseSort;
 			}
-			//getData().setFigureSwitch(FigureSwitch::MakeFigure);
 			m_currentFigureSwitch = FigureSwitch::MakeFigure;
 
 			// 正誤判定の動きの再始動.
@@ -938,7 +779,6 @@ void LetsPlay::update()
 				getData().resetComboNum();
 				m_tof = TrueOrFalse::FalseSort;
 			}
-			//getData().setFigureSwitch(FigureSwitch::MakeFigure);
 			m_currentFigureSwitch = FigureSwitch::MakeFigure;
 
 			// 正誤判定の動きの再始動.
@@ -966,7 +806,6 @@ void LetsPlay::update()
 		{
 			m_countdown.reset();
 			m_t_cd = 0.0;
-			//getData().setFigureSwitch(FigureSwitch::MakeFigure);
 			m_currentFigureSwitch = FigureSwitch::MakeFigure;
 
 			// 制限時間の開始.
@@ -981,121 +820,6 @@ void LetsPlay::update()
 	default:
 		break;
 	}
-	//switch (m_currentFlow)
-	//{
-	//case LetsPlayFlow::ExplainPage1:	// 仕分けルール説明.
-
-	//	// ちょっと暗くする.
-	//	makuSize.draw(makuColor);
-
-	//	// 説明窓.
-	//	explainWindow.drawFrame(haba, kuro).draw(shiro);
-	//	text(U"-ルール説明-").draw(30, explainMain, kuro);
-	//	text(U"「かたち」は\n図形の形").drawAt(26, explainSubShape, kuro);
-	//	text(U"「いろ」は\n図形の色").drawAt(26, explainSubColor, kuro);
-	//	text(U"「もじ」は\n図形の文字").drawAt(26, explainSubText, kuro);
-
-	//	// 区切りの線.
-	//	Line{ explainLineLeftBegin, explainLineLeftEnd }.draw(haba, kuro);
-	//	Line{ explainLineRightBegin, explainLineRightEnd }.draw(haba, kuro);
-
-	//	// 飾りの図形.
-	//	explainShapeCircle.drawFrame(haba, kuro).draw(getData().colors()[1]);
-	//	explainShapeTriangle.drawFrame(haba, kuro).draw(getData().colors()[1]);
-	//	explainShapeRect.drawFrame(haba, kuro).draw(getData().colors()[1]);
-
-	//	explainColorCircle.drawFrame(haba, kuro).draw(getData().colors()[0]);
-	//	explainColorTriangle.drawFrame(haba, kuro).draw(getData().colors()[1]);
-	//	explainColorRect.drawFrame(haba, kuro).draw(getData().colors()[2]);
-
-	//	text(getData().texts()[0]).draw(30, explainTextmaru, kuro);
-	//	text(getData().texts()[1]).draw(30, explainTextsankaku, kuro);
-	//	text(getData().texts()[2]).draw(30, explainTextshikaku, kuro);
-
-	//	break;
-
-	//case LetsPlayFlow::ExplainPage2:	// 図形の動かし方の説明.
-
-	//	// ちょっと暗くする.
-	//	makuSize.draw(makuColor);
-
-	//	// 説明窓.
-	//	explainWindow.drawFrame(haba, kuro).draw(shiro);
-	//	text(U"-操作方法-").draw(30, explainMain, kuro);
-	//	text(U"左クリックでつかんで移動!!").drawAt(30, 400, 300, kuro);
-
-	//	break;
-
-	//case LetsPlayFlow::Start:	// スタートボタンを押す.
-
-	//	// ちょっと暗くする.
-	//	makuSize.draw(makuColor);
-
-	//	// START ボタンがクリックできることを分かりやすく.
-	//	text(U"クリックしてスタート").drawAt(16, 400, 340, kuro);
-
-	//	break;
-
-	//case LetsPlayFlow::CountDown:
-
-	//{
-	//	m_t_cd = m_countdown.sF();
-	//	const double t_cdmaku = Min(m_countdown.sF() / 2, 1.0);
-
-	//	// 開幕演出.
-	//	m_boxOutQuad_adu(t_cdmaku, makuSize, makuColor);
-	//	if (m_t_cd <= 1)
-	//	{
-	//		text(U"3").drawAt(countdownsize, countdownpoint, kuro);
-
-	//		// ルールの読み忘れを無くす矢印.
-	//		text(U"↑").drawAt(50, yondeyoLeft, kuro);
-	//		text(U"↑").drawAt(50, yondeyoRight, kuro);
-	//		break;
-	//	}
-	//	else if (1 < m_t_cd && m_t_cd <= 2)
-	//	{
-	//		text(U"2").drawAt(countdownsize, countdownpoint, kuro);
-	//		break;
-	//	}
-	//	else if (2 < m_t_cd && m_t_cd <= 3)
-	//	{
-	//		text(U"1").drawAt(countdownsize, countdownpoint, kuro);
-
-	//		// ルールの読み忘れを無くす矢印.
-	//		text(U"↑").drawAt(50, yondeyoLeft, kuro);
-	//		text(U"↑").drawAt(50, yondeyoRight, kuro);
-	//		break;
-	//	}
-	//	else if (3 < m_t_cd && m_t_cd <= 4)
-	//	{
-	//		text(U"START!!").drawAt(countdownsize, countdownpoint, kuro);
-	//	}
-	//	if (4 < m_t_cd)
-	//	{
-	//		m_countdown.reset();
-	//		m_t_cd = 0.0;
-	//		getData().setFigureSwitch(FigureSwitch::MakeFigure);
-
-	//		// 制限時間の開始.
-	//		m_playtime.restart();
-
-	//		MoveNextFlow(LetsPlayFlow::Play);
-
-	//		break;
-	//	}
-	//}
-	//	break;
-
-	//case LetsPlayFlow::Play:
-	//	break;
-
-	//case LetsPlayFlow::Pause:
-	//	break;
-
-	//default:
-	//	break;
-	//}
 }
 
 void LetsPlay::draw() const
@@ -1313,7 +1037,6 @@ void LetsPlay::initialize()
 		[&](ButtonBase* self)
 		{
 			// 仕分けルールを表示する.
-			//getData().setRuleText(true);
 			m_countdown.restart();
 			m_playtime.reset();
 
@@ -1331,7 +1054,6 @@ void LetsPlay::initialize()
 			m_playtime.pause();
 			m_countdown.pause();
 			m_isPaused = true;
-			//getData().setPauseSwitch(PauseSwitch::PauseWindow);
 
 			MoveNextFlow(LetsPlayFlow::Pause);
 		});
@@ -1341,14 +1063,11 @@ void LetsPlay::initialize()
 		ButtonCtx(pauseRetire, daidai, U"ステージに戻る", FontButton),
 		[&](ButtonBase* self)
 		{
-			//getData().setFigureSwitch(FigureSwitch::Break);
 			getData().initialize();
 			m_gt = 0;
 			m_playtime.reset();
 			m_countdown.reset();
-			//getData().setRuleText(false);
 			m_isPaused = false;
-			//getData().setPauseSwitch(PauseSwitch::BackButton);
 			changeScene(SceneSwitch::Stage, 0.0);
 		});
 
@@ -1360,7 +1079,6 @@ void LetsPlay::initialize()
 			m_playtime.resume();
 			m_countdown.resume();
 			m_isPaused = false;
-			//getData().setPauseSwitch(PauseSwitch::BackButton);
 			changeScene(SceneSwitch::Letsplay, 0.0);
 			
 			MoveNextFlow(LetsPlayFlow::Play);
@@ -1374,7 +1092,6 @@ void LetsPlay::initialize()
 			m_playtime.resume();
 			m_countdown.resume();
 			m_isPaused = false;
-			//getData().setPauseSwitch(PauseSwitch::BackButton);
 			changeScene(SceneSwitch::Letsplay, 0.0);
 			
 			MoveNextFlow(LetsPlayFlow::Play);
@@ -1567,21 +1284,10 @@ void Result::initialize()
 		ButtonCtx(m_playAgain, kiiro, U"もう一回", FontButton),
 		[&](ButtonBase* self)
 		{
-			if (getData().isSkippedExplain())
-			{
-				//getData().setCountSwitch(CountSwitch::Start);
-			}
-			else
-			{
-				//getData().setCountSwitch(CountSwitch::ExplainRule);
-			}
-			//getData().setFigureSwitch(FigureSwitch::Break);
 			getData().initialize();
-			//getData().setRuleText(false);
+			
 			m_resultwindow.reset();
-			/*m_resulttext01.reset();
-			m_resulttext02.reset();
-			m_resulttext03.reset();*/
+			
 			changeScene(SceneSwitch::Letsplay, 0.0);
 		},
 		m_playAgainAppearPoint, 1.0, easeOutExpo);
@@ -1592,21 +1298,10 @@ void Result::initialize()
 		ButtonCtx(m_backStage, kiiro, U"ステージへ", FontButton),
 		[&](ButtonBase* self)
 		{
-			if (getData().isSkippedExplain())
-			{
-				//getData().setCountSwitch(CountSwitch::Start);
-			}
-			else
-			{
-				//getData().setCountSwitch(CountSwitch::ExplainRule);
-			}
-			//getData().setFigureSwitch(FigureSwitch::Break);
 			getData().initialize();
-			//getData().setRuleText(false);
+			
 			m_resultwindow.reset();
-			/*m_resulttext01.reset();
-			m_resulttext02.reset();
-			m_resulttext03.reset();*/
+			
 			changeScene(SceneSwitch::Stage, 0.0);
 		},
 		m_backStageAppearPoint, 1.1, easeOutExpo);
@@ -1617,21 +1312,10 @@ void Result::initialize()
 		ButtonCtx(m_backTitle, murasaki * 1.4, U"タイトルへ", FontButton),
 		[&](ButtonBase* self)
 		{
-			if (getData().isSkippedExplain())
-			{
-				//getData().setCountSwitch(CountSwitch::Start);
-			}
-			else
-			{
-				//getData().setCountSwitch(CountSwitch::ExplainRule);
-			}
-			//getData().setFigureSwitch(FigureSwitch::Break);
 			getData().initialize();
-			//getData().setRuleText(false);
+			
 			m_resultwindow.reset();
-			/*m_resulttext01.reset();
-			m_resulttext02.reset();
-			m_resulttext03.reset();*/
+			
 			changeScene(SceneSwitch::Title, 0.0);
 		},
 		m_backTitleAppearPoint, 1.2, easeOutExpo);
