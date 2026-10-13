@@ -174,6 +174,15 @@ public:
 		FalseSort,	// 間違えたとき.
 	};
 
+	// 図形操作の画面管理.
+	enum class FigureSwitch
+	{
+		MakeFigure,	// 図形生成.
+		Catch,		// 図形を運ぶとき.
+		Release,	// つかんだ図形を離したとき.
+		Break,		// 待機.
+	};
+
 	explicit LetsPlay(const InitData& init);
 
 	~LetsPlay() = default;
@@ -327,6 +336,8 @@ private:
 	int16 m_distance_y = 0;
 
 	LetsPlayFlow m_currentFlow;
+
+	FigureSwitch m_currentFigureSwitch = FigureSwitch::Break;
 
 	void MoveNextFlow(const LetsPlayFlow next);
 

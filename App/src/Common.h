@@ -71,14 +71,14 @@ enum class ScoreSwitch
 	TextRule,	// 文字で分ける場合.
 };
 
-// 図形操作の画面管理.
-enum class FigureSwitch
-{
-	MakeFigure,	// 図形生成.
-	Catch,		// 図形を運ぶとき.
-	Release,	// つかんだ図形を離したとき.
-	Break,		// 待機.
-};
+//// 図形操作の画面管理.
+//enum class FigureSwitch
+//{
+//	MakeFigure,	// 図形生成.
+//	Catch,		// 図形を運ぶとき.
+//	Release,	// つかんだ図形を離したとき.
+//	Break,		// 待機.
+//};
 
 // 仕分ける図形.
 struct Figure
@@ -126,7 +126,7 @@ public:
 
 	//void setPauseSwitch(const PauseSwitch& pause) { m_currentPause = pause; }
 	void setScoreSwitch(const ScoreSwitch& skip) { m_currentScoreSwitch = skip; }
-	void setFigureSwitch(const FigureSwitch& skip) { m_currentFigureSwitch = skip; }
+	//void setFigureSwitch(const FigureSwitch& skip) { m_currentFigureSwitch = skip; }
 	void setHighScore(const size_t idx, const int16 score) { m_highScores[idx] = score; }
 	void setFcolor(const Array<ColorF>& colors) { m_Fcolor = colors; }
 	void setFtext(const Array<String>& texts) { m_Ftext = texts; }
@@ -140,7 +140,7 @@ public:
 	const bool isSkippedExplain() const { return m_isSkippedExplain; }
 	//const PauseSwitch currentPauseSwitch() const { return m_currentPause; }
 	const ScoreSwitch currentScoreSwitch() const { return m_currentScoreSwitch; }
-	const FigureSwitch currentFigureSwitch() const { return m_currentFigureSwitch; }
+	//const FigureSwitch currentFigureSwitch() const { return m_currentFigureSwitch; }
 	const Array<int16>& highScores() const { return m_highScores; }
 	const Array<ColorF>& Fcolor() const { return m_Fcolor; }
 	const Array<String>& Ftext() const { return m_Ftext; }
@@ -164,7 +164,7 @@ private:
 
 	ScoreSwitch m_currentScoreSwitch = ScoreSwitch::ShapeRule;	// 得点計算.
 
-	FigureSwitch m_currentFigureSwitch = FigureSwitch::Break;// 図形操作の画面の信仰.
+	//FigureSwitch m_currentFigureSwitch = FigureSwitch::Break;// 図形操作の画面の信仰.
 
 	Array<int16> m_highScores = { 0, 0, 0 };
 

@@ -510,7 +510,8 @@ void LetsPlay::update()
 	//	break;
 	//}
 	// 動かす図形.
-	switch (getData().currentFigureSwitch()) {
+	switch (m_currentFigureSwitch)
+	{
 	case FigureSwitch::Break: // 待機画面.
 		break;
 
@@ -539,7 +540,9 @@ void LetsPlay::update()
 			// さんかく,しかくはなんもなし描画をする.
 			triangle = { figure.center.x, figure.center.y, 0 };
 			rect = { Arg::center(center_X, center_Y), 0 };
-			getData().setFigureSwitch(FigureSwitch::Release);
+			//getData().setFigureSwitch(FigureSwitch::Release);
+			m_currentFigureSwitch = FigureSwitch::Release;
+
 			break;
 		}
 		else if (shapeNum == 1)
@@ -555,7 +558,9 @@ void LetsPlay::update()
 
 			// さんかくの時だけ文字の大きさを小さくする.
 			figure.textSize *= 0.8;
-			getData().setFigureSwitch(FigureSwitch::Release);
+			//getData().setFigureSwitch(FigureSwitch::Release);
+			m_currentFigureSwitch = FigureSwitch::Release;
+
 			break;
 		}
 		else if (shapeNum == 2)
@@ -566,7 +571,9 @@ void LetsPlay::update()
 			// まる,さんかくはなんもなし描写をする.
 			circle = { figure.center, 0 };
 			triangle = { figure.center.x, figure.center.y, 0 };
-			getData().setFigureSwitch(FigureSwitch::Release);
+			//getData().setFigureSwitch(FigureSwitch::Release);
+			m_currentFigureSwitch = FigureSwitch::Release;
+
 			break;
 		}
 
@@ -591,7 +598,8 @@ void LetsPlay::update()
 				m_distance_x = figure.center.x - Cursor::Pos().x;
 				m_distance_y = figure.center.y - Cursor::Pos().y;
 
-				getData().setFigureSwitch(FigureSwitch::Catch);
+				//getData().setFigureSwitch(FigureSwitch::Catch);
+				m_currentFigureSwitch = FigureSwitch::Catch;
 			}
 		}
 
@@ -611,7 +619,9 @@ void LetsPlay::update()
 			triangle = { figure.center, culc_Length(triangle) };
 			rect.x = culc_lx(figure);
 			rect.y = culc_ly(figure);
-			getData().setFigureSwitch(FigureSwitch::Release);
+			//getData().setFigureSwitch(FigureSwitch::Release);
+			m_currentFigureSwitch = FigureSwitch::Release;
+
 			break;
 		}
 		break;
@@ -691,7 +701,8 @@ void LetsPlay::update()
 			}
 
 			// 新たに図形を作る.
-			getData().setFigureSwitch(FigureSwitch::MakeFigure);
+			//getData().setFigureSwitch(FigureSwitch::MakeFigure);
+			m_currentFigureSwitch = FigureSwitch::MakeFigure;
 
 			// 正誤判定の動きの再始動.
 			m_truefalse.restart();
@@ -716,7 +727,8 @@ void LetsPlay::update()
 				getData().resetComboNum();
 				m_tof = TrueOrFalse::FalseSort;
 			}
-			getData().setFigureSwitch(FigureSwitch::MakeFigure);
+			//getData().setFigureSwitch(FigureSwitch::MakeFigure);
+			m_currentFigureSwitch = FigureSwitch::MakeFigure;
 
 			// 正誤判定の動きの再始動.
 			m_truefalse.restart();
@@ -741,7 +753,8 @@ void LetsPlay::update()
 				getData().resetComboNum();
 				m_tof = TrueOrFalse::FalseSort;
 			}
-			getData().setFigureSwitch(FigureSwitch::MakeFigure);
+			//getData().setFigureSwitch(FigureSwitch::MakeFigure);
+			m_currentFigureSwitch = FigureSwitch::MakeFigure;
 
 			// 正誤判定の動きの再始動.
 			m_truefalse.restart();
@@ -778,7 +791,8 @@ void LetsPlay::update()
 				getData().resetComboNum();
 				m_tof = TrueOrFalse::FalseSort;
 			}
-			getData().setFigureSwitch(FigureSwitch::MakeFigure);
+			//getData().setFigureSwitch(FigureSwitch::MakeFigure);
+			m_currentFigureSwitch = FigureSwitch::MakeFigure;
 
 			// 正誤判定の動きの再始動.
 			m_truefalse.restart();
@@ -803,7 +817,8 @@ void LetsPlay::update()
 				getData().resetComboNum();
 				m_tof = TrueOrFalse::FalseSort;
 			}
-			getData().setFigureSwitch(FigureSwitch::MakeFigure);
+			//getData().setFigureSwitch(FigureSwitch::MakeFigure);
+			m_currentFigureSwitch = FigureSwitch::MakeFigure;
 
 			// 正誤判定の動きの再始動.
 			m_truefalse.restart();
@@ -827,7 +842,8 @@ void LetsPlay::update()
 				getData().resetComboNum();
 				m_tof = TrueOrFalse::FalseSort;
 			}
-			getData().setFigureSwitch(FigureSwitch::MakeFigure);
+			//getData().setFigureSwitch(FigureSwitch::MakeFigure);
+			m_currentFigureSwitch = FigureSwitch::MakeFigure;
 
 			// 正誤判定の動きの再始動.
 			m_truefalse.restart();
@@ -865,7 +881,8 @@ void LetsPlay::update()
 				getData().resetComboNum();
 				m_tof = TrueOrFalse::FalseSort;
 			}
-			getData().setFigureSwitch(FigureSwitch::MakeFigure);
+			//getData().setFigureSwitch(FigureSwitch::MakeFigure);
+			m_currentFigureSwitch = FigureSwitch::MakeFigure;
 
 			// 正誤判定の動きの再始動.
 			m_truefalse.restart();
@@ -889,7 +906,8 @@ void LetsPlay::update()
 				getData().resetComboNum();
 				m_tof = TrueOrFalse::FalseSort;
 			}
-			getData().setFigureSwitch(FigureSwitch::MakeFigure);
+			//getData().setFigureSwitch(FigureSwitch::MakeFigure);
+			m_currentFigureSwitch = FigureSwitch::MakeFigure;
 
 			// 正誤判定の動きの再始動.
 			m_truefalse.restart();
@@ -914,7 +932,8 @@ void LetsPlay::update()
 				getData().resetComboNum();
 				m_tof = TrueOrFalse::FalseSort;
 			}
-			getData().setFigureSwitch(FigureSwitch::MakeFigure);
+			//getData().setFigureSwitch(FigureSwitch::MakeFigure);
+			m_currentFigureSwitch = FigureSwitch::MakeFigure;
 
 			// 正誤判定の動きの再始動.
 			m_truefalse.restart();
@@ -941,7 +960,8 @@ void LetsPlay::update()
 		{
 			m_countdown.reset();
 			m_t_cd = 0.0;
-			getData().setFigureSwitch(FigureSwitch::MakeFigure);
+			//getData().setFigureSwitch(FigureSwitch::MakeFigure);
+			m_currentFigureSwitch = FigureSwitch::MakeFigure;
 
 			// 制限時間の開始.
 			m_playtime.restart();
@@ -1080,7 +1100,7 @@ void LetsPlay::draw() const
 	box_under(ubox_rght, getData().Fcolor()[rght]);
 
 	// 動かす図形.
-	switch (getData().currentFigureSwitch())
+	switch (m_currentFigureSwitch)
 	{
 	case FigureSwitch::Release: // 図形をつかんでないとき.
 
@@ -1315,7 +1335,7 @@ void LetsPlay::initialize()
 		ButtonCtx(pauseRetire, daidai, U"ステージに戻る", FontButton),
 		[&](ButtonBase* self)
 		{
-			getData().setFigureSwitch(FigureSwitch::Break);
+			//getData().setFigureSwitch(FigureSwitch::Break);
 			getData().initialize();
 			m_gt = 0;
 			m_playtime.reset();
@@ -1549,7 +1569,7 @@ void Result::initialize()
 			{
 				//getData().setCountSwitch(CountSwitch::ExplainRule);
 			}
-			getData().setFigureSwitch(FigureSwitch::Break);
+			//getData().setFigureSwitch(FigureSwitch::Break);
 			getData().initialize();
 			//getData().setRuleText(false);
 			m_resultwindow.reset();
@@ -1574,7 +1594,7 @@ void Result::initialize()
 			{
 				//getData().setCountSwitch(CountSwitch::ExplainRule);
 			}
-			getData().setFigureSwitch(FigureSwitch::Break);
+			//getData().setFigureSwitch(FigureSwitch::Break);
 			getData().initialize();
 			//getData().setRuleText(false);
 			m_resultwindow.reset();
@@ -1599,7 +1619,7 @@ void Result::initialize()
 			{
 				//getData().setCountSwitch(CountSwitch::ExplainRule);
 			}
-			getData().setFigureSwitch(FigureSwitch::Break);
+			//getData().setFigureSwitch(FigureSwitch::Break);
 			getData().initialize();
 			//getData().setRuleText(false);
 			m_resultwindow.reset();
