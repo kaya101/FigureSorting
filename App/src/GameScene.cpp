@@ -832,6 +832,163 @@ void LetsPlay::update()
 	// 説明とカウントダウン画面.
 	switch (m_currentFlow)
 	{
+	case LetsPlayFlow::CountDown:
+
+		m_t_cd = m_countdown.sF();
+
+		if (4 < m_t_cd)
+		{
+			m_countdown.reset();
+			m_t_cd = 0.0;
+			getData().setFigureSwitch(FigureSwitch::MakeFigure);
+
+			// 制限時間の開始.
+			m_playtime.restart();
+
+			MoveNextFlow(LetsPlayFlow::Play);
+
+			break;
+		}
+
+		break;
+	default:
+		break;
+	}
+	//switch (m_currentFlow)
+	//{
+	//case LetsPlayFlow::ExplainPage1:	// 仕分けルール説明.
+
+	//	// ちょっと暗くする.
+	//	makuSize.draw(makuColor);
+
+	//	// 説明窓.
+	//	explainWindow.drawFrame(haba, kuro).draw(shiro);
+	//	text(U"-ルール説明-").draw(30, explainMain, kuro);
+	//	text(U"「かたち」は\n図形の形").drawAt(26, explainSubShape, kuro);
+	//	text(U"「いろ」は\n図形の色").drawAt(26, explainSubColor, kuro);
+	//	text(U"「もじ」は\n図形の文字").drawAt(26, explainSubText, kuro);
+
+	//	// 区切りの線.
+	//	Line{ explainLineLeftBegin, explainLineLeftEnd }.draw(haba, kuro);
+	//	Line{ explainLineRightBegin, explainLineRightEnd }.draw(haba, kuro);
+
+	//	// 飾りの図形.
+	//	explainShapeCircle.drawFrame(haba, kuro).draw(getData().colors()[1]);
+	//	explainShapeTriangle.drawFrame(haba, kuro).draw(getData().colors()[1]);
+	//	explainShapeRect.drawFrame(haba, kuro).draw(getData().colors()[1]);
+
+	//	explainColorCircle.drawFrame(haba, kuro).draw(getData().colors()[0]);
+	//	explainColorTriangle.drawFrame(haba, kuro).draw(getData().colors()[1]);
+	//	explainColorRect.drawFrame(haba, kuro).draw(getData().colors()[2]);
+
+	//	text(getData().texts()[0]).draw(30, explainTextmaru, kuro);
+	//	text(getData().texts()[1]).draw(30, explainTextsankaku, kuro);
+	//	text(getData().texts()[2]).draw(30, explainTextshikaku, kuro);
+
+	//	break;
+
+	//case LetsPlayFlow::ExplainPage2:	// 図形の動かし方の説明.
+
+	//	// ちょっと暗くする.
+	//	makuSize.draw(makuColor);
+
+	//	// 説明窓.
+	//	explainWindow.drawFrame(haba, kuro).draw(shiro);
+	//	text(U"-操作方法-").draw(30, explainMain, kuro);
+	//	text(U"左クリックでつかんで移動!!").drawAt(30, 400, 300, kuro);
+
+	//	break;
+
+	//case LetsPlayFlow::Start:	// スタートボタンを押す.
+
+	//	// ちょっと暗くする.
+	//	makuSize.draw(makuColor);
+
+	//	// START ボタンがクリックできることを分かりやすく.
+	//	text(U"クリックしてスタート").drawAt(16, 400, 340, kuro);
+
+	//	break;
+
+	//case LetsPlayFlow::CountDown:
+
+	//{
+	//	m_t_cd = m_countdown.sF();
+	//	const double t_cdmaku = Min(m_countdown.sF() / 2, 1.0);
+
+	//	// 開幕演出.
+	//	m_boxOutQuad_adu(t_cdmaku, makuSize, makuColor);
+	//	if (m_t_cd <= 1)
+	//	{
+	//		text(U"3").drawAt(countdownsize, countdownpoint, kuro);
+
+	//		// ルールの読み忘れを無くす矢印.
+	//		text(U"↑").drawAt(50, yondeyoLeft, kuro);
+	//		text(U"↑").drawAt(50, yondeyoRight, kuro);
+	//		break;
+	//	}
+	//	else if (1 < m_t_cd && m_t_cd <= 2)
+	//	{
+	//		text(U"2").drawAt(countdownsize, countdownpoint, kuro);
+	//		break;
+	//	}
+	//	else if (2 < m_t_cd && m_t_cd <= 3)
+	//	{
+	//		text(U"1").drawAt(countdownsize, countdownpoint, kuro);
+
+	//		// ルールの読み忘れを無くす矢印.
+	//		text(U"↑").drawAt(50, yondeyoLeft, kuro);
+	//		text(U"↑").drawAt(50, yondeyoRight, kuro);
+	//		break;
+	//	}
+	//	else if (3 < m_t_cd && m_t_cd <= 4)
+	//	{
+	//		text(U"START!!").drawAt(countdownsize, countdownpoint, kuro);
+	//	}
+	//	if (4 < m_t_cd)
+	//	{
+	//		m_countdown.reset();
+	//		m_t_cd = 0.0;
+	//		getData().setFigureSwitch(FigureSwitch::MakeFigure);
+
+	//		// 制限時間の開始.
+	//		m_playtime.restart();
+
+	//		MoveNextFlow(LetsPlayFlow::Play);
+
+	//		break;
+	//	}
+	//}
+	//	break;
+
+	//case LetsPlayFlow::Play:
+	//	break;
+
+	//case LetsPlayFlow::Pause:
+	//	break;
+
+	//default:
+	//	break;
+	//}
+}
+
+void LetsPlay::draw() const
+{
+	drawUI();
+}
+
+void LetsPlay::drawFadeIn(double t) const
+{
+}
+
+void LetsPlay::drawFadeOut(double t) const
+{
+}
+
+void LetsPlay::drawUI() const
+{
+	// 説明とカウントダウン画面.
+	switch (m_currentFlow)
+	{
 	case LetsPlayFlow::ExplainPage1:	// 仕分けルール説明.
 
 		// ちょっと暗くする.
@@ -888,7 +1045,6 @@ void LetsPlay::update()
 	case LetsPlayFlow::CountDown:
 
 	{
-		m_t_cd = m_countdown.sF();
 		const double t_cdmaku = Min(m_countdown.sF() / 2, 1.0);
 
 		// 開幕演出.
@@ -920,21 +1076,8 @@ void LetsPlay::update()
 		{
 			text(U"START!!").drawAt(countdownsize, countdownpoint, kuro);
 		}
-		if (4 < m_t_cd)
-		{
-			m_countdown.reset();
-			m_t_cd = 0.0;
-			getData().setFigureSwitch(FigureSwitch::MakeFigure);
-
-			// 制限時間の開始.
-			m_playtime.restart();
-
-			MoveNextFlow(LetsPlayFlow::Play);
-
-			break;
-		}
 	}
-		break;
+	break;
 
 	case LetsPlayFlow::Play:
 		break;
@@ -945,23 +1088,7 @@ void LetsPlay::update()
 	default:
 		break;
 	}
-}
 
-void LetsPlay::draw() const
-{
-	drawUI();
-}
-
-void LetsPlay::drawFadeIn(double t) const
-{
-}
-
-void LetsPlay::drawFadeOut(double t) const
-{
-}
-
-void LetsPlay::drawUI() const
-{
 	if (m_isPaused)
 	{
 		// 一時停止のウィンドウ.
