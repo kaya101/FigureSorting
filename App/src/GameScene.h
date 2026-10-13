@@ -158,10 +158,12 @@ class LetsPlay
 public:
 	enum class LetsPlayFlow : ButtonTableKey
 	{
-		Default,
-		Explain,	// ルール/操作方法の説明.
-		Start,		// はじめるボタンを押すまで.
-		Pause,		// 中断ウィンドウが出てる画面.
+		ExplainPage1,	// ルールの説明.
+		ExplainPage2,	// 操作方法の説明.
+		Start,			// はじめるボタンを押すまで.
+		CountDown,		// 開始直後の幕開け.
+		Play,			// 遊びの画面.
+		Pause,			// 中断ウィンドウが出てる画面.
 	};
 
 	// 正誤判定.
@@ -170,6 +172,15 @@ public:
 		WaitSort,	// 仕分け待ち.
 		TrueSort,	// 正解したとき.
 		FalseSort,	// 間違えたとき.
+	};
+
+	// 図形操作の画面管理.
+	enum class FigureSwitch
+	{
+		MakeFigure,	// 図形生成.
+		Catch,		// 図形を運ぶとき.
+		Release,	// つかんだ図形を離したとき.
+		Break,		// 待機.
 	};
 
 	explicit LetsPlay(const InitData& init);
@@ -290,8 +301,6 @@ private:
 	const Array<uint16> wallx = { 50, 750 };
 	const Array<uint16> wally = { 130, 530 };
 
-	const Font text{ FontMethod::SDF, 30, Typeface::Bold };
-
 	double m_t_cd = 0.0;		// カウントダウンの時間.
 	
 	uint8 m_timelimit = 15;	// 制限時間.
@@ -299,7 +308,9 @@ private:
 	
 	uint8 m_gt = 0;			// 制限時間のカウントダウン時間.
 
-	bool m_pause = false;
+	bool m_isPaused = false;
+
+	bool m_canDisplayRule = false;
 
 	TrueOrFalse m_tof = TrueOrFalse::WaitSort;	// 正誤判定.
 
@@ -322,7 +333,11 @@ private:
 	int16 m_distance_x = 0;
 	int16 m_distance_y = 0;
 
-	LetsPlayFlow m_currentFlow = LetsPlayFlow::Default;
+	LetsPlayFlow m_currentFlow;
+
+	FigureSwitch m_currentFigureSwitch = FigureSwitch::Break;
+
+	void MoveNextFlow(const LetsPlayFlow next);
 
 	// 図形の色を決める関数.
 	void decide_color(Figure& figure, const uint8& stageNum, const bool& colorchange) const
@@ -331,11 +346,13 @@ private:
 		uint8 num = randInt() % kinds[stageNum][COLOR];
 
 		// 色を変更しているとき.
-		if (colorchange) {
+		if (colorchange)
+		{
 			figure.color = colorchangecolor[stageNum][num];
 		}
 		// 最初の状態のまま.
-		else {
+		else
+		{
 			figure.color = color[stageNum][num];
 		}
 	}
@@ -347,11 +364,13 @@ private:
 		uint8 num = randInt() % kinds[stageNum][TEXT];
 
 		// 色を変更しているとき.
-		if (colorchange && stageNum == static_cast<Stage::StageLevelValue>(Stage::StageLevel::LevelMAX)) {
+		if (colorchange && stageNum == static_cast<Stage::StageLevelValue>(Stage::StageLevel::LevelMAX))
+		{
 			figure.text = colorchangetext[num];
 		}
 		// 最初のまま.
-		else {
+		else
+		{
 			figure.text = teXt[stageNum][num];
 		}
 	}
@@ -367,25 +386,31 @@ private:
 	// 任意の座標成分より,図形の中心がはみ出ないようにする関数.
 	const double check_wallx(const Array<uint16>& wall, const int16& point_x, const Figure& figure) const
 	{
-		if (point_x - figure.size / 2 <= wall[0]) {
+		if (point_x - figure.size / 2 <= wall[0])
+		{
 			return wall[0] + figure.size / 2;
 		}
-		else if (wall[1] <= point_x + figure.size / 2) {
+		else if (wall[1] <= point_x + figure.size / 2)
+		{
 			return wall[1] - figure.size / 2;
 		}
-		else {
+		else
+		{
 			return point_x;
 		}
 	}
 	const double check_wally(const Array<uint16>& wall, const int16& point_y, const Figure& figure) const
 	{
-		if (point_y - figure.size / 2 <= wall[0]) {
+		if (point_y - figure.size / 2 <= wall[0])
+		{
 			return wall[0] + figure.size / 2;
 		}
-		else if (wall[1] <= point_y + figure.size / 2) {
+		else if (wall[1] <= point_y + figure.size / 2)
+		{
 			return wall[1] - figure.size / 2;
 		}
-		else {
+		else
+		{
 			return point_y;
 		}
 	}
