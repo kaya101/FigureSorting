@@ -345,11 +345,6 @@ void LetsPlay::update()
 {
 	updateButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
 
-	// 分別はこ下側.
-	box_under(ubox_left, getData().Fcolor()[left]);
-	box_under(ubox_mdle, getData().Fcolor()[mdle]);
-	box_under(ubox_rght, getData().Fcolor()[rght]);
-
 	// 正誤判定.
 	// 時間という概念？の取得.
 	int32 t_tf = (m_truefalse.ms() / 30);
@@ -383,6 +378,137 @@ void LetsPlay::update()
 		break;
 	}
 
+	//// 動かす図形.
+	//switch (getData().currentFigureSwitch()) {
+	//case FigureSwitch::Break: // 待機画面.
+	//	break;
+
+	//case FigureSwitch::MakeFigure: // 図形生成.
+	//{
+	//	// 生成した回数の記録.
+	//	getData().countClassifyNum();
+
+	//	// 図形の出現座標と大きさの代入.
+	//	figure.center = center;
+	//	figure.size = size;
+	//	figure.textSize = textSize;
+	//	figure.textcolor = kuro;
+
+	//	// 図形の色と文字を決める.
+	//	decide_color(figure, getData().stageNum(), getData().isChangedColor());
+	//	decide_text(figure, getData().stageNum(), getData().isChangedColor());
+
+	//	// 図形の形を決める.
+	//	uint8 shapeNum = randInt() % 3;
+	//	if (shapeNum == 0)
+	//	{
+	//		// まる.
+	//		circle = { figure.center, figure.size / 2 };
+
+	//		// さんかく,しかくはなんもなし描画をする.
+	//		triangle = { figure.center.x, figure.center.y, 0 };
+	//		rect = { Arg::center(center_X, center_Y), 0 };
+	//		getData().setFigureSwitch(FigureSwitch::Release);
+	//		break;
+	//	}
+	//	else if (shapeNum == 1)
+	//	{
+	//		// さんかく.
+	//		// ちょっと大きくする.
+	//		figure.size *= 1.3;
+	//		triangle = { center_X, center_Y, (double)figure.size };
+
+	//		// まる,しかくはなんもなし描写をする.
+	//		circle = { figure.center, 0 };
+	//		rect = { Arg::center(center_X, center_Y), 0 };
+
+	//		// さんかくの時だけ文字の大きさを小さくする.
+	//		figure.textSize *= 0.8;
+	//		getData().setFigureSwitch(FigureSwitch::Release);
+	//		break;
+	//	}
+	//	else if (shapeNum == 2)
+	//	{
+	//		// しかく.
+	//		rect = { Arg::center(center_X, center_Y), figure.size };
+
+	//		// まる,さんかくはなんもなし描写をする.
+	//		circle = { figure.center, 0 };
+	//		triangle = { figure.center.x, figure.center.y, 0 };
+	//		getData().setFigureSwitch(FigureSwitch::Release);
+	//		break;
+	//	}
+
+	//	break;
+	//}
+
+
+	//case FigureSwitch::Release: // 図形をつかんでないとき.
+
+	//	// 落とした場所に図形を描写する.
+	//	circle.drawFrame(haba, kuro).draw(figure.color);
+	//	triangle.drawFrame(haba, kuro).draw(figure.color);
+	//	rect.drawFrame(haba, kuro).draw(figure.color);
+	//	text(figure.text).drawAt(figure.textSize, figure.center, figure.textcolor);
+
+	//	// 図形をつかんだとき.
+	//	/*Print <<U"circle" << circle.mouseOver();
+	//	Print << U"triangle" << triangle.mouseOver();
+	//	Print << U"rectr" << rect.mouseOver();*/
+	//	// triangle の一辺が 0 だと,当たり判定が常に true になるバグあり.
+	//	if ((circle.mouseOver() || (triangle.mouseOver() && culc_Length(triangle) != 0) || rect.mouseOver()) && not m_isPaused)
+	//	{
+	//		// 手にする.
+	//		Cursor::RequestStyle(CursorStyle::Hand);
+
+	//		if (MouseL.pressed())
+	//		{
+	//			// カーソルと図形の中心座標の差をとる.
+	//			m_distance_x = figure.center.x - Cursor::Pos().x;
+	//			m_distance_y = figure.center.y - Cursor::Pos().y;
+
+	//			getData().setFigureSwitch(FigureSwitch::Catch);
+	//		}
+	//	}
+
+	//	break;
+
+	//case FigureSwitch::Catch: // 図形をつかんで運ぶとき.
+
+	//	Cursor::RequestStyle(CursorStyle::Hand);
+
+	//	// 移動させる.
+	//	if (MouseL.pressed())
+	//	{
+	//		Circle{ check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), circle.r }.drawFrame(haba, kuro).draw(figure.color);
+	//		Triangle{ (double)check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), (double)check_wally(wally, Cursor::Pos().y + m_distance_y, figure), culc_Length(triangle) }.drawFrame(haba, kuro).draw(figure.color);
+	//		RectF{ Arg::center(check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure)), rect.size }.drawFrame(haba, kuro).draw(figure.color);
+	//		text(figure.text).drawAt(figure.textSize, check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), figure.textcolor);
+	//	}
+
+	//	// 図形を離したとき.
+	//	if (MouseL.up())
+	//	{
+	//		// 図形を書いて穴埋め.
+	//		Circle{ check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), circle.r }.drawFrame(haba, kuro).draw(figure.color);
+	//		Triangle{ (double)check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), (double)check_wally(wally, Cursor::Pos().y + m_distance_y, figure), culc_Length(triangle) }.drawFrame(haba, kuro).draw(figure.color);
+	//		RectF{ Arg::center(check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure)), rect.size }.drawFrame(haba, kuro).draw(figure.color);
+	//		text(figure.text).drawAt(figure.textSize, check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), figure.textcolor);
+
+	//		// 図形の中心座標を離した座標に更新.
+	//		figure.center.x = check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure);
+	//		figure.center.y = check_wally(wally, Cursor::Pos().y + m_distance_y, figure);
+	//		circle.center = figure.center;
+	//		triangle = { figure.center, culc_Length(triangle) };
+	//		rect.x = culc_lx(figure);
+	//		rect.y = culc_ly(figure);
+	//		getData().setFigureSwitch(FigureSwitch::Release);
+	//		break;
+	//	}
+	//	break;
+	//default:
+	//	break;
+	//}
 	// 動かす図形.
 	switch (getData().currentFigureSwitch()) {
 	case FigureSwitch::Break: // 待機画面.
@@ -447,17 +573,7 @@ void LetsPlay::update()
 		break;
 	}
 
-
 	case FigureSwitch::Release: // 図形をつかんでないとき.
-
-		// 落とした場所に図形を描写する.
-		circle.draw(figure.color);
-		circle.drawFrame(haba, kuro);
-		triangle.draw(figure.color);
-		triangle.drawFrame(haba, kuro);
-		rect.draw(figure.color);
-		rect.drawFrame(haba, kuro);
-		text(figure.text).drawAt(figure.textSize, figure.center, figure.textcolor);
 
 		// 図形をつかんだとき.
 		/*Print <<U"circle" << circle.mouseOver();
@@ -485,30 +601,9 @@ void LetsPlay::update()
 
 		Cursor::RequestStyle(CursorStyle::Hand);
 
-		// 移動させる.
-		if (MouseL.pressed())
-		{
-			Circle{ check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), circle.r }.draw(figure.color);
-			Circle{ check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), circle.r }.drawFrame(haba, kuro);
-			Triangle{ (double)check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), (double)check_wally(wally, Cursor::Pos().y + m_distance_y, figure), culc_Length(triangle) }.draw(figure.color);
-			Triangle{ (double)check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), (double)check_wally(wally, Cursor::Pos().y + m_distance_y, figure), culc_Length(triangle) }.drawFrame(haba, kuro);
-			RectF{ Arg::center(check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure)), rect.size }.draw(figure.color);
-			RectF{ Arg::center(check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure)), rect.size }.drawFrame(haba, kuro);
-			text(figure.text).drawAt(figure.textSize, check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), figure.textcolor);
-		}
-
 		// 図形を離したとき.
 		if (MouseL.up())
 		{
-			// 図形を書いて穴埋め.
-			Circle{ check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), circle.r }.draw(figure.color);
-			Circle{ check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), circle.r }.drawFrame(haba, kuro);
-			Triangle{ (double)check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), (double)check_wally(wally, Cursor::Pos().y + m_distance_y, figure), culc_Length(triangle) }.draw(figure.color);
-			Triangle{ (double)check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), (double)check_wally(wally, Cursor::Pos().y + m_distance_y, figure), culc_Length(triangle) }.drawFrame(haba, kuro);
-			RectF{ Arg::center(check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure)), rect.size }.draw(figure.color);
-			RectF{ Arg::center(check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure)), rect.size }.drawFrame(haba, kuro);
-			text(figure.text).drawAt(figure.textSize, check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), figure.textcolor);
-
 			// 図形の中心座標を離した座標に更新.
 			figure.center.x = check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure);
 			figure.center.y = check_wally(wally, Cursor::Pos().y + m_distance_y, figure);
@@ -523,14 +618,6 @@ void LetsPlay::update()
 	default:
 		break;
 	}
-
-	// 分別はこ上側.
-	box_over(obox_left, getData().Fcolor()[left], text, U"●");
-	text(U"\n{}"_fmt(getData().Ftext()[left])).drawAt(obox_left.x + obox_left.w / 2, obox_left.y + obox_left.h * 3 / 5, kuro);
-	box_over(obox_mdle, getData().Fcolor()[mdle], text, U"▲");
-	text(U"\n{}"_fmt(getData().Ftext()[mdle])).drawAt(obox_mdle.x + obox_mdle.w / 2, obox_mdle.y + obox_mdle.h * 3 / 5, kuro);
-	box_over(obox_rght, getData().Fcolor()[rght], text, U"■");
-	text(U"\n{}"_fmt(getData().Ftext()[rght])).drawAt(obox_rght.x + obox_rght.w / 2, obox_rght.y + obox_rght.h * 3 / 5, kuro);
 
 	// 制限時間.
 	m_gt = m_playtime.s();
@@ -987,6 +1074,59 @@ void LetsPlay::update()
 
 void LetsPlay::draw() const
 {
+	// 分別はこ下側.
+	box_under(ubox_left, getData().Fcolor()[left]);
+	box_under(ubox_mdle, getData().Fcolor()[mdle]);
+	box_under(ubox_rght, getData().Fcolor()[rght]);
+
+	// 動かす図形.
+	switch (getData().currentFigureSwitch())
+	{
+	case FigureSwitch::Release: // 図形をつかんでないとき.
+
+		// 落とした場所に図形を描写する.
+		circle.drawFrame(haba, kuro).draw(figure.color);
+		triangle.drawFrame(haba, kuro).draw(figure.color);
+		rect.drawFrame(haba, kuro).draw(figure.color);
+		text(figure.text).drawAt(figure.textSize, figure.center, figure.textcolor);
+
+		break;
+
+	case FigureSwitch::Catch: // 図形をつかんで運ぶとき.
+
+		// 移動させる.
+		if (MouseL.pressed())
+		{
+			Circle{ check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), circle.r }.drawFrame(haba, kuro).draw(figure.color);
+			Triangle{ (double)check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), (double)check_wally(wally, Cursor::Pos().y + m_distance_y, figure), culc_Length(triangle) }.drawFrame(haba, kuro).draw(figure.color);
+			RectF{ Arg::center(check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure)), rect.size }.drawFrame(haba, kuro).draw(figure.color);
+			text(figure.text).drawAt(figure.textSize, check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), figure.textcolor);
+		}
+
+		// 図形を離したとき.
+		if (MouseL.up())
+		{
+			// 図形を書いて穴埋め.
+			Circle{ check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), circle.r }.drawFrame(haba, kuro).draw(figure.color);
+			Triangle{ (double)check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), (double)check_wally(wally, Cursor::Pos().y + m_distance_y, figure), culc_Length(triangle) }.drawFrame(haba, kuro).draw(figure.color);
+			RectF{ Arg::center(check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure)), rect.size }.drawFrame(haba, kuro).draw(figure.color);
+			text(figure.text).drawAt(figure.textSize, check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), figure.textcolor);
+
+			break;
+		}
+		break;
+	default:
+		break;
+	}
+
+	// 分別はこ上側.
+	box_over(obox_left, getData().Fcolor()[left], text, U"●");
+	text(U"\n{}"_fmt(getData().Ftext()[left])).drawAt(obox_left.x + obox_left.w / 2, obox_left.y + obox_left.h * 3 / 5, kuro);
+	box_over(obox_mdle, getData().Fcolor()[mdle], text, U"▲");
+	text(U"\n{}"_fmt(getData().Ftext()[mdle])).drawAt(obox_mdle.x + obox_mdle.w / 2, obox_mdle.y + obox_mdle.h * 3 / 5, kuro);
+	box_over(obox_rght, getData().Fcolor()[rght], text, U"■");
+	text(U"\n{}"_fmt(getData().Ftext()[rght])).drawAt(obox_rght.x + obox_rght.w / 2, obox_rght.y + obox_rght.h * 3 / 5, kuro);
+
 	drawUI();
 }
 
