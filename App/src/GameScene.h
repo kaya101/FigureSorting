@@ -303,6 +303,8 @@ private:
 
 	bool m_isPaused = false;
 
+	bool m_canDisplayRule = false;
+
 	TrueOrFalse m_tof = TrueOrFalse::WaitSort;	// 正誤判定.
 
 	Stopwatch m_countdown{ StartImmediately::Yes };	// ゲーム開始のカウントダウン.

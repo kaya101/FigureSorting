@@ -562,10 +562,14 @@ void LetsPlay::update()
 	switch (getData().currentScoreSwitch()) {
 	case ScoreSwitch::ShapeRule: // 形で分ける.
 
-		if (getData().ruleText())
+		if (m_canDisplayRule)
 		{
 			text(U"かたちで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
 		}
+		/*if (getData().ruleText())
+		{
+			text(U"かたちで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
+		}*/
 
 		// left は,まる.
 		if (circle.intersects(ubox_left) || rect.intersects(ubox_left) || triangle.intersects(ubox_left))
@@ -661,10 +665,14 @@ void LetsPlay::update()
 		break;
 	case ScoreSwitch::ColorRule: // 色で分ける.
 
-		if (getData().ruleText())
+		if (m_canDisplayRule)
 		{
 			text(U"いろで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
 		}
+		/*if (getData().ruleText())
+		{
+			text(U"いろで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
+		}*/
 
 		// left は,赤.
 		if (circle.intersects(ubox_left) || rect.intersects(ubox_left) || triangle.intersects(ubox_left))
@@ -744,10 +752,14 @@ void LetsPlay::update()
 
 	case ScoreSwitch::TextRule: // 文字で分ける.
 
-		if (getData().ruleText())
+		if (m_canDisplayRule)
 		{
 			text(U"もじで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
 		}
+		/*if (getData().ruleText())
+		{
+			text(U"もじで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
+		}*/
 
 		// left は,"あか".
 		if (circle.intersects(ubox_left) || rect.intersects(ubox_left) || triangle.intersects(ubox_left))
@@ -833,6 +845,8 @@ void LetsPlay::update()
 	switch (m_currentFlow)
 	{
 	case LetsPlayFlow::CountDown:
+
+		m_canDisplayRule = true;
 
 		m_t_cd = m_countdown.sF();
 
@@ -1133,7 +1147,7 @@ void LetsPlay::initialize()
 		[&](ButtonBase* self)
 		{
 			// 仕分けルールを表示する.
-			getData().setRuleText(true);
+			//getData().setRuleText(true);
 			m_countdown.restart();
 			m_playtime.reset();
 
@@ -1166,7 +1180,7 @@ void LetsPlay::initialize()
 			m_gt = 0;
 			m_playtime.reset();
 			m_countdown.reset();
-			getData().setRuleText(false);
+			//getData().setRuleText(false);
 			m_isPaused = false;
 			//getData().setPauseSwitch(PauseSwitch::BackButton);
 			changeScene(SceneSwitch::Stage, 0.0);
@@ -1397,7 +1411,7 @@ void Result::initialize()
 			}
 			getData().setFigureSwitch(FigureSwitch::Break);
 			getData().initialize();
-			getData().setRuleText(false);
+			//getData().setRuleText(false);
 			m_resultwindow.reset();
 			/*m_resulttext01.reset();
 			m_resulttext02.reset();
@@ -1422,7 +1436,7 @@ void Result::initialize()
 			}
 			getData().setFigureSwitch(FigureSwitch::Break);
 			getData().initialize();
-			getData().setRuleText(false);
+			//getData().setRuleText(false);
 			m_resultwindow.reset();
 			/*m_resulttext01.reset();
 			m_resulttext02.reset();
@@ -1447,7 +1461,7 @@ void Result::initialize()
 			}
 			getData().setFigureSwitch(FigureSwitch::Break);
 			getData().initialize();
-			getData().setRuleText(false);
+			//getData().setRuleText(false);
 			m_resultwindow.reset();
 			/*m_resulttext01.reset();
 			m_resulttext02.reset();

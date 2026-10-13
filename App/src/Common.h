@@ -131,7 +131,7 @@ public:
 	void setFcolor(const Array<ColorF>& colors) { m_Fcolor = colors; }
 	void setFtext(const Array<String>& texts) { m_Ftext = texts; }
 	void setStageNum(const uint8 n) { m_stageNum = n; }
-	void setRuleText(const bool skip) { m_ruleText = skip; }
+	//void setRuleText(const bool skip) { m_ruleText = skip; }
 	void setNewRecord(const bool skip) { m_newRecord = skip; }
 	void setColors(const Array<ColorF>& colors) { m_colors = colors; }
 	void setTexts(const Array<String>& texts) { m_texts = texts; }
@@ -145,7 +145,7 @@ public:
 	const Array<ColorF>& Fcolor() const { return m_Fcolor; }
 	const Array<String>& Ftext() const { return m_Ftext; }
 	const uint8 stageNum() const { return m_stageNum; }
-	const bool ruleText() const { return m_ruleText; }
+	//const bool ruleText() const { return m_ruleText; }
 	const bool newRecord() const { return m_newRecord; }
 	const int16 score() const { return m_score; }
 	const uint8 classifyNum() const { return m_classifyNum; }
@@ -174,7 +174,7 @@ private:
 
 	uint8 m_stageNum = 0;		// どのステージか.
 
-	bool m_ruleText = false;	// 仕分けルールの表示.
+	//bool m_ruleText = false;	// 仕分けルールの表示.
 
 	bool m_newRecord = false;	// 記録を更新したかどうか.
 
