@@ -1283,6 +1283,8 @@ void LetsPlay::initialize()
 
 	m_figureGen.init();
 
+	m_scoreManager.init();
+
 	makeButton(
 		static_cast<ButtonTableKey>(LetsPlayFlow::ExplainPage1),
 		ButtonCtx(explainNextButton, makuColor, U"→", FontButton),

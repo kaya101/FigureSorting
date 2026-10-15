@@ -4,6 +4,7 @@
 #include "Button.h"
 #include "SortedShape.h"
 #include "Generator.h"
+#include "Manager.h"
 
 class GameScene
 {
@@ -324,6 +325,8 @@ private:
 	FigureSwitch m_currentFigureSwitch = FigureSwitch::Break;
 
 	FigureGenerator m_figureGen;
+
+	ScoreManager m_scoreManager;
 
 	void MoveNextFlow(const LetsPlayFlow next);
 
