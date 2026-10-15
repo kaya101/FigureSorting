@@ -125,7 +125,10 @@
     <ClCompile Include="App\src\Common.cpp" />
     <ClCompile Include="App\src\GameScene.cpp" />
     <ClCompile Include="App\src\Button.cpp" />
-    <ClCompile Include="App\src\NonRepeatRandomGenerator.cpp" />
+    <ClCompile Include="App\src\SortedShape.cpp" />
+    <ClCompile Include="App\src\Generator.cpp" />
+    <ClCompile Include="App\src\Enums.cpp" />
+    <ClCompile Include="App\src\Manager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\engine\texture\box-shadow\128.png" />
@@ -410,7 +413,10 @@
     <ClInclude Include="App\src\Common.h" />
     <ClInclude Include="App\src\GameScene.h" />
     <ClInclude Include="App\src\Button.h" />
-    <ClInclude Include="App\src\NonRepeatRandomGenerator.h" />
+    <ClInclude Include="App\src\SortedShape.h" />
+    <ClInclude Include="App\src\Generator.h" />
+    <ClInclude Include="App\src\Enums.h" />
+    <ClInclude Include="App\src\Manager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App\example\obj\blacksmith.obj">

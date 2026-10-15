@@ -1,6 +1,10 @@
 ﻿#pragma once
+#include "Enums.h"
 #include "Common.h"
 #include "Button.h"
+#include "SortedShape.h"
+#include "Generator.h"
+#include "Manager.h"
 
 class GameScene
 {
@@ -72,15 +76,6 @@ public:
 		Default,
 	};
 
-	using StageLevelValue = size_t;
-	enum class StageLevel : StageLevelValue
-	{
-		Level01 = 0,
-		Level02 = 1,
-		LevelMAX = 2,
-		Count = 3		// 要素数.
-	};
-
 	explicit Stage(const InitData& init);
 
 	~Stage() = default;
@@ -148,7 +143,7 @@ private:
 
 	bool m_isChangedColor;
 
-	void setupGameData(const StageLevel level, GameData& gd) const;
+	void setupSortRule(const StageLevel level, GameData& gd) const;
 };
 
 class LetsPlay
@@ -200,17 +195,6 @@ public:
 	void initialize() override;
 
 private:
-	// 図形出現の中心座標.
-	static constexpr uint16 center_X = 400;
-	static constexpr uint16 center_Y = 470;
-	static constexpr Vec2 center = { center_X, center_Y };
-
-	// 図形の基本サイズ.
-	static constexpr uint8 size = 120;
-
-	// 図形の文字の基本サイズ.
-	static constexpr uint8 textSize = 28;
-
 	// 仕分けるルールの説明窓.
 	static constexpr Rect explainWindow = { 115, 100, 570, 400 };
 
@@ -300,6 +284,7 @@ private:
 	// 仕分けてるとき.
 	const Array<uint16> wallx = { 50, 750 };
 	const Array<uint16> wally = { 130, 530 };
+	static constexpr RectF SortedArea = { Vec2(50, 130), SizeF(700, 400) };
 
 	double m_t_cd = 0.0;		// カウントダウンの時間.
 	
@@ -321,102 +306,113 @@ private:
 	Stopwatch m_truefalse{ StartImmediately::Yes };	// 正誤判定のエフェクト.
 
 	// 動かす図形の素材の受け皿.
-	Figure figure;
+	std::unique_ptr<SortedShapeBase> m_sortedShapePtr;
+	/*Figure figure;
 	
 	Circle circle{};
 	
 	Triangle triangle{};
 	
-	Rect rect{};
+	Rect rect{};*/
 
 	// 図形を持ち運ぶときの図形の中心とカーソルの距離を保持する.
-	int16 m_distance_x = 0;
-	int16 m_distance_y = 0;
+	/*int16 m_distance_x = 0;
+	int16 m_distance_y = 0;*/
+	Vec2 m_distance = Vec2().Zero();
 
 	LetsPlayFlow m_currentFlow;
 
 	FigureSwitch m_currentFigureSwitch = FigureSwitch::Break;
 
+	FigureGenerator m_figureGen;
+
+	ScoreManager m_scoreManager;
+
 	void MoveNextFlow(const LetsPlayFlow next);
 
-	// 図形の色を決める関数.
-	void decide_color(Figure& figure, const uint8& stageNum, const bool& colorchange) const
+	std::unique_ptr<SortedShapeBase> generateFigure()
 	{
-		// そのステージで使える色は何種類あるうちのどれか.
-		uint8 num = randInt() % kinds[stageNum][COLOR];
-
-		// 色を変更しているとき.
-		if (colorchange)
-		{
-			figure.color = colorchangecolor[stageNum][num];
-		}
-		// 最初の状態のまま.
-		else
-		{
-			figure.color = color[stageNum][num];
-		}
+		return m_figureGen.generate(getData().currentSortRule(), getData().isChangedColor());
 	}
 
-	// 図形の文字を決める関数.
-	void decide_text(Figure& figure, const uint8& stageNum, const bool& colorchange) const
-	{
-		// そのステージで使える文字は何種類あるうちのどれか.
-		uint8 num = randInt() % kinds[stageNum][TEXT];
+	//// 図形の色を決める関数.
+	//void decide_color(Figure& figure, const uint8& stageNum, const bool& colorchange) const
+	//{
+	//	// そのステージで使える色は何種類あるうちのどれか.
+	//	uint8 num = randInt() % kinds[stageNum][COLOR];
 
-		// 色を変更しているとき.
-		if (colorchange && stageNum == static_cast<Stage::StageLevelValue>(Stage::StageLevel::LevelMAX))
-		{
-			figure.text = colorchangetext[num];
-		}
-		// 最初のまま.
-		else
-		{
-			figure.text = teXt[stageNum][num];
-		}
-	}
+	//	// 色を変更しているとき.
+	//	if (colorchange)
+	//	{
+	//		figure.color = colorchangecolor[stageNum][num];
+	//	}
+	//	// 最初の状態のまま.
+	//	else
+	//	{
+	//		figure.color = color[stageNum][num];
+	//	}
+	//}
 
-	// 中心座標から四角の左上座標を求める関数.
-	const int16 culc_lx(const Figure& figure) const { return figure.center.x - (figure.size / 2); }
-	const int16 culc_ly(const Figure& figure) const { return figure.center.y - (figure.size / 2); }
+	//// 図形の文字を決める関数.
+	//void decide_text(Figure& figure, const uint8& stageNum, const bool& colorchange) const
+	//{
+	//	// そのステージで使える文字は何種類あるうちのどれか.
+	//	uint8 num = randInt() % kinds[stageNum][TEXT];
+
+	//	// 色を変更しているとき.
+	//	if (colorchange && stageNum == static_cast<Stage::StageLevelValue>(Stage::StageLevel::LevelMAX))
+	//	{
+	//		figure.text = colorchangetext[num];
+	//	}
+	//	// 最初のまま.
+	//	else
+	//	{
+	//		figure.text = teXt[stageNum][num];
+	//	}
+	//}
+
+	//// 中心座標から四角の左上座標を求める関数.
+	//const int16 culc_lx(const Figure& figure) const { return figure.center.x - (figure.size / 2); }
+	//const int16 culc_ly(const Figure& figure) const { return figure.center.y - (figure.size / 2); }
 
 	// 正三角形の 3 頂点から辺の長さを求める関数.
 	// 実際は 2 点で足りるけど.
 	const double culc_Length(const Triangle& triangle) const { return sqrt(pow(triangle.p1.x - triangle.p0.x, 2) + pow(triangle.p1.y - triangle.p0.y, 2)); }
 
-	// 任意の座標成分より,図形の中心がはみ出ないようにする関数.
-	const double check_wallx(const Array<uint16>& wall, const int16& point_x, const Figure& figure) const
-	{
-		if (point_x - figure.size / 2 <= wall[0])
-		{
-			return wall[0] + figure.size / 2;
-		}
-		else if (wall[1] <= point_x + figure.size / 2)
-		{
-			return wall[1] - figure.size / 2;
-		}
-		else
-		{
-			return point_x;
-		}
-	}
-	const double check_wally(const Array<uint16>& wall, const int16& point_y, const Figure& figure) const
-	{
-		if (point_y - figure.size / 2 <= wall[0])
-		{
-			return wall[0] + figure.size / 2;
-		}
-		else if (wall[1] <= point_y + figure.size / 2)
-		{
-			return wall[1] - figure.size / 2;
-		}
-		else
-		{
-			return point_y;
-		}
-	}
+	//// 任意の座標成分より,図形の中心がはみ出ないようにする関数.
+	//const double check_wallx(const Array<uint16>& wall, const int16& point_x, const Figure& figure) const
+	//{
+	//	if (point_x - figure.size / 2 <= wall[0])
+	//	{
+	//		return wall[0] + figure.size / 2;
+	//	}
+	//	else if (wall[1] <= point_x + figure.size / 2)
+	//	{
+	//		return wall[1] - figure.size / 2;
+	//	}
+	//	else
+	//	{
+	//		return point_x;
+	//	}
+	//}
+	//const double check_wally(const Array<uint16>& wall, const int16& point_y, const Figure& figure) const
+	//{
+	//	if (point_y - figure.size / 2 <= wall[0])
+	//	{
+	//		return wall[0] + figure.size / 2;
+	//	}
+	//	else if (wall[1] <= point_y + figure.size / 2)
+	//	{
+	//		return wall[1] - figure.size / 2;
+	//	}
+	//	else
+	//	{
+	//		return point_y;
+	//	}
+	//}
 
 	// ゲーム結果画面の幕が上がるやつ.
-	void m_boxOutQuad_adu(const double t, const Rect& rect, const ColorF& colorf) const
+	void m_boxOutQuad_adu(const double t, const RectF& rect, const ColorF& colorf) const
 	{
 		RectF{ rect.x, rect.y, rect.w, rect.h * (1 - easeOutQuad(t)) }.draw(colorf);
 	}
@@ -486,7 +482,7 @@ private:
 	Stopwatch m_resultwindow{ StartImmediately::Yes };
 
 	// ゲーム結果画面の幕が下りるやつ.
-	void m_boxBounce_aud(const double t, const Rect& rect, const ColorF& colorf) const
+	void m_boxBounce_aud(const double t, const RectF& rect, const ColorF& colorf) const
 	{
 		RectF{ rect.x, rect.y, rect.w, rect.h * easeOutBounce(t) }.draw(colorf);
 	}
