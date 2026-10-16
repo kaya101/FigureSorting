@@ -161,17 +161,17 @@ void Stage::drawUI() const
 	// 01.
 	stage01textback.drawFrame(haba, kuro).draw(haiiro);
 	FontAsset(FontTitle)(U"Lv.1").drawAt(stagetextSize, stage01text);
-	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける"_fmt(getData().gameManagerPtr()->scoreManager().highScores()[static_cast<EnumValue>(StageLevel::Level01)])).draw(stagetextsubSize, stage01textsub);
+	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける"_fmt(getData().gameManager().scoreManager().highScores()[static_cast<EnumValue>(StageLevel::Level01)])).draw(stagetextsubSize, stage01textsub);
 
 	// 02.
 	stage02textback.drawFrame(haba, kuro).draw(haiiro);
 	FontAsset(FontTitle)(U"Lv.2").drawAt(stagetextSize, stage02text);
-	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける\n・色でわける"_fmt(getData().gameManagerPtr()->scoreManager().highScores()[static_cast<EnumValue>(StageLevel::Level02)])).draw(stagetextsubSize, stage02textsub);
+	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける\n・色でわける"_fmt(getData().gameManager().scoreManager().highScores()[static_cast<EnumValue>(StageLevel::Level02)])).draw(stagetextsubSize, stage02textsub);
 
 	// MAX.
 	stageMAXtextback.drawFrame(haba, kuro).draw(haiiro);
 	FontAsset(FontTitle)(U"Lv.3").drawAt(stagetextSize, stageMAXtext);
-	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける\n・色でわける\n・文字でわける"_fmt(getData().gameManagerPtr()->scoreManager().highScores()[static_cast<EnumValue>(StageLevel::LevelMAX)])).draw(stagetextsubSize, stageMAXtextsub);
+	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける\n・色でわける\n・文字でわける"_fmt(getData().gameManager().scoreManager().highScores()[static_cast<EnumValue>(StageLevel::LevelMAX)])).draw(stagetextsubSize, stageMAXtextsub);
 
 	// 図形の見本.
 	m_sampleCircle.drawFrame(haba, kuro).draw(FigureGenerator::SortingColorsDefault[0]);// 色変えに対応するように !!.
@@ -224,16 +224,16 @@ void Stage::initialize()
 		ButtonCtx(colorchangeBox, bg_shiro, U"", FontButton),
 		[&](ButtonBase* self)
 		{
-			if (!getData().gameManagerPtr()->isChangedColor())
+			if (!getData().gameManager().isChangedColor())
 			{
 				// on にする.
-				getData().gameManagerPtr()->turnOnChangedColor();
+				getData().gameManager().turnOnChangedColor();
 				self->setText(m_markedText);
 			}
 			else
 			{
 				// off にする.
-				getData().gameManagerPtr()->turnOffChangedColor();
+				getData().gameManager().turnOffChangedColor();
 				self->setText(U"");
 			}
 		});
@@ -243,27 +243,27 @@ void Stage::initialize()
 		ButtonCtx(explainskipBox, bg_shiro, U"", FontButton),
 		[&](ButtonBase* self)
 		{
-			if (!getData().gameManagerPtr()->isSkippedExplain())
+			if (!getData().gameManager().isSkippedExplain())
 			{
 				// スキップする.
-				getData().gameManagerPtr()->turnOnSkippedExplain();
+				getData().gameManager().turnOnSkippedExplain();
 				self->setText(m_markedText);
 			}
 			else
 			{
 				// スキップしない.
-				getData().gameManagerPtr()->turnOffSkippedExplain();
+				getData().gameManager().turnOffSkippedExplain();
 				self->setText(U"");
 			}
 		});
 
-	getData().gameManagerPtr()->init();
+	getData().gameManager().init();
 }
 
 void Stage::setupSortRule(const StageLevel level, GameData& gd) const
 {
 	// 素材の準備.
-	gd.gameManagerPtr()->setSortRule(static_cast<EnumValue>(level));
+	gd.gameManager().setSortRule(static_cast<EnumValue>(level));
 }
 
 /*	End Stage Scene		********************************************************************************************************/
@@ -275,7 +275,7 @@ LetsPlay::LetsPlay(const InitData& init)
 {
 	initialize();
 
-	if (getData().gameManagerPtr()->isSkippedExplain())
+	if (getData().gameManager().isSkippedExplain())
 	{
 		MoveNextFlow(LetsPlayFlow::Start);
 	}
@@ -300,7 +300,7 @@ void LetsPlay::update()
 		m_gt = 0;
 
 		// ハイスコアを更新したかどうかの記録.
-		//getData().gameManagerPtr()->scoreManager().updateHighScores(getData().gameManagerPtr()->stageLevel());
+		//getData().gameManager().scoreManager().updateHighScores(getData().gameManager().stageLevel());
 
 		changeScene(SceneSwitch::Result, 0.0);
 	}
@@ -337,7 +337,7 @@ void LetsPlay::update()
 		break;
 	case LetsPlayFlow::Play:
 
-		getData().gameManagerPtr()->update();
+		getData().gameManager().update();
 
 		break;
 
@@ -383,17 +383,17 @@ void LetsPlay::drawUI() const
 		Line{ explainLineRightBegin, explainLineRightEnd }.draw(haba, kuro);
 
 		// 飾りの図形.
-		explainShapeCircle.drawFrame(haba, kuro).draw((getData().gameManagerPtr()->isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
-		explainShapeTriangle.drawFrame(haba, kuro).draw((getData().gameManagerPtr()->isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
-		explainShapeRect.drawFrame(haba, kuro).draw((getData().gameManagerPtr()->isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
+		explainShapeCircle.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
+		explainShapeTriangle.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
+		explainShapeRect.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
 
-		explainColorCircle.drawFrame(haba, kuro).draw((getData().gameManagerPtr()->isChangedColor()) ? ScoreManager::SortingAnswers[0].colors.colorChanged : ScoreManager::SortingAnswers[0].colors.colorDefault);
-		explainColorTriangle.drawFrame(haba, kuro).draw((getData().gameManagerPtr()->isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
-		explainColorRect.drawFrame(haba, kuro).draw((getData().gameManagerPtr()->isChangedColor()) ? ScoreManager::SortingAnswers[2].colors.colorChanged : ScoreManager::SortingAnswers[2].colors.colorDefault);
+		explainColorCircle.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[0].colors.colorChanged : ScoreManager::SortingAnswers[0].colors.colorDefault);
+		explainColorTriangle.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
+		explainColorRect.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[2].colors.colorChanged : ScoreManager::SortingAnswers[2].colors.colorDefault);
 
-		FontAsset(FontText)((getData().gameManagerPtr()->isChangedColor()) ? ScoreManager::SortingAnswers[0].texts.textChanged : ScoreManager::SortingAnswers[0].texts.textDefault).draw(30, explainTextmaru, kuro);
-		FontAsset(FontText)((getData().gameManagerPtr()->isChangedColor()) ? ScoreManager::SortingAnswers[1].texts.textChanged : ScoreManager::SortingAnswers[1].texts.textDefault).draw(30, explainTextsankaku, kuro);
-		FontAsset(FontText)((getData().gameManagerPtr()->isChangedColor()) ? ScoreManager::SortingAnswers[2].texts.textChanged : ScoreManager::SortingAnswers[2].texts.textDefault).draw(30, explainTextshikaku, kuro);
+		FontAsset(FontText)((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[0].texts.textChanged : ScoreManager::SortingAnswers[0].texts.textDefault).draw(30, explainTextmaru, kuro);
+		FontAsset(FontText)((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].texts.textChanged : ScoreManager::SortingAnswers[1].texts.textDefault).draw(30, explainTextsankaku, kuro);
+		FontAsset(FontText)((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[2].texts.textChanged : ScoreManager::SortingAnswers[2].texts.textDefault).draw(30, explainTextshikaku, kuro);
 
 		break;
 
@@ -459,7 +459,7 @@ void LetsPlay::drawUI() const
 	case LetsPlayFlow::Play:
 
 		// 動かす図形.
-		getData().gameManagerPtr()->draw();
+		getData().gameManager().draw();
 
 		break;
 
@@ -470,7 +470,7 @@ void LetsPlay::drawUI() const
 		break;
 	}
 
-	if (getData().gameManagerPtr()->isPaused())
+	if (getData().gameManager().isPaused())
 	{
 		// 一時停止のウィンドウ.
 		pauseWindow.drawFrame(haba, kuro).draw(ColorF{ 0.7, 0.7, 0.7, 0.8 });
@@ -534,7 +534,7 @@ void LetsPlay::initialize()
 		{
 			m_playtime.pause();
 			m_countdown.pause();
-			getData().gameManagerPtr()->turnOnPause();
+			getData().gameManager().turnOnPause();
 
 			MoveNextFlow(LetsPlayFlow::Pause);
 		});
@@ -548,7 +548,7 @@ void LetsPlay::initialize()
 			m_gt = 0;
 			m_playtime.reset();
 			m_countdown.reset();
-			getData().gameManagerPtr()->turnOffPause();
+			getData().gameManager().turnOffPause();
 			changeScene(SceneSwitch::Stage, 0.0);
 		});
 
@@ -559,7 +559,7 @@ void LetsPlay::initialize()
 		{
 			m_playtime.resume();
 			m_countdown.resume();
-			getData().gameManagerPtr()->turnOffPause();
+			getData().gameManager().turnOffPause();
 			changeScene(SceneSwitch::Letsplay, 0.0);
 			
 			MoveNextFlow(LetsPlayFlow::Play);
@@ -572,7 +572,7 @@ void LetsPlay::initialize()
 		{
 			m_playtime.resume();
 			m_countdown.resume();
-			getData().gameManagerPtr()->turnOffPause();
+			getData().gameManager().turnOffPause();
 			changeScene(SceneSwitch::Letsplay, 0.0);
 			
 			MoveNextFlow(LetsPlayFlow::Play);
@@ -630,7 +630,7 @@ void Result::draw() const
 	const double t_rw = Min(m_resultwindow.sF(), 1.0);
 
 	// さっきまでの背景たち.
-	getData().gameManagerPtr()->draw();
+	getData().gameManager().draw();
 
 	// 幕を下ろす.
 	m_boxBounce_aud(t_rw, makuSize, makuColor);
@@ -640,13 +640,13 @@ void Result::draw() const
 	m_textBounce_aud(t_rw, resultText, FontAsset(FontButton), U"★RESULT★", 80);
 
 	// 獲得スコア.
-	m_textBounce_aud(t_rw, yourscoreText, FontAsset(FontButton), U"Your Score:{}"_fmt(getData().gameManagerPtr()->scoreManager().score()), 36);
+	m_textBounce_aud(t_rw, yourscoreText, FontAsset(FontButton), U"Your Score:{}"_fmt(getData().gameManager().scoreManager().score()), 36);
 
 	// ハイスコア.
-	m_textBounce_aud(t_rw, highscoreText, FontAsset(FontButton), U"High Score:{}"_fmt(getData().gameManagerPtr()->scoreManager().highScores()[static_cast<EnumValue>(getData().gameManagerPtr()->stageLevel())]), 20);
+	m_textBounce_aud(t_rw, highscoreText, FontAsset(FontButton), U"High Score:{}"_fmt(getData().gameManager().scoreManager().highScores()[static_cast<EnumValue>(getData().gameManager().stageLevel())]), 20);
 
 	// 記録を更新したか.
-	if (getData().gameManagerPtr()->scoreManager().newRecord())
+	if (getData().gameManager().scoreManager().newRecord())
 	{
 		m_textBounce_aud(t_rw, newrecordText, FontAsset(FontButton), U"New Record!!", 20);
 	}
@@ -673,7 +673,7 @@ void Result::draw() const
 			}
 			else
 			{
-				m_textOutExpo_aap(sortedPtr->rate(), sortedTextAppearPoint, sortedText, kuro, FontAsset(FontButton), U"sorted:{}"_fmt(getData().gameManagerPtr()->scoreManager().classifyNum() - 1), 30);
+				m_textOutExpo_aap(sortedPtr->rate(), sortedTextAppearPoint, sortedText, kuro, FontAsset(FontButton), U"sorted:{}"_fmt(getData().gameManager().scoreManager().classifyNum() - 1), 30);
 			}
 		}
 
@@ -682,7 +682,7 @@ void Result::draw() const
 		{
 			if (truePtr != nullptr)
 			{
-				m_textOutExpo_aap(truePtr->rate(), trueTextAppearPoint, trueText, kuro, FontAsset(FontButton), U"true:{}"_fmt(getData().gameManagerPtr()->scoreManager().correctNum()), 30);
+				m_textOutExpo_aap(truePtr->rate(), trueTextAppearPoint, trueText, kuro, FontAsset(FontButton), U"true:{}"_fmt(getData().gameManager().scoreManager().correctNum()), 30);
 			}
 			else
 			{
@@ -695,7 +695,7 @@ void Result::draw() const
 		{
 			if (missPtr != nullptr)
 			{
-				m_textOutExpo_aap(missPtr->rate(), missTextAppearPoint, missText, kuro, FontAsset(FontButton), U"miss:{}"_fmt(getData().gameManagerPtr()->scoreManager().missNum()), 30);
+				m_textOutExpo_aap(missPtr->rate(), missTextAppearPoint, missText, kuro, FontAsset(FontButton), U"miss:{}"_fmt(getData().gameManager().scoreManager().missNum()), 30);
 			}
 			else
 			{

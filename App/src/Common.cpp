@@ -3,16 +3,7 @@
 
 void GameData::initialize()
 {
-	/*m_score = 0;
-	m_classifyNum = 0;
-	m_correctNum = 0;
-	m_missNum = 0;
-	m_comboNum = 0;
-	m_newRecord = false;*/
-
-	m_gameManagerPtr = std::make_unique<GameManager>();
-
-	/*m_sortRuleGen.init(FigureGenerator::N);*/
+	m_gameManager.init();
 }
 
 //void GameData::setSortRule(const size_t nextStageIdx)

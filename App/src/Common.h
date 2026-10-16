@@ -47,16 +47,19 @@ static constexpr ColorF toumei{ 1, 1, 1, 0 };
 class GameData
 {
 public:
-	explicit GameData() = default;
+	explicit GameData()
+	{
+		initialize();
+	}
 
 	~GameData() = default;
 
 	void initialize();
 
-	GameManager* gameManagerPtr() { return m_gameManagerPtr.get(); }
+	GameManager& gameManager() { return m_gameManager; }
 
 private:
-	std::unique_ptr<GameManager> m_gameManagerPtr;
+	GameManager m_gameManager;
 };
 
 using App = SceneManager<SceneSwitch, GameData>;

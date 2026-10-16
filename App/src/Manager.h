@@ -98,7 +98,7 @@ public:
 	void setTF(const TrueOrFalse tf) { m_tof = tf; }
 
 	const SortedShapeBase* sortedShapePtr() const { return m_sortedShapePtr.get(); }
-	const ScoreManager scoreManager() const { return m_scoreManager; }
+	const ScoreManager& scoreManager() const { return m_scoreManager; }
 	const SortRule currentSortRule() const { return m_currentSortRule; }
 	const bool isChangedColor() const { return m_isChangedColor; }
 	const bool isSkippedExplain() const { return m_isSkippedExplain; }
