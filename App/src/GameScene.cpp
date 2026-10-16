@@ -9,7 +9,6 @@ void GameScene::makeButton(const ButtonTableKey key, const ButtonCtx& ctx, Butto
 
 	ptr->setWorkCallBack([workCallBack, p = ptr.get()]() { workCallBack(p); });
 
-	//m_buttonPtrs.push_back(std::move(ptr));
 	m_buttonTable[key].push_back(std::move(ptr));
 }
 
@@ -19,7 +18,6 @@ void GameScene::makeButton(const ButtonTableKey key, const ButtonCtx& ctx, Butto
 
 	ptr->setWorkCallBack([workCallBack, p = ptr.get()]() { workCallBack(p); });
 
-	//m_buttonPtrs.push_back(std::move(ptr));
 	m_buttonTable[key].push_back(std::move(ptr));
 }
 
@@ -231,16 +229,12 @@ void Stage::initialize()
 				// on にする.
 				getData().gameManagerPtr()->turnOnChangedColor();
 				self->setText(m_markedText);
-				/*getData().setColors(SortingColorsChanged);
-				getData().setTexts(SortingTextsChanged);*/
 			}
 			else
 			{
 				// off にする.
 				getData().gameManagerPtr()->turnOffChangedColor();
 				self->setText(U"");
-				/*getData().setColors(SortingColorsDefault);
-				getData().setTexts(SortingTextsDefault);*/
 			}
 		});
 
@@ -268,60 +262,8 @@ void Stage::initialize()
 
 void Stage::setupSortRule(const StageLevel level, GameData& gd) const
 {
-	//const size_t idx = static_cast<StageLevelValue>(level);
-
 	// 素材の準備.
-	//gd.setStageNum(idx);
 	gd.gameManagerPtr()->setSortRule(static_cast<EnumValue>(level));
-
-	/*if (m_isChangedColor)
-	{
-		gd.setFcolor(colorchangecolor[idx]);
-		gd.setFtext((level == StageLevel::LevelMAX) ? colorchangetext : text_Lv01);
-	}
-	else
-	{
-		gd.setFcolor(color[idx]);
-		gd.setFtext(teXt[idx]);
-	}*/
-
-	// ルール決め.
-	//if (level == StageLevel::Level01)
-	//{
-	//	gd.setScoreSwitch(ScoreSwitch::ShapeRule);
-	//}
-	//else if (level == StageLevel::Level02)
-	//{
-	//	if (randInt() % 2)
-	//	{
-	//		// 色でわける.
-	//		gd.setScoreSwitch(ScoreSwitch::ColorRule);
-	//	}
-	//	else
-	//	{
-	//		// 形でわける.
-	//		gd.setScoreSwitch(ScoreSwitch::ShapeRule);
-	//	}
-	//}
-	//else
-	//{
-	//	uint8 ruleNum = randInt() % 3;
-	//	if (ruleNum == 0)
-	//	{
-	//		// 文字でわける.
-	//		gd.setScoreSwitch(ScoreSwitch::TextRule);
-	//	}
-	//	else if (ruleNum == 1)
-	//	{
-	//		// 色でわける.
-	//		gd.setScoreSwitch(ScoreSwitch::ColorRule);
-	//	}
-	//	else
-	//	{
-	//		// 形でわける.
-	//		gd.setScoreSwitch(ScoreSwitch::ShapeRule);
-	//	}
-	//}
 }
 
 /*	End Stage Scene		********************************************************************************************************/
@@ -357,19 +299,9 @@ void LetsPlay::update()
 		m_playtime.reset();
 		m_gt = 0;
 
-		//// ハイスコアを更新したかどうかの記録.
-		//if (getData().gameManagerPtr()->scoreManagerPtr()->highScores()[getData().stageIdx()] < getData().score())
-		//{
-		//	getData().setHighScore(getData().stageIdx(), getData().score());
-		//	getData().setNewRecord(true);
-		//}
+		// ハイスコアを更新したかどうかの記録.
 		getData().gameManagerPtr()->scoreManagerPtr()->updateHighScores(getData().gameManagerPtr()->stageLevel());
 
-		//// 得点がマイナスになっていた場合 0 にする.
-		//if (getData().gameManagerPtr()->scoreManagerPtr()->score() < 0)
-		//{
-		//	getData().addScore(-getData().score());
-		//}
 		changeScene(SceneSwitch::Result, 0.0);
 	}
 
@@ -418,22 +350,6 @@ void LetsPlay::update()
 
 void LetsPlay::draw() const
 {
-	//// 分別はこ下側.
-	//box_under(ubox_left, getData().Fcolor()[left]);
-	//box_under(ubox_mdle, getData().Fcolor()[mdle]);
-	//box_under(ubox_rght, getData().Fcolor()[rght]);
-
-	//// 動かす図形.
-	//getData().gameManagerPtr()->draw();
-
-	//// 分別はこ上側.
-	//box_over(obox_left, getData().Fcolor()[left], FontAsset(FontText), U"●");
-	//FontAsset(FontText)(U"\n{}"_fmt(getData().Ftext()[left])).drawAt(obox_left.x + obox_left.w / 2, obox_left.y + obox_left.h * 3 / 5, kuro);
-	//box_over(obox_mdle, getData().Fcolor()[mdle], FontAsset(FontText), U"▲");
-	//FontAsset(FontText)(U"\n{}"_fmt(getData().Ftext()[mdle])).drawAt(obox_mdle.x + obox_mdle.w / 2, obox_mdle.y + obox_mdle.h * 3 / 5, kuro);
-	//box_over(obox_rght, getData().Fcolor()[rght], FontAsset(FontText), U"■");
-	//FontAsset(FontText)(U"\n{}"_fmt(getData().Ftext()[rght])).drawAt(obox_rght.x + obox_rght.w / 2, obox_rght.y + obox_rght.h * 3 / 5, kuro);
-
 	drawUI();
 }
 
@@ -478,18 +394,6 @@ void LetsPlay::drawUI() const
 		FontAsset(FontText)((getData().gameManagerPtr()->isChangedColor()) ? ScoreManager::SortingAnswers[0].texts.textChanged : ScoreManager::SortingAnswers[0].texts.textDefault).draw(30, explainTextmaru, kuro);
 		FontAsset(FontText)((getData().gameManagerPtr()->isChangedColor()) ? ScoreManager::SortingAnswers[1].texts.textChanged : ScoreManager::SortingAnswers[1].texts.textDefault).draw(30, explainTextsankaku, kuro);
 		FontAsset(FontText)((getData().gameManagerPtr()->isChangedColor()) ? ScoreManager::SortingAnswers[2].texts.textChanged : ScoreManager::SortingAnswers[2].texts.textDefault).draw(30, explainTextshikaku, kuro);
-
-		//explainShapeCircle.drawFrame(haba, kuro).draw(m_figureGen.SortingColorsDefault[1]);// 色変えに対応するように !!.
-		//explainShapeTriangle.drawFrame(haba, kuro).draw(m_figureGen.SortingColorsDefault[1]);
-		//explainShapeRect.drawFrame(haba, kuro).draw(m_figureGen.SortingColorsDefault[1]);
-
-		//explainColorCircle.drawFrame(haba, kuro).draw(m_figureGen.SortingColorsDefault[0]);// 色変えに対応するように !!.
-		//explainColorTriangle.drawFrame(haba, kuro).draw(m_figureGen.SortingColorsDefault[1]);
-		//explainColorRect.drawFrame(haba, kuro).draw(m_figureGen.SortingColorsDefault[2]);
-
-		//FontAsset(FontText)(m_figureGen.SortingTextsDefault[0]).draw(30, explainTextmaru, kuro);// 色変えに対応するように !!.
-		//FontAsset(FontText)(m_figureGen.SortingTextsDefault[1]).draw(30, explainTextsankaku, kuro);
-		//FontAsset(FontText)(m_figureGen.SortingTextsDefault[2]).draw(30, explainTextshikaku, kuro);
 
 		break;
 
@@ -630,7 +534,6 @@ void LetsPlay::initialize()
 		{
 			m_playtime.pause();
 			m_countdown.pause();
-			//m_isPaused = true;
 			getData().gameManagerPtr()->turnOnPause();
 
 			MoveNextFlow(LetsPlayFlow::Pause);
@@ -645,7 +548,6 @@ void LetsPlay::initialize()
 			m_gt = 0;
 			m_playtime.reset();
 			m_countdown.reset();
-			//m_isPaused = false;
 			getData().gameManagerPtr()->turnOffPause();
 			changeScene(SceneSwitch::Stage, 0.0);
 		});
@@ -657,7 +559,6 @@ void LetsPlay::initialize()
 		{
 			m_playtime.resume();
 			m_countdown.resume();
-			//m_isPaused = false;
 			getData().gameManagerPtr()->turnOffPause();
 			changeScene(SceneSwitch::Letsplay, 0.0);
 			
@@ -671,35 +572,12 @@ void LetsPlay::initialize()
 		{
 			m_playtime.resume();
 			m_countdown.resume();
-			//m_isPaused = false;
 			getData().gameManagerPtr()->turnOffPause();
 			changeScene(SceneSwitch::Letsplay, 0.0);
 			
 			MoveNextFlow(LetsPlayFlow::Play);
 		});
 }
-
-//void LetsPlay::effect_TrueOrFalse(double t, const uint8& comboNum, const ColorF& colorf, const Font& font, const uint8& textsize)
-//{
-//	const String combo3 = U"Perfect!!!";
-//	const String combo2 = U"Great!!";
-//	const String combo1 = U"Good!";
-//	const String combo0 = U"Miss";
-//	constexpr uint16 effect_X = 400;
-//	constexpr uint16 effect_Y = 570;
-//	if (comboNum >= 3) {
-//		font(combo3.substr(0, t)).drawAt(textsize, effect_X, effect_Y, colorf);
-//	}
-//	else if (comboNum == 2) {
-//		font(combo2.substr(0, t)).drawAt(textsize, effect_X, effect_Y, colorf);
-//	}
-//	else if (comboNum == 0) {
-//		font(combo0.substr(0, t)).drawAt(textsize, effect_X, effect_Y, colorf);
-//	}
-//	else {
-//		font(combo1.substr(0, t)).drawAt(textsize, effect_X, effect_Y, colorf);
-//	}
-//}
 
 void LetsPlay::MoveNextFlow(const LetsPlayFlow next)
 {
@@ -753,18 +631,6 @@ void Result::draw() const
 
 	// さっきまでの背景たち.
 	getData().gameManagerPtr()->draw();
-	//// 分別はこ下側.
-	//box_under(ubox_left, getData().Fcolor()[left]);
-	//box_under(ubox_mdle, getData().Fcolor()[mdle]);
-	//box_under(ubox_rght, getData().Fcolor()[rght]);
-
-	//// 分別はこ上側.
-	//box_over(obox_left, getData().Fcolor()[left], FontAsset(FontButton), U"●");
-	//FontAsset(FontButton)(U"\n{}"_fmt(getData().Ftext()[left])).drawAt(obox_left.x + obox_left.w / 2, obox_left.y + obox_left.h * 3 / 5, kuro);
-	//box_over(obox_mdle, getData().Fcolor()[mdle], FontAsset(FontButton), U"▲");
-	//FontAsset(FontButton)(U"\n{}"_fmt(getData().Ftext()[mdle])).drawAt(obox_mdle.x + obox_mdle.w / 2, obox_mdle.y + obox_mdle.h * 3 / 5, kuro);
-	//box_over(obox_rght, getData().Fcolor()[rght], FontAsset(FontButton), U"■");
-	//FontAsset(FontButton)(U"\n{}"_fmt(getData().Ftext()[rght])).drawAt(obox_rght.x + obox_rght.w / 2, obox_rght.y + obox_rght.h * 3 / 5, kuro);
 
 	// 幕を下ろす.
 	m_boxBounce_aud(t_rw, makuSize, makuColor);

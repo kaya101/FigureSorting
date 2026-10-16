@@ -73,16 +73,6 @@ private:
 	void correct(const size_t stageIdx);
 
 	void miss(const size_t stageIdx);
-
-	//void countClassifyNum() { ++m_classifyNum; }
-
-	//void countCorrectNum() { ++m_correctNum; }
-
-	//void countMissNum() { ++m_missNum; }
-
-	//void countComboNum() { ++m_comboNum; }
-
-	//void resetComboNum() { m_comboNum = 0; }
 };
 
 class GameManager
