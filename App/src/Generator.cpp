@@ -12,12 +12,12 @@ void NonRepeatRandomGenerator::init(const GenValue n)
 	auto seed = seedGen();
 	m_engine = std::mt19937(seed);
 
-	m_prevLastElement = -1;
+	m_prevLastElement = 999;
 
 	refill();
 }
 
-const NonRepeatRandomGenerator::GenValue NonRepeatRandomGenerator::generate()
+const GenValue NonRepeatRandomGenerator::generate()
 {
 	if (m_v.empty()) refill();
 
@@ -74,9 +74,9 @@ void FigureGenerator::init()
 std::unique_ptr<SortedShapeBase> FigureGenerator::generate(const StageLevel level, const SortRule rule, const bool isChangedColor)
 {
 	std::unique_ptr<SortedShapeCtx> ctxPtr;
-	NonRepeatRandomGenerator::GenValue shapeIdx;
-	NonRepeatRandomGenerator::GenValue colorIdx;
-	NonRepeatRandomGenerator::GenValue textIdx;
+	GenValue shapeIdx;
+	GenValue colorIdx;
+	GenValue textIdx;
 
 	// 形による分類パターンの決定.
 	shapeIdx = m_shapeGen.generate();

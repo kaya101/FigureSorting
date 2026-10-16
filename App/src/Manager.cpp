@@ -314,7 +314,7 @@ void GameManager::setSortRule(const EnumValue nextStageIdx)
 
 	m_stageLevel = static_cast<StageLevel>(nextStageIdx);
 
-	NonRepeatRandomGenerator::GenValue idx = m_sortRuleGenPtr->generate();
+	GenValue idx = m_sortRuleGenPtr->generate();
 	m_currentSortRule = static_cast<SortRule>(idx);
 }
 
