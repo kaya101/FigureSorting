@@ -56,7 +56,7 @@ public:
 
 	void init();
 
-	std::unique_ptr<SortedShapeBase> generate(const SortRule rule, const bool isChangedColor);
+	std::unique_ptr<SortedShapeBase> generate(const StageLevel level, const SortRule rule, const bool isChangedColor);
 
 private:
 	NonRepeatRandomGenerator m_shapeGen;

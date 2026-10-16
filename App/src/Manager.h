@@ -163,7 +163,7 @@ private:
 
 	std::unique_ptr<SortedShapeBase> generateFigure()
 	{
-		return m_figureGenPtr->generate(m_currentSortRule, m_isChangedColor);
+		return m_figureGenPtr->generate(m_stageLevel, m_currentSortRule, m_isChangedColor);
 	}
 
 	// 正誤判定のエフェクト.
