@@ -139,6 +139,8 @@ void GameManager::update()
 	// 分類処理.
 	for (size_t i = 0; i < static_cast<EnumValue>(SortingBoxIdx::Count); ++i)
 	{
+		if (m_sortedShapePtr == nullptr) break;
+
 		if (m_sortedShapePtr->isIntersects(SortingBoxes[layerIdx][i]))
 		{
 			m_scoreManagerPtr->classify(i);
@@ -263,7 +265,7 @@ void GameManager::draw() const
 	}
 
 	// 動かす図形.
-	m_sortedShapePtr->draw();
+	if (m_sortedShapePtr != nullptr) m_sortedShapePtr->draw();
 
 	// 分別はこ上側.
 	for (size_t i = 0; i < static_cast<EnumValue>(SortingBoxIdx::Count); ++i)

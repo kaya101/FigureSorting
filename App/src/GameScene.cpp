@@ -347,8 +347,6 @@ void LetsPlay::update()
 {
 	updateButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
 
-	getData().gameManagerPtr()->update();
-
 	// 制限時間.
 	m_gt = m_playtime.s();
 	FontAsset(FontText)(U"time(s):{}"_fmt(m_timelimit - m_gt)).draw(20, 60, kuro);
@@ -378,6 +376,12 @@ void LetsPlay::update()
 	// 説明とカウントダウン画面.
 	switch (m_currentFlow)
 	{
+	case LetsPlayFlow::ExplainPage1:
+		break;
+	case LetsPlayFlow::ExplainPage2:
+		break;
+	case LetsPlayFlow::Start:
+		break;
 	case LetsPlayFlow::CountDown:
 
 		//m_canDisplayRule = true;
@@ -399,6 +403,14 @@ void LetsPlay::update()
 		}
 
 		break;
+	case LetsPlayFlow::Play:
+
+		getData().gameManagerPtr()->update();
+
+		break;
+
+	case LetsPlayFlow::Pause:
+		break;
 	default:
 		break;
 	}
@@ -411,8 +423,8 @@ void LetsPlay::draw() const
 	//box_under(ubox_mdle, getData().Fcolor()[mdle]);
 	//box_under(ubox_rght, getData().Fcolor()[rght]);
 
-	// 動かす図形.
-	getData().gameManagerPtr()->draw();
+	//// 動かす図形.
+	//getData().gameManagerPtr()->draw();
 
 	//// 分別はこ上側.
 	//box_over(obox_left, getData().Fcolor()[left], FontAsset(FontText), U"●");
@@ -541,6 +553,10 @@ void LetsPlay::drawUI() const
 	break;
 
 	case LetsPlayFlow::Play:
+
+		// 動かす図形.
+		getData().gameManagerPtr()->draw();
+
 		break;
 
 	case LetsPlayFlow::Pause:

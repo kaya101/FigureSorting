@@ -169,7 +169,7 @@ private:
 
 	Stopwatch m_truefalse{ StartImmediately::Yes };	// 正誤判定のエフェクト.
 
-	FigureSwitch m_currentFigureSwitch = FigureSwitch::Break;
+	FigureSwitch m_currentFigureSwitch = FigureSwitch::MakeFigure;
 
 	std::unique_ptr<SortedShapeBase> generateFigure()
 	{
