@@ -124,12 +124,21 @@ const std::array<String, static_cast<EnumValue>(SortingBoxIdx::Count)> GameManag
 
 void GameManager::init()
 {
-	//m_sortRuleGenPtr->init(FigureGenerator::N);
+	m_sortedShapePtr = nullptr;
 
-	m_figureGenPtr = std::make_unique<FigureGenerator>();
-	m_figureGenPtr->init();
+	m_sortRuleGen.init(FigureGenerator::N);
 
-	m_sortedShapePtr = generateFigure();
+	m_figureGen.init();
+
+	m_distance = Vec2().Zero();
+	m_currentSortRule = SortRule::Count;
+	m_isChangedColor = false;
+	m_isSkippedExplain = false;
+	m_canDisplayRule = false;
+	m_isPaused = false;
+	m_stageLevel = StageLevel::Count;
+	m_tof = TrueOrFalse::WaitSort;
+	m_currentFigureSwitch = FigureSwitch::MakeFigure;
 }
 
 void GameManager::update()
@@ -144,7 +153,7 @@ void GameManager::update()
 
 		if (m_sortedShapePtr->isIntersects(SortingBoxes[layerIdx][i]))
 		{
-			m_scoreManagerPtr->classify(i);
+			m_scoreManager.classify(i);
 
 			// 新たに図形を作る.
 			m_currentFigureSwitch = FigureSwitch::MakeFigure;
@@ -228,7 +237,7 @@ void GameManager::update()
 	case TrueOrFalse::TrueSort: // 正解した時.
 
 		// 正解したエフェクト.
-		effect_TrueOrFalse(t_tf, m_scoreManagerPtr->comboNum(), kuro, FontAsset(FontText), 30);
+		effect_TrueOrFalse(t_tf, m_scoreManager.comboNum(), kuro, FontAsset(FontText), 30);
 
 		// 時間経過で消す.
 		if (t_tf > 20)
@@ -242,7 +251,7 @@ void GameManager::update()
 	case TrueOrFalse::FalseSort: // 間違えたとき.
 
 		// 間違えた時のエフェクト.
-		effect_TrueOrFalse(t_tf, m_scoreManagerPtr->comboNum(), kuro, FontAsset(FontText), 30);
+		effect_TrueOrFalse(t_tf, m_scoreManager.comboNum(), kuro, FontAsset(FontText), 30);
 
 		if (t_tf > 20)
 		{
@@ -262,7 +271,7 @@ void GameManager::draw() const
 	// 分別はこ下側.
 	for (size_t i = 0; i < static_cast<EnumValue>(SortingBoxIdx::Count); ++i)
 	{
-		box_under(SortingBoxes[static_cast<EnumValue>(SortingBoxLayerIdx::Lowerside)][i], (m_isChangedColor) ? m_scoreManagerPtr->SortingAnswers[i].colors.colorChanged : m_scoreManagerPtr->SortingAnswers[i].colors.colorDefault);
+		box_under(SortingBoxes[static_cast<EnumValue>(SortingBoxLayerIdx::Lowerside)][i], (m_isChangedColor) ? m_scoreManager.SortingAnswers[i].colors.colorChanged : m_scoreManager.SortingAnswers[i].colors.colorDefault);
 	}
 
 	// 動かす図形.
@@ -274,11 +283,11 @@ void GameManager::draw() const
 		const RectF box = SortingBoxes[static_cast<EnumValue>(SortingBoxLayerIdx::Upperside)][i];
 		box_over(
 			box,
-			(m_isChangedColor) ? m_scoreManagerPtr->SortingAnswers[i].colors.colorChanged : m_scoreManagerPtr->SortingAnswers[i].colors.colorDefault,
+			(m_isChangedColor) ? m_scoreManager.SortingAnswers[i].colors.colorChanged : m_scoreManager.SortingAnswers[i].colors.colorDefault,
 			FontAsset(FontText),
 			SortingBoxesMarks[i]);
 
-		const String text = (m_isChangedColor) ? m_scoreManagerPtr->SortingAnswers[i].texts.textChanged : m_scoreManagerPtr->SortingAnswers[i].texts.textDefault;
+		const String text = (m_isChangedColor) ? m_scoreManager.SortingAnswers[i].texts.textChanged : m_scoreManager.SortingAnswers[i].texts.textDefault;
 		FontAsset(FontText)(U"\n{}"_fmt(text)).drawAt(box.x + box.w / 2, box.y + box.h * 3 / 5, kuro);
 	}
 
@@ -311,12 +320,17 @@ void GameManager::draw() const
 
 void GameManager::setSortRule(const EnumValue nextStageIdx)
 {
-	if (static_cast<EnumValue>(m_stageLevel) != nextStageIdx) m_sortRuleGenPtr->init(nextStageIdx + 1);
+	if (static_cast<EnumValue>(m_stageLevel) != nextStageIdx) m_sortRuleGen.init(nextStageIdx + 1);
 
 	m_stageLevel = static_cast<StageLevel>(nextStageIdx);
 
-	GenValue idx = m_sortRuleGenPtr->generate();
+	GenValue idx = m_sortRuleGen.generate();
 	m_currentSortRule = static_cast<SortRule>(idx);
+}
+
+std::unique_ptr<SortedShapeBase> GameManager::generateFigure()
+{
+	return m_figureGen.generate(m_stageLevel, m_currentSortRule, m_isChangedColor);
 }
 
 void GameManager::effect_TrueOrFalse(double t, const uint8& comboNum, const ColorF& colorf, const Font& font, const uint8& textsize)

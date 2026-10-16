@@ -161,17 +161,17 @@ void Stage::drawUI() const
 	// 01.
 	stage01textback.drawFrame(haba, kuro).draw(haiiro);
 	FontAsset(FontTitle)(U"Lv.1").drawAt(stagetextSize, stage01text);
-	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける"_fmt(getData().gameManagerPtr()->scoreManagerPtr()->highScores()[static_cast<EnumValue>(StageLevel::Level01)])).draw(stagetextsubSize, stage01textsub);
+	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける"_fmt(getData().gameManagerPtr()->scoreManager().highScores()[static_cast<EnumValue>(StageLevel::Level01)])).draw(stagetextsubSize, stage01textsub);
 
 	// 02.
 	stage02textback.drawFrame(haba, kuro).draw(haiiro);
 	FontAsset(FontTitle)(U"Lv.2").drawAt(stagetextSize, stage02text);
-	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける\n・色でわける"_fmt(getData().gameManagerPtr()->scoreManagerPtr()->highScores()[static_cast<EnumValue>(StageLevel::Level02)])).draw(stagetextsubSize, stage02textsub);
+	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける\n・色でわける"_fmt(getData().gameManagerPtr()->scoreManager().highScores()[static_cast<EnumValue>(StageLevel::Level02)])).draw(stagetextsubSize, stage02textsub);
 
 	// MAX.
 	stageMAXtextback.drawFrame(haba, kuro).draw(haiiro);
 	FontAsset(FontTitle)(U"Lv.3").drawAt(stagetextSize, stageMAXtext);
-	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける\n・色でわける\n・文字でわける"_fmt(getData().gameManagerPtr()->scoreManagerPtr()->highScores()[static_cast<EnumValue>(StageLevel::LevelMAX)])).draw(stagetextsubSize, stageMAXtextsub);
+	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける\n・色でわける\n・文字でわける"_fmt(getData().gameManagerPtr()->scoreManager().highScores()[static_cast<EnumValue>(StageLevel::LevelMAX)])).draw(stagetextsubSize, stageMAXtextsub);
 
 	// 図形の見本.
 	m_sampleCircle.drawFrame(haba, kuro).draw(FigureGenerator::SortingColorsDefault[0]);// 色変えに対応するように !!.
@@ -300,7 +300,7 @@ void LetsPlay::update()
 		m_gt = 0;
 
 		// ハイスコアを更新したかどうかの記録.
-		getData().gameManagerPtr()->scoreManagerPtr()->updateHighScores(getData().gameManagerPtr()->stageLevel());
+		//getData().gameManagerPtr()->scoreManager().updateHighScores(getData().gameManagerPtr()->stageLevel());
 
 		changeScene(SceneSwitch::Result, 0.0);
 	}
@@ -640,13 +640,13 @@ void Result::draw() const
 	m_textBounce_aud(t_rw, resultText, FontAsset(FontButton), U"★RESULT★", 80);
 
 	// 獲得スコア.
-	m_textBounce_aud(t_rw, yourscoreText, FontAsset(FontButton), U"Your Score:{}"_fmt(getData().gameManagerPtr()->scoreManagerPtr()->score()), 36);
+	m_textBounce_aud(t_rw, yourscoreText, FontAsset(FontButton), U"Your Score:{}"_fmt(getData().gameManagerPtr()->scoreManager().score()), 36);
 
 	// ハイスコア.
-	m_textBounce_aud(t_rw, highscoreText, FontAsset(FontButton), U"High Score:{}"_fmt(getData().gameManagerPtr()->scoreManagerPtr()->highScores()[static_cast<EnumValue>(getData().gameManagerPtr()->stageLevel())]), 20);
+	m_textBounce_aud(t_rw, highscoreText, FontAsset(FontButton), U"High Score:{}"_fmt(getData().gameManagerPtr()->scoreManager().highScores()[static_cast<EnumValue>(getData().gameManagerPtr()->stageLevel())]), 20);
 
 	// 記録を更新したか.
-	if (getData().gameManagerPtr()->scoreManagerPtr()->newRecord())
+	if (getData().gameManagerPtr()->scoreManager().newRecord())
 	{
 		m_textBounce_aud(t_rw, newrecordText, FontAsset(FontButton), U"New Record!!", 20);
 	}
@@ -673,7 +673,7 @@ void Result::draw() const
 			}
 			else
 			{
-				m_textOutExpo_aap(sortedPtr->rate(), sortedTextAppearPoint, sortedText, kuro, FontAsset(FontButton), U"sorted:{}"_fmt(getData().gameManagerPtr()->scoreManagerPtr()->classifyNum() - 1), 30);
+				m_textOutExpo_aap(sortedPtr->rate(), sortedTextAppearPoint, sortedText, kuro, FontAsset(FontButton), U"sorted:{}"_fmt(getData().gameManagerPtr()->scoreManager().classifyNum() - 1), 30);
 			}
 		}
 
@@ -682,7 +682,7 @@ void Result::draw() const
 		{
 			if (truePtr != nullptr)
 			{
-				m_textOutExpo_aap(truePtr->rate(), trueTextAppearPoint, trueText, kuro, FontAsset(FontButton), U"true:{}"_fmt(getData().gameManagerPtr()->scoreManagerPtr()->correctNum()), 30);
+				m_textOutExpo_aap(truePtr->rate(), trueTextAppearPoint, trueText, kuro, FontAsset(FontButton), U"true:{}"_fmt(getData().gameManagerPtr()->scoreManager().correctNum()), 30);
 			}
 			else
 			{
@@ -695,7 +695,7 @@ void Result::draw() const
 		{
 			if (missPtr != nullptr)
 			{
-				m_textOutExpo_aap(missPtr->rate(), missTextAppearPoint, missText, kuro, FontAsset(FontButton), U"miss:{}"_fmt(getData().gameManagerPtr()->scoreManagerPtr()->missNum()), 30);
+				m_textOutExpo_aap(missPtr->rate(), missTextAppearPoint, missText, kuro, FontAsset(FontButton), U"miss:{}"_fmt(getData().gameManagerPtr()->scoreManager().missNum()), 30);
 			}
 			else
 			{
