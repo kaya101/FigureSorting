@@ -52,21 +52,11 @@ public:
 	~GameData() = default;
 
 	void initialize();
-	
-	void setFcolor(const Array<ColorF>& colors) { m_Fcolor = colors; }
-	void setFtext(const Array<String>& texts) { m_Ftext = texts; }
-	
-	const Array<ColorF>& Fcolor() const { return m_Fcolor; }
-	const Array<String>& Ftext() const { return m_Ftext; }
 
 	GameManager* gameManagerPtr() { return m_gameManagerPtr.get(); }
 
 private:
 	std::unique_ptr<GameManager> m_gameManagerPtr;
-
-	Array<ColorF> m_Fcolor;
-
-	Array<String> m_Ftext;
 };
 
 using App = SceneManager<SceneSwitch, GameData>;
@@ -74,96 +64,77 @@ using App = SceneManager<SceneSwitch, GameData>;
 //幕.
 static constexpr RectF makuSize = { 0, 0, 800, 600 };
 
-//各難易度ごとに何が何種類あるのか.
-static constexpr uint8 COLOR01 = 1;
-static constexpr uint8 TEXT01 = 1;
-
-static constexpr uint8 COLOR02 = 3;
-static constexpr uint8 TEXT02 = 1;
-
-static constexpr uint8 COLORMAX = 3;
-static constexpr uint8 TEXTMAX = 3;
-
-//配列にしまう.
-static Array<ColorF> color_Lv01 = {
-	midori,
-	midori,
-	midori,
-};
-static Array<String> text_Lv01 = {
-	U"", //文字無し.
-	U"", //文字無し.
-	U"", //文字無し.
-};
-
-static Array<ColorF> color_Lv02 = {
-	aka,
-	midori,
-	ao
-};
-static Array<String> text_Lv02 = {
-	U"", //文字無し.
-	U"", //文字無し.
-	U"", //文字無し.
-};
-
-static Array<ColorF> color_LvMAX = {
-	aka,
-	midori,
-	ao,
-};
-static Array<String> text_LvMAX = {
-	U"あか",
-	U"みどり",
-	U"あお",
-};
-//色を変えた時の配列.
-static Array<ColorF> colorchangecolor_Lv01 = {
-	yelow,
-	yelow,
-	yelow,
-};
-static Array<ColorF> colorchangecolor_Lv02 = {
-	red,
-	yelow,
-	blue,
-};
-static Array<ColorF> colorchangecolor_LvMAX = {
-	red,
-	yelow,
-	blue,
-};
-static Array<String> colorchangetext = {
-	U"まる",
-	U"さんかく",
-	U"しかく",
-};
-
-//それぞれ何種類ずつあるのかの配列.
-static constexpr uint8 COLOR = 0;
-static constexpr uint8 TEXT = 1;
-static Array<Array<uint8>> kinds = {
-	{ COLOR01, TEXT01 }, // Lv.01.
-	{ COLOR02, TEXT02 }, // Lv.02.
-	{ COLORMAX, TEXTMAX } // Lv.MAX.
-};
-
-static Array<Array<ColorF>> color = {
-	{ color_Lv01 },
-	{ color_Lv02 },
-	{ color_LvMAX }
-};
-static Array<Array<String>> teXt = {
-	{ text_Lv01 },
-	{ text_Lv02 },
-	{ text_LvMAX }
-};
-//色を変えたとき.
-static Array<Array<ColorF>> colorchangecolor = {
-	{ colorchangecolor_Lv01 }, // Lv.01.
-	{ colorchangecolor_Lv02 }, // Lv.02.
-	{ colorchangecolor_LvMAX } // Lv.MAX.
-};
+////配列にしまう.
+//static Array<ColorF> color_Lv01 = {
+//	midori,
+//	midori,
+//	midori,
+//};
+//static Array<String> text_Lv01 = {
+//	U"", //文字無し.
+//	U"", //文字無し.
+//	U"", //文字無し.
+//};
+//
+//static Array<ColorF> color_Lv02 = {
+//	aka,
+//	midori,
+//	ao
+//};
+//static Array<String> text_Lv02 = {
+//	U"", //文字無し.
+//	U"", //文字無し.
+//	U"", //文字無し.
+//};
+//
+//static Array<ColorF> color_LvMAX = {
+//	aka,
+//	midori,
+//	ao,
+//};
+//static Array<String> text_LvMAX = {
+//	U"あか",
+//	U"みどり",
+//	U"あお",
+//};
+////色を変えた時の配列.
+//static Array<ColorF> colorchangecolor_Lv01 = {
+//	yelow,
+//	yelow,
+//	yelow,
+//};
+//static Array<ColorF> colorchangecolor_Lv02 = {
+//	red,
+//	yelow,
+//	blue,
+//};
+//static Array<ColorF> colorchangecolor_LvMAX = {
+//	red,
+//	yelow,
+//	blue,
+//};
+//static Array<String> colorchangetext = {
+//	U"まる",
+//	U"さんかく",
+//	U"しかく",
+//};
+//
+//static Array<Array<ColorF>> color = {
+//	{ color_Lv01 },
+//	{ color_Lv02 },
+//	{ color_LvMAX }
+//};
+//static Array<Array<String>> teXt = {
+//	{ text_Lv01 },
+//	{ text_Lv02 },
+//	{ text_LvMAX }
+//};
+////色を変えたとき.
+//static Array<Array<ColorF>> colorchangecolor = {
+//	{ colorchangecolor_Lv01 }, // Lv.01.
+//	{ colorchangecolor_Lv02 }, // Lv.02.
+//	{ colorchangecolor_LvMAX } // Lv.MAX.
+//};
 
 // イージング関数.
 // 何度か跳ねるやつ.
