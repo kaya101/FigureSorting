@@ -53,7 +53,7 @@ public:
 
 	void virtual move(const Vec2& to) = 0;
 
-	const virtual Vec2& size() const = 0;
+	const virtual Vec2 size() const = 0;
 
 	const virtual bool isIntersects(const RectF& area) const = 0;
 
@@ -109,7 +109,7 @@ public:
 
 	void move(const Vec2& to) override { m_body.center = to; }
 
-	const Vec2& size() const override { return Vec2(m_body.r, m_body.r); }
+	const Vec2 size() const override { return Vec2(m_body.r, m_body.r); }
 
 	const bool isIntersects(const RectF& area) const override { return m_body.intersects(area); }
 
@@ -147,7 +147,7 @@ public:
 
 	void move(const Vec2& to) override { m_body.center() = to; }
 
-	const Vec2& size() const override { return m_body.size; }
+	const Vec2 size() const override { return m_body.size; }
 
 	const bool isIntersects(const RectF& area) const override { return m_body.intersects(area); }
 
@@ -185,7 +185,7 @@ public:
 
 	void move(const Vec2& to) override { m_body.centroid() = to; }
 
-	const Vec2& size() const override { return Vec2(m_body.side(0).length(), m_body.side(0).length()); }
+	const Vec2 size() const override { return Vec2(m_body.side(0).length(), m_body.side(0).length()); }
 
 	const bool isIntersects(const RectF& area) const override { return m_body.intersects(area); }
 

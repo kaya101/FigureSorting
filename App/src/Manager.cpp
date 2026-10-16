@@ -124,6 +124,11 @@ const std::array<String, static_cast<EnumValue>(SortingBoxIdx::Count)> GameManag
 void GameManager::init()
 {
 	//m_sortRuleGenPtr->init(FigureGenerator::N);
+
+	m_figureGenPtr = std::make_unique<FigureGenerator>();
+	m_figureGenPtr->init();
+
+	m_sortedShapePtr = generateFigure();
 }
 
 void GameManager::update()
@@ -134,7 +139,7 @@ void GameManager::update()
 	// 分類処理.
 	for (size_t i = 0; i < static_cast<EnumValue>(SortingBoxIdx::Count); ++i)
 	{
-		if (m_sortedShapePtr->isIntersects(SortingBoxes[i][layerIdx]))
+		if (m_sortedShapePtr->isIntersects(SortingBoxes[layerIdx][i]))
 		{
 			m_scoreManagerPtr->classify(i);
 

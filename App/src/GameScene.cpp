@@ -262,6 +262,8 @@ void Stage::initialize()
 				self->setText(U"");
 			}
 		});
+
+	getData().gameManagerPtr()->init();
 }
 
 void Stage::setupSortRule(const StageLevel level, GameData& gd) const

@@ -97,7 +97,7 @@ public:
 	using SortingBoxArray = std::array<RectF, static_cast<EnumValue>(SortingBoxIdx::Count)>;
 	static constexpr std::array<SortingBoxArray, static_cast<EnumValue>(SortingBoxLayerIdx::Count)> SortingBoxes = {
 		SortingBoxArray{ RectF(50, 390, 160, 140), RectF(320, 110, 160, 140), RectF(590, 390, 160, 140) },	// 下側.
-		SortingBoxArray{ RectF(50, 410, 160, 120), RectF(320, 130, 160, 120), RectF(590, 410, 160, 120) },	// 上側.
+		SortingBoxArray{ RectF(50, 410, 160, 120), RectF(320, 130, 160, 120), RectF(590, 410, 160, 120) }	// 上側.
 	};
 	static const std::array<String, static_cast<EnumValue>(SortingBoxIdx::Count)> SortingBoxesMarks;
 
@@ -105,14 +105,10 @@ public:
 	{
 		m_scoreManagerPtr = std::make_unique<ScoreManager>(*this);
 
-		//m_sortedShapePtr = std::make_unique<SortedShapeBase>();
-
 		m_sortRuleGenPtr = std::make_unique<NonRepeatRandomGenerator>();
 		m_sortRuleGenPtr->init(FigureGenerator::N);
 
-		m_figureGenPtr = std::make_unique<FigureGenerator>();
-
-		init();
+		//init();
 	}
 
 	~GameManager() = default;
