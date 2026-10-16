@@ -36,11 +36,8 @@ public:
 	~ScoreManager() = default;
 
 	void init();
-
 	void classify(const EnumValue boxIdx);
-
 	void updateHighScores(const StageLevel level);
-
 	void draw() const;
 
 	const ScoreValue score() const { return m_score; }
@@ -53,25 +50,16 @@ public:
 
 private:
 	GameManager& m_gameManager;
-
-	ScoreValue m_score = 0;
-
-	uint8 m_classifyNum = 0;	// 仕分けた個数.
-
-	uint8 m_correctNum = 0;		// 正解した個数.
-
-	uint8 m_missNum = 0;		// 間違えた個数.
-
-	uint8 m_comboNum = 0;		// 連続正解数をカウント.
-
-	bool m_newRecord = false;	// 記録を更新したかどうか.
-
-	std::array<ScoreValue, static_cast<EnumValue>(StageLevel::Count)> m_highScores = { 0, 0, 0 };
+	ScoreValue m_score;
+	uint8 m_classifyNum;	// 仕分けた個数.
+	uint8 m_correctNum;		// 正解した個数.
+	uint8 m_missNum;		// 間違えた個数.
+	uint8 m_comboNum;		// 連続正解数をカウント.
+	bool m_newRecord;		// 記録を更新したかどうか.
+	std::array<ScoreValue, static_cast<EnumValue>(StageLevel::Count)> m_highScores;
 
 	void sumScore(const ScoreValue amount) { m_score = Max(0, m_score + amount); }
-
 	void correct(const size_t stageIdx);
-
 	void miss(const size_t stageIdx);
 };
 

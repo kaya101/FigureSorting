@@ -21,6 +21,7 @@ void ScoreManager::init()
 	m_missNum = 0;
 	m_comboNum = 0;
 	m_newRecord = false;
+	m_highScores = std::array<ScoreValue, static_cast<EnumValue>(StageLevel::Count)>{ 0, 0, 0 };
 }
 
 void ScoreManager::classify(const EnumValue boxIdx)
