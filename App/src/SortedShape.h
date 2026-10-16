@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "Enums.h"
 
 struct SortedShapeCtx
 {
@@ -10,20 +11,22 @@ struct SortedShapeCtx
 
 	String text;
 
-	explicit SortedShapeCtx(const Vec2& c, const double s, const ColorF& bc, const String& t)
-		: center(c), size(s), bodyColor(bc), text(t)
+	SortingShapeType type;
+
+	explicit SortedShapeCtx(const Vec2& c, const double s, const ColorF& bc, const String& t, const SortingShapeType ty)
+		: center(c), size(s), bodyColor(bc), text(t), type(ty)
 	{}
 
-	explicit SortedShapeCtx(const Circle& c, const ColorF& bc, const String& t)
-		: center(c.center), size(c.r), bodyColor(bc), text(t)
+	explicit SortedShapeCtx(const Circle& c, const ColorF& bc, const String& t, const SortingShapeType ty)
+		: center(c.center), size(c.r), bodyColor(bc), text(t), type(ty)
 	{}
 
-	explicit SortedShapeCtx(const RectF& r, const ColorF& bc, const String& t)
-		: center(r.center()), size(r.size.minComponent()), bodyColor(bc), text(t)
+	explicit SortedShapeCtx(const RectF& r, const ColorF& bc, const String& t, const SortingShapeType ty)
+		: center(r.center()), size(r.size.minComponent()), bodyColor(bc), text(t), type(ty)
 	{}
 
-	explicit SortedShapeCtx(const Triangle& tri, const ColorF& bc, const String& t)
-		: center(tri.centroid()), size(tri.side(0).length()), bodyColor(bc), text(t)
+	explicit SortedShapeCtx(const Triangle& tri, const ColorF& bc, const String& t, const SortingShapeType ty)
+		: center(tri.centroid()), size(tri.side(0).length()), bodyColor(bc), text(t), type(ty)
 	{}
 };
 
@@ -33,6 +36,7 @@ public:
 	explicit SortedShapeBase(const SortedShapeCtx& ctx)
 		: m_bodyColor(ctx.bodyColor)
 		, m_text(ctx.text)
+		, m_type(ctx.type)
 	{
 		m_textSize = 0.0;
 	}
@@ -57,6 +61,8 @@ public:
 
 	const String& text() const { return m_text; }
 
+	const SortingShapeType type() const { return m_type; }
+
 protected:
 	static constexpr ColorF m_TextColor = Palette::Black;
 
@@ -69,6 +75,8 @@ protected:
 	ColorF m_bodyColor;
 
 	String m_text;
+
+	SortingShapeType m_type;
 
 	double m_textSize;
 };

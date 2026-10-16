@@ -161,22 +161,22 @@ public:
 		Pause,			// 中断ウィンドウが出てる画面.
 	};
 
-	// 正誤判定.
-	enum class TrueOrFalse
-	{
-		WaitSort,	// 仕分け待ち.
-		TrueSort,	// 正解したとき.
-		FalseSort,	// 間違えたとき.
-	};
+	//// 正誤判定.
+	//enum class TrueOrFalse
+	//{
+	//	WaitSort,	// 仕分け待ち.
+	//	TrueSort,	// 正解したとき.
+	//	FalseSort,	// 間違えたとき.
+	//};
 
-	// 図形操作の画面管理.
-	enum class FigureSwitch
-	{
-		MakeFigure,	// 図形生成.
-		Catch,		// 図形を運ぶとき.
-		Release,	// つかんだ図形を離したとき.
-		Break,		// 待機.
-	};
+	//// 図形操作の画面管理.
+	//enum class FigureSwitch
+	//{
+	//	MakeFigure,	// 図形生成.
+	//	Catch,		// 図形を運ぶとき.
+	//	Release,	// つかんだ図形を離したとき.
+	//	Break,		// 待機.
+	//};
 
 	explicit LetsPlay(const InitData& init);
 
@@ -250,22 +250,22 @@ private:
 	// 中断ボタン.
 	static constexpr Rect stopbotan = { 690, 60, 60, 60 };
 
-	// 加点.
-	static constexpr uint8 plus = 0;
-	// 減点.
-	static constexpr uint8 minus = 1;
-	const Array<Array<int16>> Score = {
-		{ 100, -50 }, // Lv.01.
-		{ 250, -300 }, // Lv.02.
-		{ 500, -1000 }, // Lv.MAX.
-	};
+	//// 加点.
+	//static constexpr uint8 plus = 0;
+	//// 減点.
+	//static constexpr uint8 minus = 1;
+	//const Array<Array<int16>> Score = {
+	//	{ 100, -50 }, // Lv.01.
+	//	{ 250, -300 }, // Lv.02.
+	//	{ 500, -1000 }, // Lv.MAX.
+	//};
 
 	// スタートボタン.
 	static constexpr Rect startbotan = { 220, 260, 360, 60 };
-	// 仕分けルールの表示位置.
-	static constexpr Vec2 siwakerule = { 400, 60 };
-	// 仕分けルールの文字の大きさ.
-	static constexpr uint8 siwakesize = 48;
+	//// 仕分けルールの表示位置.
+	//static constexpr Vec2 siwakerule = { 400, 60 };
+	//// 仕分けルールの文字の大きさ.
+	//static constexpr uint8 siwakesize = 48;
 	// カウントダウンの表示位置.
 	static constexpr Vec2 countdownpoint = { 400, 300 };
 	// カウントダウンの文字の大きさ.
@@ -280,11 +280,11 @@ private:
 	// 再開するボタン.
 	static constexpr Rect pauseContinue = { 404, 290, 160, 50 };
 
-	// 見えない壁の当たり判定.
-	// 仕分けてるとき.
-	const Array<uint16> wallx = { 50, 750 };
-	const Array<uint16> wally = { 130, 530 };
-	static constexpr RectF SortedArea = { Vec2(50, 130), SizeF(700, 400) };
+	//// 見えない壁の当たり判定.
+	//// 仕分けてるとき.
+	//const Array<uint16> wallx = { 50, 750 };
+	//const Array<uint16> wally = { 130, 530 };
+	//static constexpr RectF SortedArea = { Vec2(50, 130), SizeF(700, 400) };
 
 	double m_t_cd = 0.0;		// カウントダウンの時間.
 	
@@ -293,20 +293,20 @@ private:
 	
 	uint8 m_gt = 0;			// 制限時間のカウントダウン時間.
 
-	bool m_isPaused = false;
+	/*bool m_isPaused = false;*/
 
-	bool m_canDisplayRule = false;
+	/*bool m_canDisplayRule = false;*/
 
-	TrueOrFalse m_tof = TrueOrFalse::WaitSort;	// 正誤判定.
+	//TrueOrFalse m_tof = TrueOrFalse::WaitSort;	// 正誤判定.
 
 	Stopwatch m_countdown{ StartImmediately::Yes };	// ゲーム開始のカウントダウン.
 	
 	Stopwatch m_playtime{ StartImmediately::No };		// 制限時間.
 	
-	Stopwatch m_truefalse{ StartImmediately::Yes };	// 正誤判定のエフェクト.
+	//Stopwatch m_truefalse{ StartImmediately::Yes };	// 正誤判定のエフェクト.
 
-	// 動かす図形の素材の受け皿.
-	std::unique_ptr<SortedShapeBase> m_sortedShapePtr;
+	//// 動かす図形の素材の受け皿.
+	//std::unique_ptr<SortedShapeBase> m_sortedShapePtr;
 	/*Figure figure;
 	
 	Circle circle{};
@@ -315,25 +315,25 @@ private:
 	
 	Rect rect{};*/
 
-	// 図形を持ち運ぶときの図形の中心とカーソルの距離を保持する.
-	/*int16 m_distance_x = 0;
-	int16 m_distance_y = 0;*/
-	Vec2 m_distance = Vec2().Zero();
+	//// 図形を持ち運ぶときの図形の中心とカーソルの距離を保持する.
+	///*int16 m_distance_x = 0;
+	//int16 m_distance_y = 0;*/
+	//Vec2 m_distance = Vec2().Zero();
 
 	LetsPlayFlow m_currentFlow;
 
-	FigureSwitch m_currentFigureSwitch = FigureSwitch::Break;
+	/*FigureSwitch m_currentFigureSwitch = FigureSwitch::Break;*/
 
-	FigureGenerator m_figureGen;
+	/*FigureGenerator m_figureGen;*/
 
-	ScoreManager m_scoreManager;
+	/*ScoreManager m_scoreManager;*/
 
 	void MoveNextFlow(const LetsPlayFlow next);
 
-	std::unique_ptr<SortedShapeBase> generateFigure()
+	/*std::unique_ptr<SortedShapeBase> generateFigure()
 	{
 		return m_figureGen.generate(getData().currentSortRule(), getData().isChangedColor());
-	}
+	}*/
 
 	//// 図形の色を決める関数.
 	//void decide_color(Figure& figure, const uint8& stageNum, const bool& colorchange) const
@@ -417,8 +417,8 @@ private:
 		RectF{ rect.x, rect.y, rect.w, rect.h * (1 - easeOutQuad(t)) }.draw(colorf);
 	}
 
-	// 正誤判定のエフェクト.
-	void effect_TrueOrFalse(double t, const uint8& comboNum, const ColorF& colorf, const Font& font, const uint8& textsize);
+	//// 正誤判定のエフェクト.
+	//void effect_TrueOrFalse(double t, const uint8& comboNum, const ColorF& colorf, const Font& font, const uint8& textsize);
 };
 
 class Result

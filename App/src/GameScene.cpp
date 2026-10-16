@@ -112,6 +112,7 @@ void Title::initialize()
 		ButtonCtx(m_gameStart, botan * 1.4, U"はじめる", FontButton),
 		[&](ButtonBase* self)
 		{
+			getData().initialize();
 			changeScene(SceneSwitch::Stage, 0.0);
 		});
 
@@ -162,17 +163,17 @@ void Stage::drawUI() const
 	// 01.
 	stage01textback.drawFrame(haba, kuro).draw(haiiro);
 	FontAsset(FontTitle)(U"Lv.1").drawAt(stagetextSize, stage01text);
-	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける"_fmt(getData().highScores()[static_cast<EnumValue>(StageLevel::Level01)])).draw(stagetextsubSize, stage01textsub);
+	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける"_fmt(getData().gameManagerPtr()->scoreManagerPtr()->highScores()[static_cast<EnumValue>(StageLevel::Level01)])).draw(stagetextsubSize, stage01textsub);
 
 	// 02.
 	stage02textback.drawFrame(haba, kuro).draw(haiiro);
 	FontAsset(FontTitle)(U"Lv.2").drawAt(stagetextSize, stage02text);
-	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける\n・色でわける"_fmt(getData().highScores()[static_cast<EnumValue>(StageLevel::Level02)])).draw(stagetextsubSize, stage02textsub);
+	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける\n・色でわける"_fmt(getData().gameManagerPtr()->scoreManagerPtr()->highScores()[static_cast<EnumValue>(StageLevel::Level02)])).draw(stagetextsubSize, stage02textsub);
 
 	// MAX.
 	stageMAXtextback.drawFrame(haba, kuro).draw(haiiro);
 	FontAsset(FontTitle)(U"Lv.3").drawAt(stagetextSize, stageMAXtext);
-	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける\n・色でわける\n・文字でわける"_fmt(getData().highScores()[static_cast<EnumValue>(StageLevel::LevelMAX)])).draw(stagetextsubSize, stageMAXtextsub);
+	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける\n・色でわける\n・文字でわける"_fmt(getData().gameManagerPtr()->scoreManagerPtr()->highScores()[static_cast<EnumValue>(StageLevel::LevelMAX)])).draw(stagetextsubSize, stageMAXtextsub);
 
 	// 図形の見本.
 	m_sampleCircle.drawFrame(haba, kuro).draw(FigureGenerator::SortingColorsDefault[0]);// 色変えに対応するように !!.
@@ -225,10 +226,10 @@ void Stage::initialize()
 		ButtonCtx(colorchangeBox, bg_shiro, U"", FontButton),
 		[&](ButtonBase* self)
 		{
-			if (!getData().isChangedColor())
+			if (!getData().gameManagerPtr()->isChangedColor())
 			{
 				// on にする.
-				getData().turnOnChangedColor();
+				getData().gameManagerPtr()->turnOnChangedColor();
 				self->setText(m_markedText);
 				/*getData().setColors(SortingColorsChanged);
 				getData().setTexts(SortingTextsChanged);*/
@@ -236,7 +237,7 @@ void Stage::initialize()
 			else
 			{
 				// off にする.
-				getData().turnOffChangedColor();
+				getData().gameManagerPtr()->turnOffChangedColor();
 				self->setText(U"");
 				/*getData().setColors(SortingColorsDefault);
 				getData().setTexts(SortingTextsDefault);*/
@@ -248,16 +249,16 @@ void Stage::initialize()
 		ButtonCtx(explainskipBox, bg_shiro, U"", FontButton),
 		[&](ButtonBase* self)
 		{
-			if (!getData().isSkippedExplain())
+			if (!getData().gameManagerPtr()->isSkippedExplain())
 			{
 				// スキップする.
-				getData().turnOnSkippedExplain();
+				getData().gameManagerPtr()->turnOnSkippedExplain();
 				self->setText(m_markedText);
 			}
 			else
 			{
 				// スキップしない.
-				getData().turnOffSkippedExplain();
+				getData().gameManagerPtr()->turnOffSkippedExplain();
 				self->setText(U"");
 			}
 		});
@@ -269,7 +270,7 @@ void Stage::setupSortRule(const StageLevel level, GameData& gd) const
 
 	// 素材の準備.
 	//gd.setStageNum(idx);
-	gd.setSortRule(static_cast<EnumValue>(level));
+	gd.gameManagerPtr()->setSortRule(static_cast<EnumValue>(level));
 
 	/*if (m_isChangedColor)
 	{
@@ -330,7 +331,7 @@ LetsPlay::LetsPlay(const InitData& init)
 {
 	initialize();
 
-	if (getData().isSkippedExplain())
+	if (getData().gameManagerPtr()->isSkippedExplain())
 	{
 		MoveNextFlow(LetsPlayFlow::Start);
 	}
@@ -344,187 +345,7 @@ void LetsPlay::update()
 {
 	updateButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
 
-	// 正誤判定.
-	// 時間という概念？の取得.
-	int32 t_tf = (m_truefalse.ms() / 30);
-	switch (m_tof)
-	{
-	case TrueOrFalse::WaitSort: // 仕分け待ち.
-		break;
-
-	case TrueOrFalse::TrueSort: // 正解した時.
-
-		// 正解したエフェクト.
-		effect_TrueOrFalse(t_tf, getData().comboNum(), kuro, FontAsset(FontText), 30);
-
-		// 時間経過で消す.
-		if (t_tf > 20)
-		{
-			m_truefalse.reset();
-			m_tof = TrueOrFalse::WaitSort;
-		}
-
-		break;
-
-	case TrueOrFalse::FalseSort: // 間違えたとき.
-
-		// 間違えた時のエフェクト.
-		effect_TrueOrFalse(t_tf, getData().comboNum(), kuro, FontAsset(FontText), 30);
-
-		if (t_tf > 20)
-		{
-			m_truefalse.reset();
-			m_tof = TrueOrFalse::WaitSort;
-		}
-
-		break;
-
-	default:
-		break;
-	}
-
-	// 動かす図形.
-	switch (m_currentFigureSwitch)
-	{
-	case FigureSwitch::Break: // 待機画面.
-		break;
-
-	case FigureSwitch::MakeFigure: // 図形生成.
-	{
-		// 生成した回数の記録.
-		getData().countClassifyNum();
-
-		// 図形の出現座標と大きさの代入.
-		/*figure.center = center;
-		figure.size = size;
-		figure.textSize = textSize;
-		figure.textcolor = kuro;*/
-		m_sortedShapePtr = generateFigure();
-
-		m_currentFigureSwitch = FigureSwitch::Release;
-
-		//// 図形の色と文字を決める.
-		/*decide_color(figure, getData().stageNum(), getData().isChangedColor());
-		decide_text(figure, getData().stageNum(), getData().isChangedColor());*/
-
-		//// 図形の形を決める.
-		//uint8 shapeNum = randInt() % 3;
-		//if (shapeNum == 0)
-		//{
-		//	// まる.
-		//	circle = { figure.center, figure.size / 2 };
-
-		//	// さんかく,しかくはなんもなし描画をする.
-		//	triangle = { figure.center.x, figure.center.y, 0 };
-		//	rect = { Arg::center(center_X, center_Y), 0 };
-		//	m_currentFigureSwitch = FigureSwitch::Release;
-
-		//	break;
-		//}
-		//else if (shapeNum == 1)
-		//{
-		//	// さんかく.
-		//	// ちょっと大きくする.
-		//	figure.size *= 1.3;
-		//	triangle = { center_X, center_Y, (double)figure.size };
-
-		//	// まる,しかくはなんもなし描写をする.
-		//	circle = { figure.center, 0 };
-		//	rect = { Arg::center(center_X, center_Y), 0 };
-
-		//	// さんかくの時だけ文字の大きさを小さくする.
-		//	figure.textSize *= 0.8;
-		//	m_currentFigureSwitch = FigureSwitch::Release;
-
-		//	break;
-		//}
-		//else if (shapeNum == 2)
-		//{
-		//	// しかく.
-		//	rect = { Arg::center(center_X, center_Y), figure.size };
-
-		//	// まる,さんかくはなんもなし描写をする.
-		//	circle = { figure.center, 0 };
-		//	triangle = { figure.center.x, figure.center.y, 0 };
-		//	m_currentFigureSwitch = FigureSwitch::Release;
-
-		//	break;
-		//}
-
-		break;
-	}
-
-	case FigureSwitch::Release: // 図形をつかんでないとき.
-
-		//// 図形をつかんだとき.
-		///*Print <<U"circle" << circle.mouseOver();
-		//Print << U"triangle" << triangle.mouseOver();
-		//Print << U"rectr" << rect.mouseOver();*/
-		//// triangle の一辺が 0 だと,当たり判定が常に true になるバグあり.
-		//if ((circle.mouseOver() || (triangle.mouseOver() && culc_Length(triangle) != 0) || rect.mouseOver()) && not m_isPaused)
-		//{
-		//	// 手にする.
-		//	Cursor::RequestStyle(CursorStyle::Hand);
-
-		//	if (MouseL.pressed())
-		//	{
-		//		// カーソルと図形の中心座標の差をとる.
-		//		m_distance_x = figure.center.x - Cursor::Pos().x;
-		//		m_distance_y = figure.center.y - Cursor::Pos().y;
-
-		//		m_currentFigureSwitch = FigureSwitch::Catch;
-		//	}
-		//}
-		// 図形をつかんだとき.
-		/*Print <<U"circle" << circle.mouseOver();
-		Print << U"triangle" << triangle.mouseOver();
-		Print << U"rectr" << rect.mouseOver();*/
-		// triangle の一辺が 0 だと,当たり判定が常に true になるバグあり.
-		if (m_sortedShapePtr->isMouseOver() && not m_isPaused)
-		{
-			// 手にする.
-			Cursor::RequestStyle(CursorStyle::Hand);
-
-			if (MouseL.pressed())
-			{
-				// カーソルと図形の中心座標の差をとる.
-				/*m_distance_x = figure.center.x - Cursor::Pos().x;
-				m_distance_y = figure.center.y - Cursor::Pos().y;*/
-				m_distance = m_sortedShapePtr->center() - Cursor::Pos();
-
-				m_currentFigureSwitch = FigureSwitch::Catch;
-			}
-		}
-
-		break;
-
-	case FigureSwitch::Catch: // 図形をつかんで運ぶとき.
-
-		Cursor::RequestStyle(CursorStyle::Hand);
-
-		// 図形を離したとき.
-		if (MouseL.up())
-		{
-			//// 図形の中心座標を離した座標に更新.
-			//figure.center.x = check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure);
-			//figure.center.y = check_wally(wally, Cursor::Pos().y + m_distance_y, figure);
-			//circle.center = figure.center;
-			//triangle = { figure.center, culc_Length(triangle) };
-			//rect.x = culc_lx(figure);
-			//rect.y = culc_ly(figure);
-			// 図形の中心座標を離した座標に更新.
-			Vec2 pos = Cursor::Pos() + m_distance - (m_sortedShapePtr->size() / 2);
-			//m_sortedShapePtr->move(checkWall(SortedArea, Cursor::Pos() + m_distance, *m_sortedShapePtr));
-			m_sortedShapePtr->move(pos.clamped(SortedArea));
-
-			m_currentFigureSwitch = FigureSwitch::Release;
-
-			break;
-		}
-		break;
-	default:
-		break;
-	}
+	getData().gameManagerPtr()->update();
 
 	// 制限時間.
 	m_gt = m_playtime.s();
@@ -536,512 +357,28 @@ void LetsPlay::update()
 		m_playtime.reset();
 		m_gt = 0;
 
-		// ハイスコアを更新したかどうかの記録.
-		if (getData().highScores()[getData().stageIdx()] < getData().score())
-		{
-			getData().setHighScore(getData().stageIdx(), getData().score());
-			getData().setNewRecord(true);
-		}
+		//// ハイスコアを更新したかどうかの記録.
+		//if (getData().gameManagerPtr()->scoreManagerPtr()->highScores()[getData().stageIdx()] < getData().score())
+		//{
+		//	getData().setHighScore(getData().stageIdx(), getData().score());
+		//	getData().setNewRecord(true);
+		//}
+		getData().gameManagerPtr()->scoreManagerPtr()->updateHighScores(getData().gameManagerPtr()->stageLevel());
 
-		// 得点がマイナスになっていた場合 0 にする.
-		if (getData().score() < 0)
-		{
-			getData().addScore(-getData().score());
-		}
+		//// 得点がマイナスになっていた場合 0 にする.
+		//if (getData().gameManagerPtr()->scoreManagerPtr()->score() < 0)
+		//{
+		//	getData().addScore(-getData().score());
+		//}
 		changeScene(SceneSwitch::Result, 0.0);
 	}
-
-	// 得点処理.
-	if (m_sortedShapePtr->isIntersects(ubox_left))
-	{
-		switch (getData().currentSortRule())
-		{
-		case SortRule::ShapeRule:// left は、まる.
-
-			if (const auto& it = dynamic_cast<SortedCricle*>(m_sortedShapePtr.get()))
-			{
-				// 加点する.
-				getData().addScore(Score[getData().stageIdx()][plus]);
-
-				// 正解の回数の記録.
-				getData().countCorrectNum();
-
-				// 連続正解の回数を記録.
-				getData().countComboNum();
-
-				// 正解エフェクトを出す.
-				m_tof = TrueOrFalse::TrueSort;
-			}
-			else
-			{
-				// 減点する.
-				getData().addScore(Score[getData().stageIdx()][minus]);
-
-				// ミスした回数の記録.
-				getData().countMissNum();
-
-				// 連続正解の回数を 0 に戻す.
-				getData().resetComboNum();
-
-				// 間違えたエフェクトを出すへ.
-				m_tof = TrueOrFalse::FalseSort;
-			}
-
-			break;
-
-		case SortRule::ColorRule:// left は、赤.
-
-			if (m_sortedShapePtr->color() == aka || (getData().isChangedColor() && m_sortedShapePtr->color() == red))
-			{
-				getData().addScore(Score[getData().stageIdx()][plus]);
-				getData().countCorrectNum();
-				getData().countComboNum();
-				m_tof = TrueOrFalse::TrueSort;
-			}
-			else
-			{
-				getData().addScore(Score[getData().stageIdx()][minus]);
-				getData().countMissNum();
-				getData().resetComboNum();
-				m_tof = TrueOrFalse::FalseSort;
-			}
-			break;
-
-		case SortRule::TextRule:// left は、"あか".
-
-			if (m_sortedShapePtr->text() == U"あか" || (getData().isChangedColor() && m_sortedShapePtr->text() == U"まる"))
-			{
-				getData().addScore(Score[getData().stageIdx()][plus]);
-				getData().countCorrectNum();
-				getData().countComboNum();
-				m_tof = TrueOrFalse::TrueSort;
-			}
-			else
-			{
-				getData().addScore(Score[getData().stageIdx()][minus]);
-				getData().countMissNum();
-				getData().resetComboNum();
-				m_tof = TrueOrFalse::FalseSort;
-			}
-			break;
-		default:
-			break;
-		}
-
-		// 新たに図形を作る.
-		m_currentFigureSwitch = FigureSwitch::MakeFigure;
-
-		// 正誤判定の動きの再始動.
-		m_truefalse.restart();
-	}
-
-	if (m_sortedShapePtr->isIntersects(ubox_mdle))
-	{
-		switch (getData().currentSortRule())
-		{
-		case SortRule::ShapeRule:// mdle は、さんかく.
-
-			if (const auto& it = dynamic_cast<SortedTriangle*>(m_sortedShapePtr.get()))
-			{
-				getData().addScore(Score[getData().stageIdx()][plus]);
-				getData().countCorrectNum();
-				getData().countComboNum();
-				m_tof = TrueOrFalse::TrueSort;
-			}
-			else
-			{
-				getData().addScore(Score[getData().stageIdx()][minus]);
-				getData().countMissNum();
-				getData().resetComboNum();
-				m_tof = TrueOrFalse::FalseSort;
-			}
-			break;
-
-		case SortRule::ColorRule:// mdle は,緑.
-
-			if (m_sortedShapePtr->color() == midori || (getData().isChangedColor() && m_sortedShapePtr->color() == yelow))
-			{
-				getData().addScore(Score[getData().stageIdx()][plus]);
-				getData().countCorrectNum();
-				getData().countComboNum();
-				m_tof = TrueOrFalse::TrueSort;
-			}
-			else
-			{
-				getData().addScore(Score[getData().stageIdx()][minus]);
-				getData().countMissNum();
-				getData().resetComboNum();
-				m_tof = TrueOrFalse::FalseSort;
-			}
-			break;
-
-		case SortRule::TextRule:// mdle は、"みどり".
-
-			if (m_sortedShapePtr->text() == U"みどり" || (getData().isChangedColor() && m_sortedShapePtr->text() == U"さんかく"))
-			{
-				getData().addScore(Score[getData().stageIdx()][plus]);
-				getData().countCorrectNum();
-				getData().countComboNum();
-				m_tof = TrueOrFalse::TrueSort;
-			}
-			else
-			{
-				getData().addScore(Score[getData().stageIdx()][minus]);
-				getData().countMissNum();
-				getData().resetComboNum();
-				m_tof = TrueOrFalse::FalseSort;
-			}
-			break;
-		default:
-			break;
-		}
-
-		m_currentFigureSwitch = FigureSwitch::MakeFigure;
-
-		m_truefalse.restart();
-	}
-
-	if (m_sortedShapePtr->isIntersects(ubox_rght))
-	{
-		switch (getData().currentSortRule())
-		{
-		case SortRule::ShapeRule:// right は、しかく.
-
-			if (const auto& it = dynamic_cast<SortedSquare*>(m_sortedShapePtr.get()))
-			{
-				getData().addScore(Score[getData().stageIdx()][plus]);
-				getData().countCorrectNum();
-				getData().countComboNum();
-				m_tof = TrueOrFalse::TrueSort;
-			}
-			else
-			{
-				getData().addScore(Score[getData().stageIdx()][minus]);
-				getData().countMissNum();
-				getData().resetComboNum();
-				m_tof = TrueOrFalse::FalseSort;
-			}
-			break;
-
-		case SortRule::ColorRule:// right は、青.
-
-			if (m_sortedShapePtr->color() == ao || (getData().isChangedColor() && m_sortedShapePtr->color() == blue))
-			{
-				getData().addScore(Score[getData().stageIdx()][plus]);
-				getData().countCorrectNum();
-				getData().countComboNum();
-				m_tof = TrueOrFalse::TrueSort;
-			}
-			else
-			{
-				getData().addScore(Score[getData().stageIdx()][minus]);
-				getData().countMissNum();
-				getData().resetComboNum();
-				m_tof = TrueOrFalse::FalseSort;
-			}
-			break;
-
-		case SortRule::TextRule:// right は、"あお".
-
-			if (m_sortedShapePtr->text() == U"あお" || (getData().isChangedColor() && m_sortedShapePtr->text() == U"しかく"))
-			{
-				getData().addScore(Score[getData().stageIdx()][plus]);
-				getData().countCorrectNum();
-				getData().countComboNum();
-				m_tof = TrueOrFalse::TrueSort;
-			}
-			else
-			{
-				getData().addScore(Score[getData().stageIdx()][minus]);
-				getData().countMissNum();
-				getData().resetComboNum();
-				m_tof = TrueOrFalse::FalseSort;
-			}
-			break;
-		default:
-			break;
-		}
-
-		m_currentFigureSwitch = FigureSwitch::MakeFigure;
-
-		m_truefalse.restart();
-	}
-	//switch (getData().currentScoreSwitch()) {
-	//case ScoreSwitch::ShapeRule: // 形で分ける.
-
-	//	if (m_canDisplayRule)
-	//	{
-	//		FontAsset(FontText)(U"かたちで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
-	//	}
-	//	
-	//	// left は,まる.
-	//	if (circle.intersects(ubox_left) || rect.intersects(ubox_left) || triangle.intersects(ubox_left))
-	//	{
-	//		if (circle.r != 0)
-	//		{
-	//			// 加点する.
-	//			getData().addScore(Score[getData().stageNum()][plus]);
-
-	//			// 正解の回数の記録.
-	//			getData().countCorrectNum();
-
-	//			// 連続正解の回数を記録.
-	//			getData().countComboNum();
-
-	//			// 正解エフェクトを出す.
-	//			m_tof = TrueOrFalse::TrueSort;
-	//		}
-	//		else
-	//		{
-	//			// 減点する.
-	//			getData().addScore(Score[getData().stageNum()][minus]);
-
-	//			// ミスした回数の記録.
-	//			getData().countMissNum();
-
-	//			// 連続正解の回数を 0 に戻す.
-	//			getData().resetComboNum();
-
-	//			// 間違えたエフェクトを出すへ.
-	//			m_tof = TrueOrFalse::FalseSort;
-	//		}
-
-	//		// 新たに図形を作る.
-	//		m_currentFigureSwitch = FigureSwitch::MakeFigure;
-
-	//		// 正誤判定の動きの再始動.
-	//		m_truefalse.restart();
-
-	//		break;
-	//	}
-
-	//	// mdle は,さんかく.
-	//	if (circle.intersects(ubox_mdle) || rect.intersects(ubox_mdle) || triangle.intersects(ubox_mdle))
-	//	{
-	//		if (culc_Length(triangle) != 0)
-	//		{
-	//			getData().addScore(Score[getData().stageNum()][plus]);
-	//			getData().countCorrectNum();
-	//			getData().countComboNum();
-	//			m_tof = TrueOrFalse::TrueSort;
-	//		}
-	//		else
-	//		{
-	//			getData().addScore(Score[getData().stageNum()][minus]);
-	//			getData().countMissNum();
-	//			getData().resetComboNum();
-	//			m_tof = TrueOrFalse::FalseSort;
-	//		}
-	//		m_currentFigureSwitch = FigureSwitch::MakeFigure;
-
-	//		// 正誤判定の動きの再始動.
-	//		m_truefalse.restart();
-
-	//		break;
-	//	}
-
-	//	// right は,しかく.
-	//	if (circle.intersects(ubox_rght) || rect.intersects(ubox_rght) || triangle.intersects(ubox_rght))
-	//	{
-	//		if (rect.w != 0)
-	//		{
-	//			getData().addScore(Score[getData().stageNum()][plus]);
-	//			getData().countCorrectNum();
-	//			getData().countComboNum();
-	//			m_tof = TrueOrFalse::TrueSort;
-	//		}
-	//		else
-	//		{
-	//			getData().addScore(Score[getData().stageNum()][minus]);
-	//			getData().countMissNum();
-	//			getData().resetComboNum();
-	//			m_tof = TrueOrFalse::FalseSort;
-	//		}
-	//		m_currentFigureSwitch = FigureSwitch::MakeFigure;
-
-	//		// 正誤判定の動きの再始動.
-	//		m_truefalse.restart();
-
-	//		break;
-	//	}
-
-	//	break;
-	//case ScoreSwitch::ColorRule: // 色で分ける.
-
-	//	if (m_canDisplayRule)
-	//	{
-	//		FontAsset(FontText)(U"いろで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
-	//	}
-	//	
-	//	// left は,赤.
-	//	if (circle.intersects(ubox_left) || rect.intersects(ubox_left) || triangle.intersects(ubox_left))
-	//	{
-	//		if (figure.color == aka || (getData().isChangedColor() && figure.color == red))
-	//		{
-	//			getData().addScore(Score[getData().stageNum()][plus]);
-	//			getData().countCorrectNum();
-	//			getData().countComboNum();
-	//			m_tof = TrueOrFalse::TrueSort;
-	//		}
-	//		else
-	//		{
-	//			getData().addScore(Score[getData().stageNum()][minus]);
-	//			getData().countMissNum();
-	//			getData().resetComboNum();
-	//			m_tof = TrueOrFalse::FalseSort;
-	//		}
-	//		m_currentFigureSwitch = FigureSwitch::MakeFigure;
-
-	//		// 正誤判定の動きの再始動.
-	//		m_truefalse.restart();
-
-	//		break;
-	//	}
-
-	//	// mdle は,緑.
-	//	if (circle.intersects(ubox_mdle) || rect.intersects(ubox_mdle) || triangle.intersects(ubox_mdle))
-	//	{
-	//		if (figure.color == midori || (getData().isChangedColor() && figure.color == yelow))
-	//		{
-	//			getData().addScore(Score[getData().stageNum()][plus]);
-	//			getData().countCorrectNum();
-	//			getData().countComboNum();
-	//			m_tof = TrueOrFalse::TrueSort;
-	//		}
-	//		else
-	//		{
-	//			getData().addScore(Score[getData().stageNum()][minus]);
-	//			getData().countMissNum();
-	//			getData().resetComboNum();
-	//			m_tof = TrueOrFalse::FalseSort;
-	//		}
-	//		m_currentFigureSwitch = FigureSwitch::MakeFigure;
-
-	//		// 正誤判定の動きの再始動.
-	//		m_truefalse.restart();
-
-	//		break;
-	//	}
-	//	// right は,青.
-	//	if (circle.intersects(ubox_rght) || rect.intersects(ubox_rght) || triangle.intersects(ubox_rght))
-	//	{
-	//		if (figure.color == ao || (getData().isChangedColor() && figure.color == blue))
-	//		{
-	//			getData().addScore(Score[getData().stageNum()][plus]);
-	//			getData().countCorrectNum();
-	//			getData().countComboNum();
-	//			m_tof = TrueOrFalse::TrueSort;
-	//		}
-	//		else
-	//		{
-	//			getData().addScore(Score[getData().stageNum()][minus]);
-	//			getData().countMissNum();
-	//			getData().resetComboNum();
-	//			m_tof = TrueOrFalse::FalseSort;
-	//		}
-	//		m_currentFigureSwitch = FigureSwitch::MakeFigure;
-
-	//		// 正誤判定の動きの再始動.
-	//		m_truefalse.restart();
-
-	//		break;
-	//	}
-
-	//	break;
-
-	//case ScoreSwitch::TextRule: // 文字で分ける.
-
-	//	if (m_canDisplayRule)
-	//	{
-	//		FontAsset(FontText)(U"もじで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
-	//	}
-
-	//	// left は,"あか".
-	//	if (circle.intersects(ubox_left) || rect.intersects(ubox_left) || triangle.intersects(ubox_left))
-	//	{
-	//		if (figure.text == U"あか" || (getData().isChangedColor() && figure.text == U"まる"))
-	//		{
-	//			getData().addScore(Score[getData().stageNum()][plus]);
-	//			getData().countCorrectNum();
-	//			getData().countComboNum();
-	//			m_tof = TrueOrFalse::TrueSort;
-	//		}
-	//		else
-	//		{
-	//			getData().addScore(Score[getData().stageNum()][minus]);
-	//			getData().countMissNum();
-	//			getData().resetComboNum();
-	//			m_tof = TrueOrFalse::FalseSort;
-	//		}
-	//		m_currentFigureSwitch = FigureSwitch::MakeFigure;
-
-	//		// 正誤判定の動きの再始動.
-	//		m_truefalse.restart();
-
-	//		break;
-	//	}
-	//	// mdle は,"みどり".
-	//	if (circle.intersects(ubox_mdle) || rect.intersects(ubox_mdle) || triangle.intersects(ubox_mdle))
-	//	{
-	//		if (figure.text == U"みどり" || (getData().isChangedColor() && figure.text == U"さんかく"))
-	//		{
-	//			getData().addScore(Score[getData().stageNum()][plus]);
-	//			getData().countCorrectNum();
-	//			getData().countComboNum();
-	//			m_tof = TrueOrFalse::TrueSort;
-	//		}
-	//		else
-	//		{
-	//			getData().addScore(Score[getData().stageNum()][minus]);
-	//			getData().countMissNum();
-	//			getData().resetComboNum();
-	//			m_tof = TrueOrFalse::FalseSort;
-	//		}
-	//		m_currentFigureSwitch = FigureSwitch::MakeFigure;
-
-	//		// 正誤判定の動きの再始動.
-	//		m_truefalse.restart();
-
-	//		break;
-	//	}
-
-	//	// right は,"あお".
-	//	if (circle.intersects(ubox_rght) || rect.intersects(ubox_rght) || triangle.intersects(ubox_rght))
-	//	{
-	//		if (figure.text == U"あお" || (getData().isChangedColor() && figure.text == U"しかく"))
-	//		{
-	//			getData().addScore(Score[getData().stageNum()][plus]);
-	//			getData().countCorrectNum();
-	//			getData().countComboNum();
-	//			m_tof = TrueOrFalse::TrueSort;
-	//		}
-	//		else
-	//		{
-	//			getData().addScore(Score[getData().stageNum()][minus]);
-	//			getData().countMissNum();
-	//			getData().resetComboNum();
-	//			m_tof = TrueOrFalse::FalseSort;
-	//		}
-	//		m_currentFigureSwitch = FigureSwitch::MakeFigure;
-
-	//		// 正誤判定の動きの再始動.
-	//		m_truefalse.restart();
-
-	//		break;
-	//	}
-
-	//	break;
-
-	//default:
-	//	break;
-	//}
 
 	// 説明とカウントダウン画面.
 	switch (m_currentFlow)
 	{
 	case LetsPlayFlow::CountDown:
 
-		m_canDisplayRule = true;
+		//m_canDisplayRule = true;
 
 		m_t_cd = m_countdown.sF();
 
@@ -1049,7 +386,7 @@ void LetsPlay::update()
 		{
 			m_countdown.reset();
 			m_t_cd = 0.0;
-			m_currentFigureSwitch = FigureSwitch::MakeFigure;
+			//m_currentFigureSwitch = FigureSwitch::MakeFigure;
 
 			// 制限時間の開始.
 			m_playtime.restart();
@@ -1067,64 +404,21 @@ void LetsPlay::update()
 
 void LetsPlay::draw() const
 {
-	// 分別はこ下側.
-	box_under(ubox_left, getData().Fcolor()[left]);
-	box_under(ubox_mdle, getData().Fcolor()[mdle]);
-	box_under(ubox_rght, getData().Fcolor()[rght]);
+	//// 分別はこ下側.
+	//box_under(ubox_left, getData().Fcolor()[left]);
+	//box_under(ubox_mdle, getData().Fcolor()[mdle]);
+	//box_under(ubox_rght, getData().Fcolor()[rght]);
 
 	// 動かす図形.
-	switch (m_currentFigureSwitch)
-	{
-	case FigureSwitch::Release: // 図形をつかんでないとき.
+	getData().gameManagerPtr()->draw();
 
-		//// 落とした場所に図形を描写する.
-		//circle.drawFrame(haba, kuro).draw(figure.color);
-		//triangle.drawFrame(haba, kuro).draw(figure.color);
-		//rect.drawFrame(haba, kuro).draw(figure.color);
-		//FontAsset(FontText)(figure.text).drawAt(figure.textSize, figure.center, figure.textcolor);
-
-		m_sortedShapePtr->draw();
-
-		break;
-
-	case FigureSwitch::Catch: // 図形をつかんで運ぶとき.
-
-		// 移動させる.
-		if (MouseL.pressed())
-		{
-			/*Circle{ check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), circle.r }.drawFrame(haba, kuro).draw(figure.color);
-			Triangle{ (double)check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), (double)check_wally(wally, Cursor::Pos().y + m_distance_y, figure), culc_Length(triangle) }.drawFrame(haba, kuro).draw(figure.color);
-			RectF{ Arg::center(check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure)), rect.size }.drawFrame(haba, kuro).draw(figure.color);
-			FontAsset(FontText)(figure.text).drawAt(figure.textSize, check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), figure.textcolor);*/
-
-			m_sortedShapePtr->draw();
-		}
-
-		// 図形を離したとき.
-		if (MouseL.up())
-		{
-			//// 図形を書いて穴埋め.
-			//Circle{ check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), circle.r }.drawFrame(haba, kuro).draw(figure.color);
-			//Triangle{ (double)check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), (double)check_wally(wally, Cursor::Pos().y + m_distance_y, figure), culc_Length(triangle) }.drawFrame(haba, kuro).draw(figure.color);
-			//RectF{ Arg::center(check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure)), rect.size }.drawFrame(haba, kuro).draw(figure.color);
-			//FontAsset(FontText)(figure.text).drawAt(figure.textSize, check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure), check_wally(wally, Cursor::Pos().y + m_distance_y, figure), figure.textcolor);
-
-			m_sortedShapePtr->draw();
-
-			break;
-		}
-		break;
-	default:
-		break;
-	}
-
-	// 分別はこ上側.
-	box_over(obox_left, getData().Fcolor()[left], FontAsset(FontText), U"●");
-	FontAsset(FontText)(U"\n{}"_fmt(getData().Ftext()[left])).drawAt(obox_left.x + obox_left.w / 2, obox_left.y + obox_left.h * 3 / 5, kuro);
-	box_over(obox_mdle, getData().Fcolor()[mdle], FontAsset(FontText), U"▲");
-	FontAsset(FontText)(U"\n{}"_fmt(getData().Ftext()[mdle])).drawAt(obox_mdle.x + obox_mdle.w / 2, obox_mdle.y + obox_mdle.h * 3 / 5, kuro);
-	box_over(obox_rght, getData().Fcolor()[rght], FontAsset(FontText), U"■");
-	FontAsset(FontText)(U"\n{}"_fmt(getData().Ftext()[rght])).drawAt(obox_rght.x + obox_rght.w / 2, obox_rght.y + obox_rght.h * 3 / 5, kuro);
+	//// 分別はこ上側.
+	//box_over(obox_left, getData().Fcolor()[left], FontAsset(FontText), U"●");
+	//FontAsset(FontText)(U"\n{}"_fmt(getData().Ftext()[left])).drawAt(obox_left.x + obox_left.w / 2, obox_left.y + obox_left.h * 3 / 5, kuro);
+	//box_over(obox_mdle, getData().Fcolor()[mdle], FontAsset(FontText), U"▲");
+	//FontAsset(FontText)(U"\n{}"_fmt(getData().Ftext()[mdle])).drawAt(obox_mdle.x + obox_mdle.w / 2, obox_mdle.y + obox_mdle.h * 3 / 5, kuro);
+	//box_over(obox_rght, getData().Fcolor()[rght], FontAsset(FontText), U"■");
+	//FontAsset(FontText)(U"\n{}"_fmt(getData().Ftext()[rght])).drawAt(obox_rght.x + obox_rght.w / 2, obox_rght.y + obox_rght.h * 3 / 5, kuro);
 
 	drawUI();
 }
@@ -1159,17 +453,29 @@ void LetsPlay::drawUI() const
 		Line{ explainLineRightBegin, explainLineRightEnd }.draw(haba, kuro);
 
 		// 飾りの図形.
-		explainShapeCircle.drawFrame(haba, kuro).draw(m_figureGen.SortingColorsDefault[1]);// 色変えに対応するように !!.
-		explainShapeTriangle.drawFrame(haba, kuro).draw(m_figureGen.SortingColorsDefault[1]);
-		explainShapeRect.drawFrame(haba, kuro).draw(m_figureGen.SortingColorsDefault[1]);
+		explainShapeCircle.drawFrame(haba, kuro).draw((getData().gameManagerPtr()->isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
+		explainShapeTriangle.drawFrame(haba, kuro).draw((getData().gameManagerPtr()->isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
+		explainShapeRect.drawFrame(haba, kuro).draw((getData().gameManagerPtr()->isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
 
-		explainColorCircle.drawFrame(haba, kuro).draw(m_figureGen.SortingColorsDefault[0]);// 色変えに対応するように !!.
-		explainColorTriangle.drawFrame(haba, kuro).draw(m_figureGen.SortingColorsDefault[1]);
-		explainColorRect.drawFrame(haba, kuro).draw(m_figureGen.SortingColorsDefault[2]);
+		explainColorCircle.drawFrame(haba, kuro).draw((getData().gameManagerPtr()->isChangedColor()) ? ScoreManager::SortingAnswers[0].colors.colorChanged : ScoreManager::SortingAnswers[0].colors.colorDefault);
+		explainColorTriangle.drawFrame(haba, kuro).draw((getData().gameManagerPtr()->isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
+		explainColorRect.drawFrame(haba, kuro).draw((getData().gameManagerPtr()->isChangedColor()) ? ScoreManager::SortingAnswers[2].colors.colorChanged : ScoreManager::SortingAnswers[2].colors.colorDefault);
 
-		FontAsset(FontText)(m_figureGen.SortingTextsDefault[0]).draw(30, explainTextmaru, kuro);// 色変えに対応するように !!.
-		FontAsset(FontText)(m_figureGen.SortingTextsDefault[1]).draw(30, explainTextsankaku, kuro);
-		FontAsset(FontText)(m_figureGen.SortingTextsDefault[2]).draw(30, explainTextshikaku, kuro);
+		FontAsset(FontText)((getData().gameManagerPtr()->isChangedColor()) ? ScoreManager::SortingAnswers[0].texts.textChanged : ScoreManager::SortingAnswers[0].texts.textDefault).draw(30, explainTextmaru, kuro);
+		FontAsset(FontText)((getData().gameManagerPtr()->isChangedColor()) ? ScoreManager::SortingAnswers[1].texts.textChanged : ScoreManager::SortingAnswers[1].texts.textDefault).draw(30, explainTextsankaku, kuro);
+		FontAsset(FontText)((getData().gameManagerPtr()->isChangedColor()) ? ScoreManager::SortingAnswers[2].texts.textChanged : ScoreManager::SortingAnswers[2].texts.textDefault).draw(30, explainTextshikaku, kuro);
+
+		//explainShapeCircle.drawFrame(haba, kuro).draw(m_figureGen.SortingColorsDefault[1]);// 色変えに対応するように !!.
+		//explainShapeTriangle.drawFrame(haba, kuro).draw(m_figureGen.SortingColorsDefault[1]);
+		//explainShapeRect.drawFrame(haba, kuro).draw(m_figureGen.SortingColorsDefault[1]);
+
+		//explainColorCircle.drawFrame(haba, kuro).draw(m_figureGen.SortingColorsDefault[0]);// 色変えに対応するように !!.
+		//explainColorTriangle.drawFrame(haba, kuro).draw(m_figureGen.SortingColorsDefault[1]);
+		//explainColorRect.drawFrame(haba, kuro).draw(m_figureGen.SortingColorsDefault[2]);
+
+		//FontAsset(FontText)(m_figureGen.SortingTextsDefault[0]).draw(30, explainTextmaru, kuro);// 色変えに対応するように !!.
+		//FontAsset(FontText)(m_figureGen.SortingTextsDefault[1]).draw(30, explainTextsankaku, kuro);
+		//FontAsset(FontText)(m_figureGen.SortingTextsDefault[2]).draw(30, explainTextshikaku, kuro);
 
 		break;
 
@@ -1242,32 +548,7 @@ void LetsPlay::drawUI() const
 		break;
 	}
 
-	// ルール内容の表示.
-	switch (getData().currentSortRule())
-	{
-	case SortRule::ShapeRule:
-
-		if (m_canDisplayRule) FontAsset(FontText)(U"かたちで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
-
-		break;
-
-	case SortRule::ColorRule:
-
-		if (m_canDisplayRule) FontAsset(FontText)(U"いろで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
-
-		break;
-
-	case SortRule::TextRule:
-
-		if (m_canDisplayRule) FontAsset(FontText)(U"もじで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
-		
-		break;
-
-	default:
-		break;
-	}
-
-	if (m_isPaused)
+	if (getData().gameManagerPtr()->isPaused())
 	{
 		// 一時停止のウィンドウ.
 		pauseWindow.drawFrame(haba, kuro).draw(ColorF{ 0.7, 0.7, 0.7, 0.8 });
@@ -1281,9 +562,9 @@ void LetsPlay::initialize()
 {
 	Scene::SetBackground(bg_shiro);
 
-	m_figureGen.init();
+	/*m_figureGen.init();
 
-	m_scoreManager.init();
+	m_scoreManager.init();*/
 
 	makeButton(
 		static_cast<ButtonTableKey>(LetsPlayFlow::ExplainPage1),
@@ -1331,7 +612,8 @@ void LetsPlay::initialize()
 		{
 			m_playtime.pause();
 			m_countdown.pause();
-			m_isPaused = true;
+			//m_isPaused = true;
+			getData().gameManagerPtr()->turnOnPause();
 
 			MoveNextFlow(LetsPlayFlow::Pause);
 		});
@@ -1345,7 +627,8 @@ void LetsPlay::initialize()
 			m_gt = 0;
 			m_playtime.reset();
 			m_countdown.reset();
-			m_isPaused = false;
+			//m_isPaused = false;
+			getData().gameManagerPtr()->turnOffPause();
 			changeScene(SceneSwitch::Stage, 0.0);
 		});
 
@@ -1356,7 +639,8 @@ void LetsPlay::initialize()
 		{
 			m_playtime.resume();
 			m_countdown.resume();
-			m_isPaused = false;
+			//m_isPaused = false;
+			getData().gameManagerPtr()->turnOffPause();
 			changeScene(SceneSwitch::Letsplay, 0.0);
 			
 			MoveNextFlow(LetsPlayFlow::Play);
@@ -1369,34 +653,35 @@ void LetsPlay::initialize()
 		{
 			m_playtime.resume();
 			m_countdown.resume();
-			m_isPaused = false;
+			//m_isPaused = false;
+			getData().gameManagerPtr()->turnOffPause();
 			changeScene(SceneSwitch::Letsplay, 0.0);
 			
 			MoveNextFlow(LetsPlayFlow::Play);
 		});
 }
 
-void LetsPlay::effect_TrueOrFalse(double t, const uint8& comboNum, const ColorF& colorf, const Font& font, const uint8& textsize)
-{
-	const String combo3 = U"Perfect!!!";
-	const String combo2 = U"Great!!";
-	const String combo1 = U"Good!";
-	const String combo0 = U"Miss";
-	constexpr uint16 effect_X = 400;
-	constexpr uint16 effect_Y = 570;
-	if (comboNum >= 3) {
-		font(combo3.substr(0, t)).drawAt(textsize, effect_X, effect_Y, colorf);
-	}
-	else if (comboNum == 2) {
-		font(combo2.substr(0, t)).drawAt(textsize, effect_X, effect_Y, colorf);
-	}
-	else if (comboNum == 0) {
-		font(combo0.substr(0, t)).drawAt(textsize, effect_X, effect_Y, colorf);
-	}
-	else {
-		font(combo1.substr(0, t)).drawAt(textsize, effect_X, effect_Y, colorf);
-	}
-}
+//void LetsPlay::effect_TrueOrFalse(double t, const uint8& comboNum, const ColorF& colorf, const Font& font, const uint8& textsize)
+//{
+//	const String combo3 = U"Perfect!!!";
+//	const String combo2 = U"Great!!";
+//	const String combo1 = U"Good!";
+//	const String combo0 = U"Miss";
+//	constexpr uint16 effect_X = 400;
+//	constexpr uint16 effect_Y = 570;
+//	if (comboNum >= 3) {
+//		font(combo3.substr(0, t)).drawAt(textsize, effect_X, effect_Y, colorf);
+//	}
+//	else if (comboNum == 2) {
+//		font(combo2.substr(0, t)).drawAt(textsize, effect_X, effect_Y, colorf);
+//	}
+//	else if (comboNum == 0) {
+//		font(combo0.substr(0, t)).drawAt(textsize, effect_X, effect_Y, colorf);
+//	}
+//	else {
+//		font(combo1.substr(0, t)).drawAt(textsize, effect_X, effect_Y, colorf);
+//	}
+//}
 
 void LetsPlay::MoveNextFlow(const LetsPlayFlow next)
 {
@@ -1449,18 +734,19 @@ void Result::draw() const
 	const double t_rw = Min(m_resultwindow.sF(), 1.0);
 
 	// さっきまでの背景たち.
-	// 分別はこ下側.
-	box_under(ubox_left, getData().Fcolor()[left]);
-	box_under(ubox_mdle, getData().Fcolor()[mdle]);
-	box_under(ubox_rght, getData().Fcolor()[rght]);
+	getData().gameManagerPtr()->draw();
+	//// 分別はこ下側.
+	//box_under(ubox_left, getData().Fcolor()[left]);
+	//box_under(ubox_mdle, getData().Fcolor()[mdle]);
+	//box_under(ubox_rght, getData().Fcolor()[rght]);
 
-	// 分別はこ上側.
-	box_over(obox_left, getData().Fcolor()[left], FontAsset(FontButton), U"●");
-	FontAsset(FontButton)(U"\n{}"_fmt(getData().Ftext()[left])).drawAt(obox_left.x + obox_left.w / 2, obox_left.y + obox_left.h * 3 / 5, kuro);
-	box_over(obox_mdle, getData().Fcolor()[mdle], FontAsset(FontButton), U"▲");
-	FontAsset(FontButton)(U"\n{}"_fmt(getData().Ftext()[mdle])).drawAt(obox_mdle.x + obox_mdle.w / 2, obox_mdle.y + obox_mdle.h * 3 / 5, kuro);
-	box_over(obox_rght, getData().Fcolor()[rght], FontAsset(FontButton), U"■");
-	FontAsset(FontButton)(U"\n{}"_fmt(getData().Ftext()[rght])).drawAt(obox_rght.x + obox_rght.w / 2, obox_rght.y + obox_rght.h * 3 / 5, kuro);
+	//// 分別はこ上側.
+	//box_over(obox_left, getData().Fcolor()[left], FontAsset(FontButton), U"●");
+	//FontAsset(FontButton)(U"\n{}"_fmt(getData().Ftext()[left])).drawAt(obox_left.x + obox_left.w / 2, obox_left.y + obox_left.h * 3 / 5, kuro);
+	//box_over(obox_mdle, getData().Fcolor()[mdle], FontAsset(FontButton), U"▲");
+	//FontAsset(FontButton)(U"\n{}"_fmt(getData().Ftext()[mdle])).drawAt(obox_mdle.x + obox_mdle.w / 2, obox_mdle.y + obox_mdle.h * 3 / 5, kuro);
+	//box_over(obox_rght, getData().Fcolor()[rght], FontAsset(FontButton), U"■");
+	//FontAsset(FontButton)(U"\n{}"_fmt(getData().Ftext()[rght])).drawAt(obox_rght.x + obox_rght.w / 2, obox_rght.y + obox_rght.h * 3 / 5, kuro);
 
 	// 幕を下ろす.
 	m_boxBounce_aud(t_rw, makuSize, makuColor);
@@ -1470,13 +756,13 @@ void Result::draw() const
 	m_textBounce_aud(t_rw, resultText, FontAsset(FontButton), U"★RESULT★", 80);
 
 	// 獲得スコア.
-	m_textBounce_aud(t_rw, yourscoreText, FontAsset(FontButton), U"Your Score:{}"_fmt(getData().score()), 36);
+	m_textBounce_aud(t_rw, yourscoreText, FontAsset(FontButton), U"Your Score:{}"_fmt(getData().gameManagerPtr()->scoreManagerPtr()->score()), 36);
 
 	// ハイスコア.
-	m_textBounce_aud(t_rw, highscoreText, FontAsset(FontButton), U"High Score:{}"_fmt(getData().highScores()[getData().stageIdx()]), 20);
+	m_textBounce_aud(t_rw, highscoreText, FontAsset(FontButton), U"High Score:{}"_fmt(getData().gameManagerPtr()->scoreManagerPtr()->highScores()[static_cast<EnumValue>(getData().gameManagerPtr()->stageLevel())]), 20);
 
 	// 記録を更新したか.
-	if (getData().newRecord())
+	if (getData().gameManagerPtr()->scoreManagerPtr()->newRecord())
 	{
 		m_textBounce_aud(t_rw, newrecordText, FontAsset(FontButton), U"New Record!!", 20);
 	}
@@ -1503,7 +789,7 @@ void Result::draw() const
 			}
 			else
 			{
-				m_textOutExpo_aap(sortedPtr->rate(), sortedTextAppearPoint, sortedText, kuro, FontAsset(FontButton), U"sorted:{}"_fmt(getData().classifyNum() - 1), 30);
+				m_textOutExpo_aap(sortedPtr->rate(), sortedTextAppearPoint, sortedText, kuro, FontAsset(FontButton), U"sorted:{}"_fmt(getData().gameManagerPtr()->scoreManagerPtr()->classifyNum() - 1), 30);
 			}
 		}
 
@@ -1512,7 +798,7 @@ void Result::draw() const
 		{
 			if (truePtr != nullptr)
 			{
-				m_textOutExpo_aap(truePtr->rate(), trueTextAppearPoint, trueText, kuro, FontAsset(FontButton), U"true:{}"_fmt(getData().correctNum()), 30);
+				m_textOutExpo_aap(truePtr->rate(), trueTextAppearPoint, trueText, kuro, FontAsset(FontButton), U"true:{}"_fmt(getData().gameManagerPtr()->scoreManagerPtr()->correctNum()), 30);
 			}
 			else
 			{
@@ -1525,7 +811,7 @@ void Result::draw() const
 		{
 			if (missPtr != nullptr)
 			{
-				m_textOutExpo_aap(missPtr->rate(), missTextAppearPoint, missText, kuro, FontAsset(FontButton), U"miss:{}"_fmt(getData().missNum()), 30);
+				m_textOutExpo_aap(missPtr->rate(), missTextAppearPoint, missText, kuro, FontAsset(FontButton), U"miss:{}"_fmt(getData().gameManagerPtr()->scoreManagerPtr()->missNum()), 30);
 			}
 			else
 			{

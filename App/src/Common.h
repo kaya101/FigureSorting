@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Enums.h"
 #include "Generator.h"
+#include "Manager.h"
 
 static const String FontTitle = U"TitleFont";
 static const String FontButton = U"FontButton";
@@ -63,78 +64,82 @@ public:
 
 	void initialize();
 	
-	void addScore(const int16 amount) { m_score += amount; }
+	/*void addScore(const int16 amount) { m_score += amount; }
 
 	void countClassifyNum() { ++m_classifyNum; }
 	void countCorrectNum() { ++m_correctNum; }
 	void countMissNum() { ++m_missNum; }
 	void countComboNum() { ++m_comboNum; }
 
-	void resetComboNum() { m_comboNum = 0; }
+	void resetComboNum() { m_comboNum = 0; }*/
 
-	void turnOnChangedColor() { m_isChangedColor = true; }
-	void turnOffChangedColor() { m_isChangedColor = false; }
+	/*void turnOnChangedColor() { m_isChangedColor = true; }
+	void turnOffChangedColor() { m_isChangedColor = false; }*/
 
-	void turnOnSkippedExplain() { m_isSkippedExplain = true; }
-	void turnOffSkippedExplain() { m_isSkippedExplain = false; }
+	/*void turnOnSkippedExplain() { m_isSkippedExplain = true; }
+	void turnOffSkippedExplain() { m_isSkippedExplain = false; }*/
 
-	void setSortRule(const size_t nextStageNum);
+	/*void setSortRule(const size_t nextStageNum);*/
 
 	//void setScoreSwitch(const ScoreSwitch& skip) { m_currentScoreSwitch = skip; }
-	void setHighScore(const size_t idx, const int16 score) { m_highScores[idx] = score; }
+	//void setHighScore(const size_t idx, const int16 score) { m_highScores[idx] = score; }
 	void setFcolor(const Array<ColorF>& colors) { m_Fcolor = colors; }
 	void setFtext(const Array<String>& texts) { m_Ftext = texts; }
 	//void setStageNum(const uint8 n) { m_stageNum = n; }
-	void setNewRecord(const bool skip) { m_newRecord = skip; }
+	//void setNewRecord(const bool skip) { m_newRecord = skip; }
 	//void setColors(const Array<ColorF>& colors) { m_colors = colors; }
 	//void setTexts(const Array<String>& texts) { m_texts = texts; }
 
-	const bool isChangedColor() const { return m_isChangedColor; }
-	const bool isSkippedExplain() const { return m_isSkippedExplain; }
+	//const bool isChangedColor() const { return m_isChangedColor; }
+	//const bool isSkippedExplain() const { return m_isSkippedExplain; }
 	//const ScoreSwitch currentScoreSwitch() const { return m_currentScoreSwitch; }
-	const SortRule currentSortRule() const { return m_currentSortRule; }
-	const Array<int16>& highScores() const { return m_highScores; }
+	//const SortRule currentSortRule() const { return m_currentSortRule; }
+	/*const Array<int16>& highScores() const { return m_highScores; }*/
 	const Array<ColorF>& Fcolor() const { return m_Fcolor; }
 	const Array<String>& Ftext() const { return m_Ftext; }
-	const uint8 stageIdx() const { return m_stageIdx; }
-	const bool newRecord() const { return m_newRecord; }
+	/*const uint8 stageIdx() const { return m_stageIdx; }*/
+	/*const bool newRecord() const { return m_newRecord; }
 	const int16 score() const { return m_score; }
 	const uint8 classifyNum() const { return m_classifyNum; }
 	const uint8 correctNum() const { return m_correctNum; }
 	const uint8 missNum() const { return m_missNum; }
-	const uint8 comboNum() const { return m_comboNum; }
+	const uint8 comboNum() const { return m_comboNum; }*/
 	//const Array<ColorF>& colors() const { return m_colors; }
 	//const Array<String>& texts() const { return m_texts; }
 
-private:
-	bool m_isChangedColor = false;		// 色が見にくいかどうか.
+	GameManager* gameManagerPtr() { return m_gameManagerPtr.get(); }
 
-	bool m_isSkippedExplain = false;	// 説明をスキップするかどうか.
+private:
+	//bool m_isChangedColor = false;		// 色が見にくいかどうか.
+
+	//bool m_isSkippedExplain = false;	// 説明をスキップするかどうか.
 
 	//ScoreSwitch m_currentScoreSwitch = ScoreSwitch::ShapeRule;	// 得点計算.
-	SortRule m_currentSortRule;
+	/*SortRule m_currentSortRule;*/
 
-	NonRepeatRandomGenerator m_sortRuleGen;
+	/*NonRepeatRandomGenerator m_sortRuleGen;*/
 
-	Array<int16> m_highScores = { 0, 0, 0 };
+	std::unique_ptr<GameManager> m_gameManagerPtr;
+
+	/*Array<int16> m_highScores = { 0, 0, 0 };*/
 
 	Array<ColorF> m_Fcolor;
 
 	Array<String> m_Ftext;
 
-	size_t m_stageIdx = 99;		// どのステージか.
+	//size_t m_stageIdx = 99;		// どのステージか.
 
-	bool m_newRecord = false;	// 記録を更新したかどうか.
+	//bool m_newRecord = false;	// 記録を更新したかどうか.
 
-	int16 m_score = 0;
+	//int16 m_score = 0;
 
-	uint8 m_classifyNum = 0;	// 仕分けた個数.
-	
-	uint8 m_correctNum = 0;		// 正解した個数.
-	
-	uint8 m_missNum = 0;		// 間違えた個数.
-	
-	uint8 m_comboNum = 0;		// 連続正解数をカウント.
+	//uint8 m_classifyNum = 0;	// 仕分けた個数.
+	//
+	//uint8 m_correctNum = 0;		// 正解した個数.
+	//
+	//uint8 m_missNum = 0;		// 間違えた個数.
+	//
+	//uint8 m_comboNum = 0;		// 連続正解数をカウント.
 
 	/*Array<ColorF> m_colors = SortingColorsDefault;
 
@@ -147,18 +152,18 @@ using App = SceneManager<SceneSwitch, GameData>;
 static constexpr RectF makuSize = { 0, 0, 800, 600 };
 
 
-// 分類箱の位置.
-static constexpr uint8 left = 0;
-static constexpr uint8 mdle = 1;
-static constexpr uint8 rght = 2;
-// 分類箱の下側.
-static constexpr RectF ubox_left = { 50, 390, 160, 140 };
-static constexpr RectF ubox_mdle = { 320, 110, 160, 140 };
-static constexpr RectF ubox_rght = { 590, 390, 160, 140 };
-// 分類箱の上側.
-static constexpr RectF obox_left = { 50, 410, 160, 120 };
-static constexpr RectF obox_mdle = { 320, 130, 160, 120 };
-static constexpr RectF obox_rght = { 590, 410, 160, 120 };
+//// 分類箱の位置.
+//static constexpr uint8 left = 0;
+//static constexpr uint8 mdle = 1;
+//static constexpr uint8 rght = 2;
+//// 分類箱の下側.
+//static constexpr RectF ubox_left = { 50, 390, 160, 140 };
+//static constexpr RectF ubox_mdle = { 320, 110, 160, 140 };
+//static constexpr RectF ubox_rght = { 590, 390, 160, 140 };
+//// 分類箱の上側.
+//static constexpr RectF obox_left = { 50, 410, 160, 120 };
+//static constexpr RectF obox_mdle = { 320, 130, 160, 120 };
+//static constexpr RectF obox_rght = { 590, 410, 160, 120 };
 
 
 //各難易度ごとに何が何種類あるのか.

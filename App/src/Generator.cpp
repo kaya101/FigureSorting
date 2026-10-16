@@ -92,7 +92,7 @@ std::unique_ptr<SortedShapeBase> FigureGenerator::generate(const SortRule rule, 
 		color = SortingColorsDefault[colorIdx];
 		text = SortingTextsDefault[textIdx];
 	}
-	SortedShapeCtx ctx(AppearPoint, ShapoeSize, color, text);
+	SortedShapeCtx ctx(AppearPoint, ShapoeSize, color, text, static_cast<SortingShapeType>(shapeIdx));
 
 	return function(ctx);
 }
