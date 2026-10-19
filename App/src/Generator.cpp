@@ -93,13 +93,13 @@ std::unique_ptr<SortedShapeBase> FigureGenerator::generate(const StageLevel leve
 	auto& function = SortingShapes[shapeIdx];
 	if (isChangedColor)
 	{
-		color = SortingColorsChanged[colorIdx];
-		text = SortingTextsChanged[textIdx];
+		color = FigureGenerator::SortingColorsChanged[colorIdx];
+		text = FigureGenerator::SortingTextsChanged[textIdx];
 	}
 	else
 	{
-		color = SortingColorsDefault[colorIdx];
-		text = SortingTextsDefault[textIdx];
+		color = FigureGenerator::SortingColorsDefault[colorIdx];
+		text = FigureGenerator::SortingTextsDefault[textIdx];
 	}
 	ctxPtr = std::make_unique<SortedShapeCtx>(AppearPoint, ShapoeSize, color, text, static_cast<SortingShapeType>(shapeIdx));
 

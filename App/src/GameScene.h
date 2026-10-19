@@ -14,7 +14,7 @@ public:
 
 	virtual ~GameScene() = default;
 
-	void virtual drawUI() const = 0;
+	//void virtual drawUI() const = 0;
 	void virtual initialize() = 0;
 
 protected:
@@ -44,7 +44,7 @@ public:
 	void draw() const override;
 	void drawFadeIn(double t) const override;
 	void drawFadeOut(double t) const override;
-	void drawUI() const override;
+	//void drawUI() const override;
 	void initialize() override;
 
 private:
@@ -70,7 +70,7 @@ public:
 	void draw() const override;
 	void drawFadeIn(double t) const override;
 	void drawFadeOut(double t) const override;
-	void drawUI() const override;
+	//void drawUI() const override;
 	void initialize() override;
 
 private:
@@ -124,7 +124,7 @@ public:
 	void draw() const override;
 	void drawFadeIn(double t) const override;
 	void drawFadeOut(double t) const override;
-	void drawUI() const override;
+	//void drawUI() const override;
 	void initialize() override;
 
 private:
@@ -198,7 +198,7 @@ public:
 	void draw() const override;
 	void drawFadeIn(double t) const override;
 	void drawFadeOut(double t) const override;
-	void drawUI() const override;
+	//void drawUI() const override;
 	void initialize() override;
 
 private:
