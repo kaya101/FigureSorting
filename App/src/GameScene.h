@@ -14,7 +14,6 @@ public:
 
 	virtual ~GameScene() = default;
 
-	//void virtual drawUI() const = 0;
 	void virtual initialize() = 0;
 
 protected:
@@ -44,7 +43,6 @@ public:
 	void draw() const override;
 	void drawFadeIn(double t) const override;
 	void drawFadeOut(double t) const override;
-	//void drawUI() const override;
 	void initialize() override;
 
 private:
@@ -70,7 +68,6 @@ public:
 	void draw() const override;
 	void drawFadeIn(double t) const override;
 	void drawFadeOut(double t) const override;
-	//void drawUI() const override;
 	void initialize() override;
 
 private:
@@ -124,7 +121,6 @@ public:
 	void draw() const override;
 	void drawFadeIn(double t) const override;
 	void drawFadeOut(double t) const override;
-	//void drawUI() const override;
 	void initialize() override;
 
 private:
@@ -198,7 +194,6 @@ public:
 	void draw() const override;
 	void drawFadeIn(double t) const override;
 	void drawFadeOut(double t) const override;
-	//void drawUI() const override;
 	void initialize() override;
 
 private:
@@ -239,7 +234,6 @@ private:
 	void m_textOutExpo_aap(double t, const Vec2& from, const Vec2& vec2, const ColorF& colorf, const Font& font, const String& text, const uint8& size) const
 	{
 		// 左上座標準拠.
-		//font(text).draw(size, from.x + easeOutExpo(t) * (vec2.x - from.x), from.y + easeOutExpo(t) * (vec2.y - from.y), colorf);
 		font(text).draw(size, from + easeOutExpo(t) * (vec2 - from), colorf);
 	}
 };
