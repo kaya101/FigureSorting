@@ -110,7 +110,6 @@ void Title::initialize()
 		ButtonCtx(m_gameStart, botan * 1.4, U"はじめる", FontButton),
 		[&](ButtonBase* self)
 		{
-			getData().initialize();
 			changeScene(SceneSwitch::Stage, 0.0);
 		});
 
@@ -190,8 +189,6 @@ void Stage::initialize()
 {
 	Scene::SetBackground(bg_shiro);
 
-	m_isChangedColor = false;
-
 	makeButton(
 		static_cast<ButtonTableKey>(UILayer::Default),
 		ButtonCtx(stage01botan, botan * 1.4, U"これ!!", FontButton),
@@ -256,8 +253,6 @@ void Stage::initialize()
 				self->setText(U"");
 			}
 		});
-
-	getData().gameManager().init();
 }
 
 void Stage::setupSortRule(const StageLevel level, GameData& gd) const
@@ -288,22 +283,6 @@ LetsPlay::LetsPlay(const InitData& init)
 void LetsPlay::update()
 {
 	updateButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
-
-	// 制限時間.
-	m_gt = m_playtime.s();
-	FontAsset(FontText)(U"time(s):{}"_fmt(m_timelimit - m_gt)).draw(20, 60, kuro);
-
-	// 時間切れになったとき.
-	if (m_timelimit - m_gt <= 0)
-	{
-		m_playtime.reset();
-		m_gt = 0;
-
-		// ハイスコアを更新したかどうかの記録.
-		//getData().gameManager().scoreManager().updateHighScores(getData().gameManager().stageLevel());
-
-		changeScene(SceneSwitch::Result, 0.0);
-	}
 
 	// 説明とカウントダウン画面.
 	switch (m_currentFlow)
@@ -336,6 +315,22 @@ void LetsPlay::update()
 
 		break;
 	case LetsPlayFlow::Play:
+
+		// 制限時間.
+		m_gt = m_playtime.s();
+		FontAsset(FontText)(U"time(s):{}"_fmt(m_timelimit - m_gt)).draw(20, 60, kuro);
+
+		// 時間切れになったとき.
+		if (m_timelimit - m_gt <= 0)
+		{
+			m_playtime.reset();
+			m_gt = 0;
+
+			// ハイスコアを更新したかどうかの記録.
+			//getData().gameManager().scoreManager().updateHighScores(getData().gameManager().stageLevel());
+
+			changeScene(SceneSwitch::Result, 0.0);
+		}
 
 		getData().gameManager().update();
 
@@ -464,18 +459,23 @@ void LetsPlay::drawUI() const
 		break;
 
 	case LetsPlayFlow::Pause:
+
+		// 一時停止のウィンドウ.
+		pauseWindow.drawFrame(haba, kuro).draw(ColorF{ 0.7, 0.7, 0.7, 0.8 });
+		FontAsset(FontText)(U"--PAUSE--").drawAt(40, (pauseWindow.x + pauseWindow.w / 2), (pauseWindow.y + pauseWindow.h / 3), kuro);
+
 		break;
 
 	default:
 		break;
 	}
 
-	if (getData().gameManager().isPaused())
-	{
-		// 一時停止のウィンドウ.
-		pauseWindow.drawFrame(haba, kuro).draw(ColorF{ 0.7, 0.7, 0.7, 0.8 });
-		FontAsset(FontText)(U"--PAUSE--").drawAt(40, (pauseWindow.x + pauseWindow.w / 2), (pauseWindow.y + pauseWindow.h / 3), kuro);
-	}
+	//if (getData().gameManager().isPaused())
+	//{
+	//	// 一時停止のウィンドウ.
+	//	pauseWindow.drawFrame(haba, kuro).draw(ColorF{ 0.7, 0.7, 0.7, 0.8 });
+	//	FontAsset(FontText)(U"--PAUSE--").drawAt(40, (pauseWindow.x + pauseWindow.w / 2), (pauseWindow.y + pauseWindow.h / 3), kuro);
+	//}
 
 	drawButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
 }
@@ -484,9 +484,9 @@ void LetsPlay::initialize()
 {
 	Scene::SetBackground(bg_shiro);
 
-	/*m_figureGen.init();
-
-	m_scoreManager.init();*/
+	m_t_cd = 0.0;
+	m_gt = 0;
+	m_currentFlow = LetsPlayFlow::ExplainPage1;
 
 	makeButton(
 		static_cast<ButtonTableKey>(LetsPlayFlow::ExplainPage1),
@@ -522,9 +522,6 @@ void LetsPlay::initialize()
 			m_playtime.reset();
 
 			MoveNextFlow(LetsPlayFlow::CountDown);
-
-			// 初期化.
-			getData().initialize();
 		});
 
 	makeButton(
@@ -544,11 +541,11 @@ void LetsPlay::initialize()
 		ButtonCtx(pauseRetire, daidai, U"ステージに戻る", FontButton),
 		[&](ButtonBase* self)
 		{
-			getData().initialize();
+			getData().reset();
 			m_gt = 0;
 			m_playtime.reset();
 			m_countdown.reset();
-			getData().gameManager().turnOffPause();
+			//getData().gameManager().turnOffPause();
 			changeScene(SceneSwitch::Stage, 0.0);
 		});
 
@@ -560,7 +557,7 @@ void LetsPlay::initialize()
 			m_playtime.resume();
 			m_countdown.resume();
 			getData().gameManager().turnOffPause();
-			changeScene(SceneSwitch::Letsplay, 0.0);
+			//changeScene(SceneSwitch::Letsplay, 0.0);
 			
 			MoveNextFlow(LetsPlayFlow::Play);
 		});
@@ -573,7 +570,7 @@ void LetsPlay::initialize()
 			m_playtime.resume();
 			m_countdown.resume();
 			getData().gameManager().turnOffPause();
-			changeScene(SceneSwitch::Letsplay, 0.0);
+			//changeScene(SceneSwitch::Letsplay, 0.0);
 			
 			MoveNextFlow(LetsPlayFlow::Play);
 		});
@@ -732,7 +729,7 @@ void Result::initialize()
 		ButtonCtx(m_playAgain, kiiro, U"もう一回", FontButton),
 		[&](ButtonBase* self)
 		{
-			getData().initialize();
+			getData().retry();
 			
 			m_resultwindow.reset();
 			
@@ -746,7 +743,7 @@ void Result::initialize()
 		ButtonCtx(m_backStage, kiiro, U"ステージへ", FontButton),
 		[&](ButtonBase* self)
 		{
-			getData().initialize();
+			getData().reset();
 			
 			m_resultwindow.reset();
 			
@@ -760,7 +757,7 @@ void Result::initialize()
 		ButtonCtx(m_backTitle, murasaki * 1.4, U"タイトルへ", FontButton),
 		[&](ButtonBase* self)
 		{
-			getData().initialize();
+			getData().retry();
 			
 			m_resultwindow.reset();
 			

@@ -141,6 +141,27 @@ void GameManager::init()
 	m_currentFigureSwitch = FigureSwitch::MakeFigure;
 }
 
+void GameManager::reset()
+{
+	m_sortedShapePtr = nullptr;
+
+	m_distance = Vec2().Zero();
+	m_currentSortRule = SortRule::Count;
+	m_stageLevel = StageLevel::Count;
+	m_tof = TrueOrFalse::WaitSort;
+	m_currentFigureSwitch = FigureSwitch::MakeFigure;
+}
+
+void GameManager::retry()
+{
+	m_sortedShapePtr = nullptr;
+
+	m_distance = Vec2().Zero();
+	m_isPaused = false;
+	m_tof = TrueOrFalse::WaitSort;
+	m_currentFigureSwitch = FigureSwitch::MakeFigure;
+}
+
 void GameManager::update()
 {
 	// 分類箱の下側の図形との当たり判定で分類する.

@@ -55,6 +55,8 @@ public:
 	~GameData() = default;
 
 	void initialize();
+	void reset();
+	void retry();
 
 	GameManager& gameManager() { return m_gameManager; }
 

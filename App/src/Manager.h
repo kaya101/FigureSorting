@@ -86,6 +86,8 @@ public:
 	~GameManager() = default;
 
 	void init();
+	void reset();
+	void retry();
 	void update();
 	void draw() const;
 	void setSortRule(const EnumValue nextStageIdx);

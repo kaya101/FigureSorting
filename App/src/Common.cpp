@@ -6,6 +6,16 @@ void GameData::initialize()
 	m_gameManager.init();
 }
 
+void GameData::reset()
+{
+	m_gameManager.reset();
+}
+
+void GameData::retry()
+{
+	m_gameManager.retry();
+}
+
 //void GameData::setSortRule(const size_t nextStageIdx)
 //{
 //	if (m_stageIdx != nextStageIdx) m_sortRuleGen.init(nextStageIdx + 1);
