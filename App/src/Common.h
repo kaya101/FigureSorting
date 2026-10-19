@@ -5,7 +5,7 @@
 
 static const String FontTitle = U"TitleFont";
 static const String FontButton = U"FontButton";
-static const String FontText = U"FontText";
+inline constexpr StringView FontText = U"FontText";
 
 // 背景の白.
 static constexpr ColorF bg_shiro{ U"#fef4f4" };

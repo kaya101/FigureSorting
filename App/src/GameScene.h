@@ -169,6 +169,12 @@ private:
 	Stopwatch m_playtime{ StartImmediately::No };	// 制限時間.
 	LetsPlayFlow m_currentFlow;
 
+	HashTable<LetsPlayFlow, std::function<void()>> m_updateTable;
+	HashTable<LetsPlayFlow, std::function<void()>> m_drawTable;
+
+	void initUpdateTable();
+	void initDrawTable();
+
 	void MoveNextFlow(const LetsPlayFlow next);
 
 	// ゲーム結果画面の幕が上がるやつ.

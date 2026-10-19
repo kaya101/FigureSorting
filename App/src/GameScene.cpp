@@ -282,70 +282,75 @@ LetsPlay::LetsPlay(const InitData& init)
 
 void LetsPlay::update()
 {
-	updateButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
+	//updateButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
 
-	// 説明とカウントダウン画面.
-	switch (m_currentFlow)
-	{
-	case LetsPlayFlow::ExplainPage1:
-		break;
-	case LetsPlayFlow::ExplainPage2:
-		break;
-	case LetsPlayFlow::Start:
-		break;
-	case LetsPlayFlow::CountDown:
+	auto it = m_updateTable.find(m_currentFlow);
+	if (it != m_updateTable.end()) it->second();
 
-		//m_canDisplayRule = true;
+	//// 説明とカウントダウン画面.
+	//switch (m_currentFlow)
+	//{
+	//case LetsPlayFlow::ExplainPage1:
+	//	break;
+	//case LetsPlayFlow::ExplainPage2:
+	//	break;
+	//case LetsPlayFlow::Start:
+	//	break;
+	//case LetsPlayFlow::CountDown:
 
-		m_t_cd = m_countdown.sF();
+	//	////m_canDisplayRule = true;
 
-		if (4 < m_t_cd)
-		{
-			m_countdown.reset();
-			m_t_cd = 0.0;
-			//m_currentFigureSwitch = FigureSwitch::MakeFigure;
+	//	//m_t_cd = m_countdown.sF();
 
-			// 制限時間の開始.
-			m_playtime.restart();
+	//	//if (4 < m_t_cd)
+	//	//{
+	//	//	m_countdown.reset();
+	//	//	m_t_cd = 0.0;
+	//	//	//m_currentFigureSwitch = FigureSwitch::MakeFigure;
 
-			MoveNextFlow(LetsPlayFlow::Play);
+	//	//	// 制限時間の開始.
+	//	//	m_playtime.restart();
 
-			break;
-		}
+	//	//	MoveNextFlow(LetsPlayFlow::Play);
 
-		break;
-	case LetsPlayFlow::Play:
+	//	//	break;
+	//	//}
 
-		// 制限時間.
-		m_gt = m_playtime.s();
-		FontAsset(FontText)(U"time(s):{}"_fmt(m_timelimit - m_gt)).draw(20, 60, kuro);
+	//	break;
+	//case LetsPlayFlow::Play:
 
-		// 時間切れになったとき.
-		if (m_timelimit - m_gt <= 0)
-		{
-			m_playtime.reset();
-			m_gt = 0;
+	//	//// 制限時間.
+	//	//m_gt = m_playtime.s();
+	//	//FontAsset(FontText)(U"time(s):{}"_fmt(m_timelimit - m_gt)).draw(20, 60, kuro);
 
-			// ハイスコアを更新したかどうかの記録.
-			//getData().gameManager().scoreManager().updateHighScores(getData().gameManager().stageLevel());
+	//	//// 時間切れになったとき.
+	//	//if (m_timelimit - m_gt <= 0)
+	//	//{
+	//	//	m_playtime.reset();
+	//	//	m_gt = 0;
 
-			changeScene(SceneSwitch::Result, 0.0);
-		}
+	//	//	// ハイスコアを更新したかどうかの記録.
+	//	//	//getData().gameManager().scoreManager().updateHighScores(getData().gameManager().stageLevel());
 
-		getData().gameManager().update();
+	//	//	changeScene(SceneSwitch::Result, 0.0);
+	//	//}
 
-		break;
+	//	//getData().gameManager().update();
 
-	case LetsPlayFlow::Pause:
-		break;
-	default:
-		break;
-	}
+	//	break;
+
+	//case LetsPlayFlow::Pause:
+	//	break;
+	//default:
+	//	break;
+	//}
 }
 
 void LetsPlay::draw() const
 {
-	drawUI();
+	const auto& it = m_drawTable.find(m_currentFlow);
+	if (it != m_drawTable.end()) it->second();
+	//drawUI();
 }
 
 void LetsPlay::drawFadeIn(double t) const
@@ -363,32 +368,32 @@ void LetsPlay::drawUI() const
 	{
 	case LetsPlayFlow::ExplainPage1:	// 仕分けルール説明.
 
-		// ちょっと暗くする.
-		makuSize.draw(makuColor);
+		//// ちょっと暗くする.
+		//makuSize.draw(makuColor);
 
-		// 説明窓.
-		explainWindow.drawFrame(haba, kuro).draw(shiro);
-		FontAsset(FontText)(U"-ルール説明-").draw(30, explainMain, kuro);
-		FontAsset(FontText)(U"「かたち」は\n図形の形").drawAt(26, explainSubShape, kuro);
-		FontAsset(FontText)(U"「いろ」は\n図形の色").drawAt(26, explainSubColor, kuro);
-		FontAsset(FontText)(U"「もじ」は\n図形の文字").drawAt(26, explainSubText, kuro);
+		//// 説明窓.
+		//explainWindow.drawFrame(haba, kuro).draw(shiro);
+		//FontAsset(FontText)(U"-ルール説明-").draw(30, explainMain, kuro);
+		//FontAsset(FontText)(U"「かたち」は\n図形の形").drawAt(26, explainSubShape, kuro);
+		//FontAsset(FontText)(U"「いろ」は\n図形の色").drawAt(26, explainSubColor, kuro);
+		//FontAsset(FontText)(U"「もじ」は\n図形の文字").drawAt(26, explainSubText, kuro);
 
-		// 区切りの線.
-		Line{ explainLineLeftBegin, explainLineLeftEnd }.draw(haba, kuro);
-		Line{ explainLineRightBegin, explainLineRightEnd }.draw(haba, kuro);
+		//// 区切りの線.
+		//Line{ explainLineLeftBegin, explainLineLeftEnd }.draw(haba, kuro);
+		//Line{ explainLineRightBegin, explainLineRightEnd }.draw(haba, kuro);
 
-		// 飾りの図形.
-		explainShapeCircle.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
-		explainShapeTriangle.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
-		explainShapeRect.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
+		//// 飾りの図形.
+		//explainShapeCircle.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
+		//explainShapeTriangle.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
+		//explainShapeRect.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
 
-		explainColorCircle.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[0].colors.colorChanged : ScoreManager::SortingAnswers[0].colors.colorDefault);
-		explainColorTriangle.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
-		explainColorRect.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[2].colors.colorChanged : ScoreManager::SortingAnswers[2].colors.colorDefault);
+		//explainColorCircle.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[0].colors.colorChanged : ScoreManager::SortingAnswers[0].colors.colorDefault);
+		//explainColorTriangle.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
+		//explainColorRect.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[2].colors.colorChanged : ScoreManager::SortingAnswers[2].colors.colorDefault);
 
-		FontAsset(FontText)((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[0].texts.textChanged : ScoreManager::SortingAnswers[0].texts.textDefault).draw(30, explainTextmaru, kuro);
-		FontAsset(FontText)((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].texts.textChanged : ScoreManager::SortingAnswers[1].texts.textDefault).draw(30, explainTextsankaku, kuro);
-		FontAsset(FontText)((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[2].texts.textChanged : ScoreManager::SortingAnswers[2].texts.textDefault).draw(30, explainTextshikaku, kuro);
+		//FontAsset(FontText)((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[0].texts.textChanged : ScoreManager::SortingAnswers[0].texts.textDefault).draw(30, explainTextmaru, kuro);
+		//FontAsset(FontText)((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].texts.textChanged : ScoreManager::SortingAnswers[1].texts.textDefault).draw(30, explainTextsankaku, kuro);
+		//FontAsset(FontText)((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[2].texts.textChanged : ScoreManager::SortingAnswers[2].texts.textDefault).draw(30, explainTextshikaku, kuro);
 
 		break;
 
@@ -477,7 +482,7 @@ void LetsPlay::drawUI() const
 	//	FontAsset(FontText)(U"--PAUSE--").drawAt(40, (pauseWindow.x + pauseWindow.w / 2), (pauseWindow.y + pauseWindow.h / 3), kuro);
 	//}
 
-	drawButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
+	//drawButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
 }
 
 void LetsPlay::initialize()
@@ -574,6 +579,139 @@ void LetsPlay::initialize()
 			
 			MoveNextFlow(LetsPlayFlow::Play);
 		});
+
+	initUpdateTable();
+
+	initDrawTable();
+}
+
+void LetsPlay::initUpdateTable()
+{
+	m_updateTable[LetsPlayFlow::ExplainPage1] = [this]()
+		{
+			updateButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
+		};
+
+	m_updateTable[LetsPlayFlow::ExplainPage2] = [this]()
+		{
+			updateButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
+		};
+
+	m_updateTable[LetsPlayFlow::Start] = [this]()
+		{
+			updateButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
+		};
+
+	m_updateTable[LetsPlayFlow::CountDown] = [this]()
+		{
+			updateButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
+
+			//m_canDisplayRule = true;
+
+			m_t_cd = m_countdown.sF();
+
+			if (4 < m_t_cd)
+			{
+				m_countdown.reset();
+				m_t_cd = 0.0;
+				//m_currentFigureSwitch = FigureSwitch::MakeFigure;
+
+				// 制限時間の開始.
+				m_playtime.restart();
+
+				MoveNextFlow(LetsPlayFlow::Play);
+			}
+		};
+
+	m_updateTable[LetsPlayFlow::Play] = [this]()
+		{
+			updateButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
+
+			// 制限時間.
+			m_gt = m_playtime.s();
+
+			// 時間切れになったとき.
+			if (m_timelimit - m_gt <= 0)
+			{
+				m_playtime.reset();
+				m_gt = 0;
+
+				// ハイスコアを更新したかどうかの記録.
+				//getData().gameManager().scoreManager().updateHighScores(getData().gameManager().stageLevel());
+
+				changeScene(SceneSwitch::Result, 0.0);
+			}
+
+			getData().gameManager().update();
+		};
+
+	m_updateTable[LetsPlayFlow::Pause] = [this]()
+		{
+			updateButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
+		};
+}
+
+void LetsPlay::initDrawTable()
+{
+	m_drawTable[LetsPlayFlow::ExplainPage1] = [this]()
+		{
+			// ちょっと暗くする.
+			makuSize.draw(makuColor);
+
+			// 説明窓.
+			explainWindow.drawFrame(haba, kuro).draw(shiro);
+			FontAsset(U"FontText")(U"-ルール説明-").draw(30, explainMain, kuro);
+			FontAsset(U"FontText")(U"「かたち」は\n図形の形").drawAt(26, explainSubShape, kuro);
+			FontAsset(U"FontText")(U"「いろ」は\n図形の色").drawAt(26, explainSubColor, kuro);
+			FontAsset(U"FontText")(U"「もじ」は\n図形の文字").drawAt(26, explainSubText, kuro);
+
+			// 区切りの線.
+			Line{ explainLineLeftBegin, explainLineLeftEnd }.draw(haba, kuro);
+			Line{ explainLineRightBegin, explainLineRightEnd }.draw(haba, kuro);
+
+			// 飾りの図形.
+			explainShapeCircle.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
+			explainShapeTriangle.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
+			explainShapeRect.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
+
+			explainColorCircle.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[0].colors.colorChanged : ScoreManager::SortingAnswers[0].colors.colorDefault);
+			explainColorTriangle.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
+			explainColorRect.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[2].colors.colorChanged : ScoreManager::SortingAnswers[2].colors.colorDefault);
+
+			FontAsset(U"FontText")((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[0].texts.textChanged : ScoreManager::SortingAnswers[0].texts.textDefault).draw(30, explainTextmaru, kuro);
+			FontAsset(U"FontText")((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].texts.textChanged : ScoreManager::SortingAnswers[1].texts.textDefault).draw(30, explainTextsankaku, kuro);
+			FontAsset(U"FontText")((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[2].texts.textChanged : ScoreManager::SortingAnswers[2].texts.textDefault).draw(30, explainTextshikaku, kuro);
+
+			drawButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
+		};
+
+	m_drawTable[LetsPlayFlow::ExplainPage2] = [this]()
+		{
+			drawButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
+		};
+
+	m_drawTable[LetsPlayFlow::Start] = [this]()
+		{
+			drawButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
+		};
+
+	m_drawTable[LetsPlayFlow::CountDown] = [this]()
+		{
+			drawButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
+		};
+
+	m_drawTable[LetsPlayFlow::Play] = [this]()
+		{
+			// 制限時間.
+			FontAsset(U"FontText")(U"time(s):{}"_fmt(m_timelimit - m_gt)).draw(20, 60, kuro);
+
+			drawButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
+		};
+
+	m_drawTable[LetsPlayFlow::Pause] = [this]()
+		{
+			drawButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
+		};
 }
 
 void LetsPlay::MoveNextFlow(const LetsPlayFlow next)
