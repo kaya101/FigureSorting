@@ -78,32 +78,29 @@ std::unique_ptr<SortedShapeBase> FigureGenerator::generate(const StageLevel leve
 	GenValue colorIdx;
 	GenValue textIdx;
 
-	// 形による分類パターンの決定.
+	// 形 による分類パターンの決定.
 	shapeIdx = m_shapeGen.generate();
 	ColorF color = (isChangedColor) ? yelow : midori;
 	String text = U"";
 
 	// 色 による分類パターンの追加.
-	if (level >= StageLevel::Level02) colorIdx = m_colorGen.generate();
+	if (level >= StageLevel::Level02)
+	{
+		colorIdx = m_colorGen.generate();
+		color = (isChangedColor) ? FigureGenerator::SortingColorsChanged[colorIdx] : FigureGenerator::SortingColorsDefault[colorIdx];
+	}
 
 	// 文字 による分類パターンの追加.
-	if (level >= StageLevel::LevelMAX) textIdx = m_textGen.generate();
+	if (level >= StageLevel::LevelMAX)
+	{
+		textIdx = m_textGen.generate();
+		text = (isChangedColor) ? FigureGenerator::SortingTextsChanged[textIdx] : FigureGenerator::SortingTextsDefault[textIdx];
+	}
 
-	// 生成.
-	auto& function = SortingShapes[shapeIdx];
-	if (isChangedColor)
-	{
-		color = FigureGenerator::SortingColorsChanged[colorIdx];
-		text = FigureGenerator::SortingTextsChanged[textIdx];
-	}
-	else
-	{
-		color = FigureGenerator::SortingColorsDefault[colorIdx];
-		text = FigureGenerator::SortingTextsDefault[textIdx];
-	}
 	ctxPtr = std::make_unique<SortedShapeCtx>(AppearPoint, ShapoeSize, color, text, static_cast<SortingShapeType>(shapeIdx));
 
-	auto shapePtr = function(*ctxPtr);
+	auto& shapeMaker = SortingShapes[shapeIdx];
+	auto shapePtr = shapeMaker(*ctxPtr);
 
 	ctxPtr = nullptr;
 
