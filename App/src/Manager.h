@@ -137,3 +137,20 @@ private:
 	void correct(const StageLevel level);
 	void miss(const StageLevel level);
 };
+
+class UIManager : public IManager
+{
+public:
+	explicit UIManager()
+	{
+		init();
+	}
+
+	~UIManager() = default;
+
+	void init() override;
+	void reset() override;
+	void retry() override;
+
+private:
+};
