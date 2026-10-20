@@ -3,7 +3,17 @@
 #include "Generator.h"
 #include "Enums.h"
 
-class GameManager
+class IManager
+{
+public:
+	virtual ~IManager() = default;
+
+	virtual void init() = 0;
+	virtual void reset() = 0;
+	virtual void retry() = 0;
+};
+
+class GameManager : public IManager
 {
 public:
 	static constexpr RectF SortedArea = { Vec2(50, 130), SizeF(700, 400) };	// 見えない壁の当たり判定.
@@ -65,7 +75,7 @@ private:
 	StageLevel m_stageLevel;		// どのステージか.
 };
 
-class ScoreManager
+class ScoreManager : public IManager
 {
 public:
 	using ScoreValue = int16;
