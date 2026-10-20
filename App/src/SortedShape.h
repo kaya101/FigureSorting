@@ -159,7 +159,7 @@ public:
 	explicit SortedTriangle(const SortedShapeCtx& ctx)
 		: SortedShapeBase(ctx)
 	{
-		m_body = Triangle(ctx.center, ctx.size);
+		m_body = Triangle(ctx.center, ctx.size * 1.2);
 
 		m_textSize = ctx.size * 0.5;
 	}
