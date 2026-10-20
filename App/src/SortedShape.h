@@ -125,7 +125,7 @@ public:
 	{
 		m_body = RectF(ctx.center, ctx.size);
 
-		m_textSize = ctx.size * 0.5;
+		m_textSize = ctx.size * 0.26;
 	}
 
 	~SortedSquare() {}
