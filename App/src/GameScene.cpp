@@ -407,16 +407,13 @@ void LetsPlay::initUpdateTable()
 		{
 			updateButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
 
-			//m_canDisplayRule = true;
-
 			m_t_cd = m_countdown.sF();
 
 			if (4 < m_t_cd)
 			{
 				m_countdown.reset();
 				m_t_cd = 0.0;
-				//m_currentFigureSwitch = FigureSwitch::MakeFigure;
-
+				
 				// 制限時間の開始.
 				m_playtime.restart();
 
@@ -441,7 +438,7 @@ void LetsPlay::initUpdateTable()
 				m_gt = 0;
 
 				// ハイスコアを更新したかどうかの記録.
-				//getData().gameManager().scoreManager().updateHighScores(getData().gameManager().stageLevel());
+				getData().scoreManager().updateHighScores(getData().gameManager().stageLevel());
 
 				changeScene(SceneSwitch::Result, 0.0);
 				return;

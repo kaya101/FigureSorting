@@ -51,7 +51,6 @@ public:
 	const std::array<ScoreValue, static_cast<EnumValue>(StageLevel::Count)>& highScores() const { return m_highScores; }
 
 private:
-	//GameManager& m_gameManager;
 	ScoreValue m_score;
 	uint8 m_classifyNum;	// 仕分けた個数.
 	uint8 m_correctNum;		// 正解した個数.
@@ -91,6 +90,7 @@ public:
 	void reset();
 	void retry();
 	void update();
+	void generateFigure();
 	void draw() const;
 	void setSortRule(const EnumValue nextStageIdx);
 	void turnOnChangedColor() { m_isChangedColor = true; }
@@ -100,11 +100,8 @@ public:
 	void turnOnPause() { m_isPaused = true; }
 	void turnOffPause() { m_isPaused = false; }
 	void clearClassified() { m_isClassified = false; }
-	//void setTF(const TrueOrFalse tf) { m_tof = tf; }
-	void generateFigure();
 
 	const SortedShapeBase* sortedShapePtr() const { return m_sortedShapePtr.get(); }
-	//const ScoreManager& scoreManager() const { return m_scoreManager; }
 	const SortRule currentSortRule() const { return m_currentSortRule; }
 	const bool isChangedColor() const { return m_isChangedColor; }
 	const bool isSkippedExplain() const { return m_isSkippedExplain; }
@@ -114,9 +111,8 @@ public:
 	const StageLevel stageLevel() const { return m_stageLevel; }
 
 private:
-	std::unique_ptr<SortedShapeBase> m_sortedShapePtr;	// 動かす図形の素材の受け皿.
+	std::unique_ptr<SortedShapeBase> m_sortedShapePtr;
 
-	//ScoreManager m_scoreManager;
 	NonRepeatRandomGenerator m_sortRuleGen;
 	FigureGenerator m_figureGen;
 
@@ -129,11 +125,4 @@ private:
 	bool m_isClassified;
 	SortingBoxIdx m_boxIdx;
 	StageLevel m_stageLevel;		// どのステージか.
-	//TrueOrFalse m_tof;	// 正誤判定.
-	//Stopwatch m_truefalse{ StartImmediately::Yes };	// 正誤判定のエフェクト.
-	//FigureSwitch m_currentFigureSwitch;
-
-	//std::unique_ptr<SortedShapeBase> generateFigure();
-	//// 正誤判定のエフェクト.
-	//void effect_TrueOrFalse(double t, const uint8& comboNum, const ColorF& colorf, const Font& font, const uint8& textsize);
 };

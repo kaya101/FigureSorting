@@ -114,8 +114,6 @@ public:
 	const bool isIntersects(const RectF& area) const override { return m_body.intersects(area); }
 
 private:
-	//const double m_TextSize = m_body.r * 0.5;
-
 	Circle m_body;
 };
 
@@ -152,8 +150,6 @@ public:
 	const bool isIntersects(const RectF& area) const override { return m_body.intersects(area); }
 
 private:
-	//const double m_TextSize = m_body.size.minComponent() * 0.5;
-
 	RectF m_body;
 };
 

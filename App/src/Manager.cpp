@@ -111,14 +111,10 @@ void ScoreManager::correct(const StageLevel level)
 	// 加点する.
 	sumScore(Scores[static_cast<EnumValue>(level)][static_cast<EnumValue>(ScoreChange::Increase)]);
 
-	// 正解の回数の記録.
 	++m_correctNum;
 
-	// 連続正解の回数を記録.
 	++m_comboNum;
 
-	// 正解エフェクトを出す.
-	//m_gameManager.setTF(TrueOrFalse::TrueSort);
 	m_isCorrectSorted = true;
 }
 
@@ -127,14 +123,10 @@ void ScoreManager::miss(const StageLevel level)
 	// 減点する.
 	sumScore(Scores[static_cast<EnumValue>(level)][static_cast<EnumValue>(ScoreChange::Decrease)]);
 
-	// ミスした回数の記録.
 	++m_missNum;
 
-	// 連続正解の回数を 0 に戻す.
 	m_comboNum = 0;
 
-	// 間違えたエフェクトを出すへ.
-	//m_gameManager.setTF(TrueOrFalse::FalseSort);
 	m_isCorrectSorted = false;
 }
 
@@ -161,8 +153,6 @@ void GameManager::init()
 	m_isClassified = false;
 	m_boxIdx = SortingBoxIdx::Count;
 	m_stageLevel = StageLevel::Count;
-	//m_tof = TrueOrFalse::WaitSort;
-	//m_currentFigureSwitch = FigureSwitch::MakeFigure;
 }
 
 void GameManager::reset()
@@ -174,8 +164,6 @@ void GameManager::reset()
 	m_boxIdx = SortingBoxIdx::Count;
 	m_currentSortRule = SortRule::Count;
 	m_stageLevel = StageLevel::Count;
-	//m_tof = TrueOrFalse::WaitSort;
-	//m_currentFigureSwitch = FigureSwitch::MakeFigure;
 }
 
 void GameManager::retry()
@@ -186,8 +174,6 @@ void GameManager::retry()
 	m_isPaused = false;
 	m_isClassified = false;
 	m_boxIdx = SortingBoxIdx::Count;
-	//m_tof = TrueOrFalse::WaitSort;
-	//m_currentFigureSwitch = FigureSwitch::MakeFigure;
 }
 
 void GameManager::update()
@@ -201,32 +187,13 @@ void GameManager::update()
 
 		if (MouseL.down())
 		{
-			// カーソルと図形の中心座標の差をとる.
-			/*m_distance_x = figure.center.x - Cursor::Pos().x;
-			m_distance_y = figure.center.y - Cursor::Pos().y;*/
+			// カーソルで掴んだ場所を記録する.
 			m_distance = m_sortedShapePtr->center() - Cursor::Pos();
 		}
 
 		if (MouseL.pressed())
 		{
 			Vec2 pos = Cursor::Pos() + m_distance;
-			m_sortedShapePtr->move(pos.clamped(SortedArea));
-
-			//m_currentFigureSwitch = FigureSwitch::Catch;
-		}
-
-		if (MouseL.up())
-		{
-			// 図形の中心座標を離した座標に更新.
-			/*figure.center.x = check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure);
-			figure.center.y = check_wally(wally, Cursor::Pos().y + m_distance_y, figure);
-			circle.center = figure.center;
-			triangle = { figure.center, culc_Length(triangle) };
-			rect.x = culc_lx(figure);
-			rect.y = culc_ly(figure);*/
-			// 図形の中心座標を離した座標に更新.
-			Vec2 pos = Cursor::Pos() + m_distance - (m_sortedShapePtr->size() / 2);
-			//m_sortedShapePtr->move(checkWall(SortedArea, Cursor::Pos() + m_distance, *m_sortedShapePtr));
 			m_sortedShapePtr->move(pos.clamped(SortedArea));
 		}
 	}
@@ -243,117 +210,8 @@ void GameManager::update()
 		{
 			m_isClassified = true;
 			m_boxIdx = static_cast<SortingBoxIdx>(i);
-			//m_scoreManager.classify(i);
-
-			// 新たに図形を作る.
-			//m_currentFigureSwitch = FigureSwitch::MakeFigure;
-
-			// 正誤判定の動きの再始動.
-			//m_truefalse.restart();
 		}
 	}
-
-	// 動かす図形.
-	//switch (m_currentFigureSwitch)
-	//{
-	//case FigureSwitch::Break: // 待機画面.
-	//	break;
-
-	//case FigureSwitch::MakeFigure: // 図形生成.
-	//{
-	//	m_sortedShapePtr = generateFigure();
-
-	//	m_currentFigureSwitch = FigureSwitch::Release;
-
-	//	break;
-	//}
-
-	//case FigureSwitch::Release: // 図形をつかんでないとき.
-
-	//	if (m_sortedShapePtr->isMouseOver() && not m_isPaused)
-	//	{
-	//		// 手にする.
-	//		Cursor::RequestStyle(CursorStyle::Hand);
-
-	//		if (MouseL.pressed())
-	//		{
-	//			// カーソルと図形の中心座標の差をとる.
-	//			/*m_distance_x = figure.center.x - Cursor::Pos().x;
-	//			m_distance_y = figure.center.y - Cursor::Pos().y;*/
-	//			m_distance = m_sortedShapePtr->center() - Cursor::Pos();
-
-	//			m_currentFigureSwitch = FigureSwitch::Catch;
-	//		}
-	//	}
-
-	//	break;
-
-	//case FigureSwitch::Catch: // 図形をつかんで運ぶとき.
-
-	//	Cursor::RequestStyle(CursorStyle::Hand);
-
-	//	// 図形を離したとき.
-	//	if (MouseL.up())
-	//	{
-	//		//// 図形の中心座標を離した座標に更新.
-	//		//figure.center.x = check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure);
-	//		//figure.center.y = check_wally(wally, Cursor::Pos().y + m_distance_y, figure);
-	//		//circle.center = figure.center;
-	//		//triangle = { figure.center, culc_Length(triangle) };
-	//		//rect.x = culc_lx(figure);
-	//		//rect.y = culc_ly(figure);
-	//		// 図形の中心座標を離した座標に更新.
-	//		Vec2 pos = Cursor::Pos() + m_distance - (m_sortedShapePtr->size() / 2);
-	//		//m_sortedShapePtr->move(checkWall(SortedArea, Cursor::Pos() + m_distance, *m_sortedShapePtr));
-	//		m_sortedShapePtr->move(pos.clamped(SortedArea));
-
-	//		m_currentFigureSwitch = FigureSwitch::Release;
-
-	//		break;
-	//	}
-	//	break;
-	//default:
-	//	break;
-	//}
-
-	//// 正誤判定.
-	//// 時間という概念？の取得.
-	//int32 t_tf = (m_truefalse.ms() / 30);
-	//switch (m_tof)
-	//{
-	//case TrueOrFalse::WaitSort: // 仕分け待ち.
-	//	break;
-
-	//case TrueOrFalse::TrueSort: // 正解した時.
-
-	//	// 正解したエフェクト.
-	//	effect_TrueOrFalse(t_tf, m_scoreManager.comboNum(), kuro, FontAsset(FontText), 30);
-
-	//	// 時間経過で消す.
-	//	if (t_tf > 20)
-	//	{
-	//		m_truefalse.reset();
-	//		m_tof = TrueOrFalse::WaitSort;
-	//	}
-
-	//	break;
-
-	//case TrueOrFalse::FalseSort: // 間違えたとき.
-
-	//	// 間違えた時のエフェクト.
-	//	effect_TrueOrFalse(t_tf, m_scoreManager.comboNum(), kuro, FontAsset(FontText), 30);
-
-	//	if (t_tf > 20)
-	//	{
-	//		m_truefalse.reset();
-	//		m_tof = TrueOrFalse::WaitSort;
-	//	}
-
-	//	break;
-
-	//default:
-	//	break;
-	//}
 }
 
 void GameManager::generateFigure()
@@ -422,10 +280,5 @@ void GameManager::setSortRule(const EnumValue nextStageIdx)
 	GenValue idx = m_sortRuleGen.generate();
 	m_currentSortRule = static_cast<SortRule>(idx);
 }
-
-//std::unique_ptr<SortedShapeBase> GameManager::generateFigure()
-//{
-//	return m_figureGen.generate(m_stageLevel, m_currentSortRule, m_isChangedColor);
-//}
 
 /*	End GameManager			********************************************************************************************************/

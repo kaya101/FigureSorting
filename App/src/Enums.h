@@ -38,23 +38,6 @@ enum class SortingShapeType : EnumValue
 	Count = 3
 };
 
-//// 正誤判定.
-//enum class TrueOrFalse : EnumValue
-//{
-//	WaitSort,	// 仕分け待ち.
-//	TrueSort,	// 正解したとき.
-//	FalseSort,	// 間違えたとき.
-//};
-//
-//// 図形操作の画面管理.
-//enum class FigureSwitch : EnumValue
-//{
-//	MakeFigure,	// 図形生成.
-//	Catch,		// 図形を運ぶとき.
-//	Release,	// つかんだ図形を離したとき.
-//	Break,		// 待機.
-//};
-
 enum class SortingBoxIdx : EnumValue
 {
 	Left = 0,
