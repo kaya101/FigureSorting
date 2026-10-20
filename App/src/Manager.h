@@ -34,9 +34,10 @@ public:
 
 	~GameManager() = default;
 
-	void init();
-	void reset();
-	void retry();
+	void init() override;
+	void reset() override;
+	void retry() override;
+
 	void update();
 	void generateFigure();
 	void draw() const;
@@ -105,9 +106,10 @@ public:
 
 	~ScoreManager() = default;
 
-	void init();
-	void reset();
-	void retry();
+	void init() override;
+	void reset() override;
+	void retry() override;
+
 	void classify(const GameManager& gm);
 	void updateHighScores(const StageLevel level);
 	void draw() const;
