@@ -87,7 +87,7 @@ public:
 	explicit SortedCricle(const SortedShapeCtx& ctx)
 		: SortedShapeBase(ctx)
 	{
-		m_body = Circle(ctx.center, ctx.size);
+		m_body = Circle(ctx.center, ctx.size * 0.5);
 
 		m_textSize = m_body.r * 0.5;
 	}
