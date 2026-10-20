@@ -3,68 +3,6 @@
 #include "Generator.h"
 #include "Enums.h"
 
-class GameManager;
-class ScoreManager
-{
-public:
-	using ScoreValue = int16;
-
-	using ScoreArray = std::array<ScoreValue, static_cast<EnumValue>(ScoreChange::Count)>;
-	using StageScoreArray = std::array<ScoreArray, static_cast<EnumValue>(StageLevel::Count)>;
-	static constexpr StageScoreArray Scores = {
-		ScoreArray{ 100, -50  },	// Lv.01.
-		ScoreArray{ 250, -300 },	// Lv.02.
-		ScoreArray{ 500, -1000}		// Lv.MAX.
-	};
-	struct AnswerData
-	{
-		struct Colors { ColorF colorDefault; ColorF colorChanged; };
-		struct Texts { String textDefault; String textChanged; };
-
-		SortingShapeType type;
-		Colors colors;
-		Texts texts;
-	};
-	static const std::array<AnswerData, static_cast<EnumValue>(SortingBoxIdx::Count)> SortingAnswers;
-
-	explicit ScoreManager()
-	{
-		init();
-	}
-
-	~ScoreManager() = default;
-
-	void init();
-	void reset();
-	void retry();
-	void classify(const SortingBoxIdx boxIdx, const SortRule rule, const SortedShapeBase* shapePtr, const StageLevel level);
-	void updateHighScores(const StageLevel level);
-	void draw() const;
-
-	const ScoreValue score() const { return m_score; }
-	const uint8 classifyNum() const { return m_classifyNum; }
-	const uint8 correctNum() const { return m_correctNum; }
-	const uint8 missNum() const { return m_missNum; }
-	const uint8 comboNum() const { return m_comboNum; }
-	const bool newRecord() const { return m_newRecord; }
-	const bool isCorrectSorted() const { return m_isCorrectSorted; }
-	const std::array<ScoreValue, static_cast<EnumValue>(StageLevel::Count)>& highScores() const { return m_highScores; }
-
-private:
-	ScoreValue m_score;
-	uint8 m_classifyNum;	// 仕分けた個数.
-	uint8 m_correctNum;		// 正解した個数.
-	uint8 m_missNum;		// 間違えた個数.
-	uint8 m_comboNum;		// 連続正解数をカウント.
-	bool m_newRecord;		// 記録を更新したかどうか.
-	bool m_isCorrectSorted;
-	std::array<ScoreValue, static_cast<EnumValue>(StageLevel::Count)> m_highScores;
-
-	void sumScore(const ScoreValue amount) { m_score = Max(0, m_score + amount); }
-	void correct(const StageLevel level);
-	void miss(const StageLevel level);
-};
-
 class GameManager
 {
 public:
@@ -125,4 +63,65 @@ private:
 	bool m_isClassified;
 	SortingBoxIdx m_boxIdx;
 	StageLevel m_stageLevel;		// どのステージか.
+};
+
+class ScoreManager
+{
+public:
+	using ScoreValue = int16;
+
+	using ScoreArray = std::array<ScoreValue, static_cast<EnumValue>(ScoreChange::Count)>;
+	using StageScoreArray = std::array<ScoreArray, static_cast<EnumValue>(StageLevel::Count)>;
+	static constexpr StageScoreArray Scores = {
+		ScoreArray{ 100, -50  },	// Lv.01.
+		ScoreArray{ 250, -300 },	// Lv.02.
+		ScoreArray{ 500, -1000}		// Lv.MAX.
+	};
+	struct AnswerData
+	{
+		struct Colors { ColorF colorDefault; ColorF colorChanged; };
+		struct Texts { String textDefault; String textChanged; };
+
+		SortingShapeType type;
+		Colors colors;
+		Texts texts;
+	};
+	static const std::array<AnswerData, static_cast<EnumValue>(SortingBoxIdx::Count)> SortingAnswers;
+
+	explicit ScoreManager()
+	{
+		init();
+	}
+
+	~ScoreManager() = default;
+
+	void init();
+	void reset();
+	void retry();
+	void classify(const GameManager& gm);
+	void updateHighScores(const StageLevel level);
+	void draw() const;
+
+	const ScoreValue score() const { return m_score; }
+	const uint8 classifyNum() const { return m_classifyNum; }
+	const uint8 correctNum() const { return m_correctNum; }
+	const uint8 missNum() const { return m_missNum; }
+	const uint8 comboNum() const { return m_comboNum; }
+	const bool newRecord() const { return m_newRecord; }
+	const bool isCorrectSorted() const { return m_isCorrectSorted; }
+	const std::array<ScoreValue, static_cast<EnumValue>(StageLevel::Count)>& highScores() const { return m_highScores; }
+
+private:
+	ScoreValue m_score;
+	uint8 m_classifyNum;	// 仕分けた個数.
+	uint8 m_correctNum;		// 正解した個数.
+	uint8 m_missNum;		// 間違えた個数.
+	uint8 m_comboNum;		// 連続正解数をカウント.
+	bool m_newRecord;		// 記録を更新したかどうか.
+	bool m_isCorrectSorted;
+	std::array<ScoreValue, static_cast<EnumValue>(StageLevel::Count)> m_highScores;
+
+	void sumScore(const ScoreValue amount) { m_score = Max(0, m_score + amount); }
+	void correct(const StageLevel level);
+	void miss(const StageLevel level);
 };

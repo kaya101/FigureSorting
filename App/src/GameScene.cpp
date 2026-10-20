@@ -450,7 +450,7 @@ void LetsPlay::initUpdateTable()
 			// 分類の判定.
 			if (getData().gameManager().isClassified())
 			{
-				getData().scoreManager().classify(getData().gameManager().boxIdx(), getData().gameManager().currentSortRule(), getData().gameManager().sortedShapePtr(), getData().gameManager().stageLevel());
+				getData().scoreManager().classify(getData().gameManager());
 				m_truefalse.restart();
 
 				// 図形の再生成.

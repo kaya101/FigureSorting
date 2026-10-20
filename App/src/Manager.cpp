@@ -2,136 +2,6 @@
 #include "Manager.h"
 #include "Common.h"
 
-/*	Start ScoreManager		********************************************************************************************************/
-
-const std::array<ScoreManager::AnswerData, static_cast<EnumValue>(SortingBoxIdx::Count)> ScoreManager::SortingAnswers = {
-	// 左 に仕分けると正解になるデータ群.
-	ScoreManager::AnswerData(SortingShapeType::Cricle, ScoreManager::AnswerData::Colors{ aka, red }, ScoreManager::AnswerData::Texts{ U"あか", U"まる" }),
-	// 真ん中 に仕分けると正解になるデータ群.
-	ScoreManager::AnswerData(SortingShapeType::Triangle, ScoreManager::AnswerData::Colors{ midori, yelow }, ScoreManager::AnswerData::Texts{ U"みどり", U"さんかく" }),
-	// 右 に仕分けると正解になるデータ群.
-	ScoreManager::AnswerData(SortingShapeType::Square, ScoreManager::AnswerData::Colors{ ao, blue }, ScoreManager::AnswerData::Texts{ U"あお", U"しかく" })
-};
-
-void ScoreManager::init()
-{
-	m_score = 0;
-	m_classifyNum = 0;
-	m_correctNum = 0;
-	m_missNum = 0;
-	m_comboNum = 0;
-	m_newRecord = false;
-	m_isCorrectSorted = false;
-	m_highScores = std::array<ScoreValue, static_cast<EnumValue>(StageLevel::Count)>{ 0, 0, 0 };
-}
-
-void ScoreManager::reset()
-{
-	m_score = 0;
-	m_classifyNum = 0;
-	m_correctNum = 0;
-	m_missNum = 0;
-	m_comboNum = 0;
-	m_newRecord = false;
-	m_isCorrectSorted = false;
-	m_highScores = std::array<ScoreValue, static_cast<EnumValue>(StageLevel::Count)>{ 0, 0, 0 };
-}
-
-void ScoreManager::retry()
-{
-	m_score = 0;
-	m_classifyNum = 0;
-	m_correctNum = 0;
-	m_missNum = 0;
-	m_comboNum = 0;
-	m_newRecord = false;
-	m_isCorrectSorted = false;
-}
-
-void ScoreManager::classify(const SortingBoxIdx boxIdx, const SortRule rule, const SortedShapeBase* shapePtr, const StageLevel level)
-{
-	++m_classifyNum;	// 仕分けた回数の更新.
-
-	const auto idx = static_cast<EnumValue>(boxIdx);
-
-	if (rule == SortRule::ShapeRule)
-	{
-		if (shapePtr->type() == SortingAnswers[idx].type)
-		{
-			correct(level);
-		}
-		else
-		{
-			miss(level);
-		}
-	}
-	else if (rule == SortRule::ColorRule)
-	{
-		if (shapePtr->color() == SortingAnswers[idx].colors.colorDefault || shapePtr->color() == SortingAnswers[idx].colors.colorChanged)
-		{
-			correct(level);
-		}
-		else
-		{
-			miss(level);
-		}
-	}
-	else if (rule == SortRule::TextRule)
-	{
-		if (shapePtr->text() == SortingAnswers[idx].texts.textDefault || shapePtr->text() == SortingAnswers[idx].texts.textChanged)
-		{
-			correct(level);
-		}
-		else
-		{
-			miss(level);
-		}
-	}
-	else
-	{
-		Print << U"classify: 未定義の仕分けルールで分類を試みました.";
-	}
-}
-
-void ScoreManager::updateHighScores(const StageLevel level)
-{
-	const EnumValue idx = static_cast<EnumValue>(level);
-	if (m_score > m_highScores[idx])
-	{
-		m_highScores[idx] = m_score;
-
-		m_newRecord = true;
-	}
-}
-
-void ScoreManager::draw() const {}
-
-void ScoreManager::correct(const StageLevel level)
-{
-	// 加点する.
-	sumScore(Scores[static_cast<EnumValue>(level)][static_cast<EnumValue>(ScoreChange::Increase)]);
-
-	++m_correctNum;
-
-	++m_comboNum;
-
-	m_isCorrectSorted = true;
-}
-
-void ScoreManager::miss(const StageLevel level)
-{
-	// 減点する.
-	sumScore(Scores[static_cast<EnumValue>(level)][static_cast<EnumValue>(ScoreChange::Decrease)]);
-
-	++m_missNum;
-
-	m_comboNum = 0;
-
-	m_isCorrectSorted = false;
-}
-
-/*	End ScoreManager		********************************************************************************************************/
-
 /*	Start GameManager		********************************************************************************************************/
 
 const std::array<String, static_cast<EnumValue>(SortingBoxIdx::Count)> GameManager::SortingBoxesMarks = { U"●", U"▲", U"■" };
@@ -282,3 +152,136 @@ void GameManager::setSortRule(const EnumValue nextStageIdx)
 }
 
 /*	End GameManager			********************************************************************************************************/
+
+/*	Start ScoreManager		********************************************************************************************************/
+
+const std::array<ScoreManager::AnswerData, static_cast<EnumValue>(SortingBoxIdx::Count)> ScoreManager::SortingAnswers = {
+	// 左 に仕分けると正解になるデータ群.
+	ScoreManager::AnswerData(SortingShapeType::Cricle, ScoreManager::AnswerData::Colors{ aka, red }, ScoreManager::AnswerData::Texts{ U"あか", U"まる" }),
+	// 真ん中 に仕分けると正解になるデータ群.
+	ScoreManager::AnswerData(SortingShapeType::Triangle, ScoreManager::AnswerData::Colors{ midori, yelow }, ScoreManager::AnswerData::Texts{ U"みどり", U"さんかく" }),
+	// 右 に仕分けると正解になるデータ群.
+	ScoreManager::AnswerData(SortingShapeType::Square, ScoreManager::AnswerData::Colors{ ao, blue }, ScoreManager::AnswerData::Texts{ U"あお", U"しかく" })
+};
+
+void ScoreManager::init()
+{
+	m_score = 0;
+	m_classifyNum = 0;
+	m_correctNum = 0;
+	m_missNum = 0;
+	m_comboNum = 0;
+	m_newRecord = false;
+	m_isCorrectSorted = false;
+	m_highScores = std::array<ScoreValue, static_cast<EnumValue>(StageLevel::Count)>{ 0, 0, 0 };
+}
+
+void ScoreManager::reset()
+{
+	m_score = 0;
+	m_classifyNum = 0;
+	m_correctNum = 0;
+	m_missNum = 0;
+	m_comboNum = 0;
+	m_newRecord = false;
+	m_isCorrectSorted = false;
+	m_highScores = std::array<ScoreValue, static_cast<EnumValue>(StageLevel::Count)>{ 0, 0, 0 };
+}
+
+void ScoreManager::retry()
+{
+	m_score = 0;
+	m_classifyNum = 0;
+	m_correctNum = 0;
+	m_missNum = 0;
+	m_comboNum = 0;
+	m_newRecord = false;
+	m_isCorrectSorted = false;
+}
+
+void ScoreManager::classify(const GameManager& gm)
+{
+	++m_classifyNum;	// 仕分けた回数の更新.
+
+	const auto rule = gm.currentSortRule();
+	const auto shapePtr = gm.sortedShapePtr();
+	const auto idx = static_cast<EnumValue>(gm.boxIdx());
+	const auto level = gm.stageLevel();
+
+	if (rule == SortRule::ShapeRule)
+	{
+		if (shapePtr->type() == SortingAnswers[idx].type)
+		{
+			correct(level);
+		}
+		else
+		{
+			miss(level);
+		}
+	}
+	else if (rule == SortRule::ColorRule)
+	{
+		if (shapePtr->color() == SortingAnswers[idx].colors.colorDefault || shapePtr->color() == SortingAnswers[idx].colors.colorChanged)
+		{
+			correct(level);
+		}
+		else
+		{
+			miss(level);
+		}
+	}
+	else if (rule == SortRule::TextRule)
+	{
+		if (shapePtr->text() == SortingAnswers[idx].texts.textDefault || shapePtr->text() == SortingAnswers[idx].texts.textChanged)
+		{
+			correct(level);
+		}
+		else
+		{
+			miss(level);
+		}
+	}
+	else
+	{
+		Print << U"classify: 未定義の仕分けルールで分類を試みました.";
+	}
+}
+
+void ScoreManager::updateHighScores(const StageLevel level)
+{
+	const EnumValue idx = static_cast<EnumValue>(level);
+	if (m_score > m_highScores[idx])
+	{
+		m_highScores[idx] = m_score;
+
+		m_newRecord = true;
+	}
+}
+
+void ScoreManager::draw() const {}
+
+void ScoreManager::correct(const StageLevel level)
+{
+	// 加点する.
+	sumScore(Scores[static_cast<EnumValue>(level)][static_cast<EnumValue>(ScoreChange::Increase)]);
+
+	++m_correctNum;
+
+	++m_comboNum;
+
+	m_isCorrectSorted = true;
+}
+
+void ScoreManager::miss(const StageLevel level)
+{
+	// 減点する.
+	sumScore(Scores[static_cast<EnumValue>(level)][static_cast<EnumValue>(ScoreChange::Decrease)]);
+
+	++m_missNum;
+
+	m_comboNum = 0;
+
+	m_isCorrectSorted = false;
+}
+
+/*	End ScoreManager		********************************************************************************************************/
