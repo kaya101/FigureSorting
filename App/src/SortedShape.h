@@ -161,7 +161,7 @@ public:
 	{
 		m_body = Triangle(ctx.center, ctx.size * 1.2);
 
-		m_textSize = ctx.size * 0.5;
+		m_textSize = ctx.size * 0.2;
 	}
 
 	~SortedTriangle() {}
