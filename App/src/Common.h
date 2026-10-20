@@ -58,9 +58,11 @@ public:
 	void reset();
 	void retry();
 
+	ScoreManager& scoreManager() { return m_scoreManager; }
 	GameManager& gameManager() { return m_gameManager; }
 
 private:
+	ScoreManager m_scoreManager;
 	GameManager m_gameManager;
 };
 

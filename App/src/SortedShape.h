@@ -107,7 +107,7 @@ public:
 
 	const Vec2& center() const override { return m_body.center; }
 
-	void move(const Vec2& to) override { m_body.center = to; }
+	void move(const Vec2& to) override { m_body = m_body.movedBy(to - m_body.center); }
 
 	const Vec2 size() const override { return Vec2(m_body.r, m_body.r); }
 
@@ -145,7 +145,7 @@ public:
 
 	const Vec2& center() const override { return m_body.center(); }
 
-	void move(const Vec2& to) override { m_body.center() = to; }
+	void move(const Vec2& to) override { m_body = m_body.movedBy(to - m_body.center()); }
 
 	const Vec2 size() const override { return m_body.size; }
 
@@ -183,7 +183,7 @@ public:
 
 	const Vec2& center() const override { return m_body.centroid(); }
 
-	void move(const Vec2& to) override { m_body.centroid() = to; }
+	void move(const Vec2& to) override { m_body = m_body.movedBy(to - m_body.centroid()); }
 
 	const Vec2 size() const override { return Vec2(m_body.side(0).length(), m_body.side(0).length()); }
 

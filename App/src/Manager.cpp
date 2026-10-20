@@ -21,55 +21,75 @@ void ScoreManager::init()
 	m_missNum = 0;
 	m_comboNum = 0;
 	m_newRecord = false;
+	m_isCorrectSorted = false;
 	m_highScores = std::array<ScoreValue, static_cast<EnumValue>(StageLevel::Count)>{ 0, 0, 0 };
 }
 
-void ScoreManager::classify(const EnumValue boxIdx)
+void ScoreManager::reset()
+{
+	m_score = 0;
+	m_classifyNum = 0;
+	m_correctNum = 0;
+	m_missNum = 0;
+	m_comboNum = 0;
+	m_newRecord = false;
+	m_isCorrectSorted = false;
+	m_highScores = std::array<ScoreValue, static_cast<EnumValue>(StageLevel::Count)>{ 0, 0, 0 };
+}
+
+void ScoreManager::retry()
+{
+	m_score = 0;
+	m_classifyNum = 0;
+	m_correctNum = 0;
+	m_missNum = 0;
+	m_comboNum = 0;
+	m_newRecord = false;
+	m_isCorrectSorted = false;
+}
+
+void ScoreManager::classify(const SortingBoxIdx boxIdx, const SortRule rule, const SortedShapeBase* shapePtr, const StageLevel level)
 {
 	++m_classifyNum;	// 仕分けた回数の更新.
 
-	switch (m_gameManager.currentSortRule())
+	const auto idx = static_cast<EnumValue>(boxIdx);
+
+	if (rule == SortRule::ShapeRule)
 	{
-	case SortRule::ShapeRule:
-
-		if (m_gameManager.sortedShapePtr()->type() == SortingAnswers[boxIdx].type)
+		if (shapePtr->type() == SortingAnswers[idx].type)
 		{
-			correct(static_cast<EnumValue>(m_gameManager.stageLevel()));
+			correct(level);
 		}
 		else
 		{
-			miss(static_cast<EnumValue>(m_gameManager.stageLevel()));
+			miss(level);
 		}
-
-		break;
-
-	case SortRule::ColorRule:
-
-		if (m_gameManager.sortedShapePtr()->color() == SortingAnswers[boxIdx].colors.colorDefault
-			|| (m_gameManager.isChangedColor() && m_gameManager.sortedShapePtr()->color() == SortingAnswers[boxIdx].colors.colorChanged))
+	}
+	else if (rule == SortRule::ColorRule)
+	{
+		if (shapePtr->color() == SortingAnswers[idx].colors.colorDefault || shapePtr->color() == SortingAnswers[idx].colors.colorChanged)
 		{
-			correct(static_cast<EnumValue>(m_gameManager.stageLevel()));
+			correct(level);
 		}
 		else
 		{
-			miss(static_cast<EnumValue>(m_gameManager.stageLevel()));
+			miss(level);
 		}
-		break;
-
-	case SortRule::TextRule:
-
-		if (m_gameManager.sortedShapePtr()->text() == SortingAnswers[boxIdx].texts.textDefault
-			|| (m_gameManager.isChangedColor() && m_gameManager.sortedShapePtr()->text() == SortingAnswers[boxIdx].texts.textChanged))
+	}
+	else if (rule == SortRule::TextRule)
+	{
+		if (shapePtr->text() == SortingAnswers[idx].texts.textDefault || shapePtr->text() == SortingAnswers[idx].texts.textChanged)
 		{
-			correct(static_cast<EnumValue>(m_gameManager.stageLevel()));
+			correct(level);
 		}
 		else
 		{
-			miss(static_cast<EnumValue>(m_gameManager.stageLevel()));
+			miss(level);
 		}
-		break;
-	default:
-		break;
+	}
+	else
+	{
+		Print << U"classify: 未定義の仕分けルールで分類を試みました.";
 	}
 }
 
@@ -86,10 +106,10 @@ void ScoreManager::updateHighScores(const StageLevel level)
 
 void ScoreManager::draw() const {}
 
-void ScoreManager::correct(const size_t stageIdx)
+void ScoreManager::correct(const StageLevel level)
 {
 	// 加点する.
-	sumScore(Scores[stageIdx][static_cast<EnumValue>(ScoreChange::Increase)]);
+	sumScore(Scores[static_cast<EnumValue>(level)][static_cast<EnumValue>(ScoreChange::Increase)]);
 
 	// 正解の回数の記録.
 	++m_correctNum;
@@ -98,13 +118,14 @@ void ScoreManager::correct(const size_t stageIdx)
 	++m_comboNum;
 
 	// 正解エフェクトを出す.
-	m_gameManager.setTF(TrueOrFalse::TrueSort);
+	//m_gameManager.setTF(TrueOrFalse::TrueSort);
+	m_isCorrectSorted = true;
 }
 
-void ScoreManager::miss(const size_t stageIdx)
+void ScoreManager::miss(const StageLevel level)
 {
 	// 減点する.
-	sumScore(Scores[stageIdx][static_cast<EnumValue>(ScoreChange::Decrease)]);
+	sumScore(Scores[static_cast<EnumValue>(level)][static_cast<EnumValue>(ScoreChange::Decrease)]);
 
 	// ミスした回数の記録.
 	++m_missNum;
@@ -113,7 +134,8 @@ void ScoreManager::miss(const size_t stageIdx)
 	m_comboNum = 0;
 
 	// 間違えたエフェクトを出すへ.
-	m_gameManager.setTF(TrueOrFalse::FalseSort);
+	//m_gameManager.setTF(TrueOrFalse::FalseSort);
+	m_isCorrectSorted = false;
 }
 
 /*	End ScoreManager		********************************************************************************************************/
@@ -136,9 +158,11 @@ void GameManager::init()
 	m_isSkippedExplain = false;
 	m_canDisplayRule = false;
 	m_isPaused = false;
+	m_isClassified = false;
+	m_boxIdx = SortingBoxIdx::Count;
 	m_stageLevel = StageLevel::Count;
-	m_tof = TrueOrFalse::WaitSort;
-	m_currentFigureSwitch = FigureSwitch::MakeFigure;
+	//m_tof = TrueOrFalse::WaitSort;
+	//m_currentFigureSwitch = FigureSwitch::MakeFigure;
 }
 
 void GameManager::reset()
@@ -146,10 +170,12 @@ void GameManager::reset()
 	m_sortedShapePtr = nullptr;
 
 	m_distance = Vec2().Zero();
+	m_isClassified = false;
+	m_boxIdx = SortingBoxIdx::Count;
 	m_currentSortRule = SortRule::Count;
 	m_stageLevel = StageLevel::Count;
-	m_tof = TrueOrFalse::WaitSort;
-	m_currentFigureSwitch = FigureSwitch::MakeFigure;
+	//m_tof = TrueOrFalse::WaitSort;
+	//m_currentFigureSwitch = FigureSwitch::MakeFigure;
 }
 
 void GameManager::retry()
@@ -158,12 +184,53 @@ void GameManager::retry()
 
 	m_distance = Vec2().Zero();
 	m_isPaused = false;
-	m_tof = TrueOrFalse::WaitSort;
-	m_currentFigureSwitch = FigureSwitch::MakeFigure;
+	m_isClassified = false;
+	m_boxIdx = SortingBoxIdx::Count;
+	//m_tof = TrueOrFalse::WaitSort;
+	//m_currentFigureSwitch = FigureSwitch::MakeFigure;
 }
 
 void GameManager::update()
 {
+	if (m_sortedShapePtr == nullptr) return;
+
+	if (m_sortedShapePtr->isMouseOver() && not m_isPaused)
+	{
+		// カーソルを手の形にする.
+		Cursor::RequestStyle(CursorStyle::Hand);
+
+		if (MouseL.down())
+		{
+			// カーソルと図形の中心座標の差をとる.
+			/*m_distance_x = figure.center.x - Cursor::Pos().x;
+			m_distance_y = figure.center.y - Cursor::Pos().y;*/
+			m_distance = m_sortedShapePtr->center() - Cursor::Pos();
+		}
+
+		if (MouseL.pressed())
+		{
+			Vec2 pos = Cursor::Pos() + m_distance;
+			m_sortedShapePtr->move(pos.clamped(SortedArea));
+
+			//m_currentFigureSwitch = FigureSwitch::Catch;
+		}
+
+		if (MouseL.up())
+		{
+			// 図形の中心座標を離した座標に更新.
+			/*figure.center.x = check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure);
+			figure.center.y = check_wally(wally, Cursor::Pos().y + m_distance_y, figure);
+			circle.center = figure.center;
+			triangle = { figure.center, culc_Length(triangle) };
+			rect.x = culc_lx(figure);
+			rect.y = culc_ly(figure);*/
+			// 図形の中心座標を離した座標に更新.
+			Vec2 pos = Cursor::Pos() + m_distance - (m_sortedShapePtr->size() / 2);
+			//m_sortedShapePtr->move(checkWall(SortedArea, Cursor::Pos() + m_distance, *m_sortedShapePtr));
+			m_sortedShapePtr->move(pos.clamped(SortedArea));
+		}
+	}
+
 	// 分類箱の下側の図形との当たり判定で分類する.
 	const EnumValue layerIdx = static_cast<EnumValue>(SortingBoxLayerIdx::Lowerside);
 
@@ -172,119 +239,126 @@ void GameManager::update()
 	{
 		if (m_sortedShapePtr == nullptr) break;
 
-		if (m_sortedShapePtr->isIntersects(SortingBoxes[layerIdx][i]))
+		if (m_sortedShapePtr->isIntersects(SortingBoxes[layerIdx][i]) && MouseL.up())
 		{
-			m_scoreManager.classify(i);
+			m_isClassified = true;
+			m_boxIdx = static_cast<SortingBoxIdx>(i);
+			//m_scoreManager.classify(i);
 
 			// 新たに図形を作る.
-			m_currentFigureSwitch = FigureSwitch::MakeFigure;
+			//m_currentFigureSwitch = FigureSwitch::MakeFigure;
 
 			// 正誤判定の動きの再始動.
-			m_truefalse.restart();
+			//m_truefalse.restart();
 		}
 	}
 
 	// 動かす図形.
-	switch (m_currentFigureSwitch)
-	{
-	case FigureSwitch::Break: // 待機画面.
-		break;
+	//switch (m_currentFigureSwitch)
+	//{
+	//case FigureSwitch::Break: // 待機画面.
+	//	break;
 
-	case FigureSwitch::MakeFigure: // 図形生成.
-	{
-		m_sortedShapePtr = generateFigure();
+	//case FigureSwitch::MakeFigure: // 図形生成.
+	//{
+	//	m_sortedShapePtr = generateFigure();
 
-		m_currentFigureSwitch = FigureSwitch::Release;
+	//	m_currentFigureSwitch = FigureSwitch::Release;
 
-		break;
-	}
+	//	break;
+	//}
 
-	case FigureSwitch::Release: // 図形をつかんでないとき.
+	//case FigureSwitch::Release: // 図形をつかんでないとき.
 
-		if (m_sortedShapePtr->isMouseOver() && not m_isPaused)
-		{
-			// 手にする.
-			Cursor::RequestStyle(CursorStyle::Hand);
+	//	if (m_sortedShapePtr->isMouseOver() && not m_isPaused)
+	//	{
+	//		// 手にする.
+	//		Cursor::RequestStyle(CursorStyle::Hand);
 
-			if (MouseL.pressed())
-			{
-				// カーソルと図形の中心座標の差をとる.
-				/*m_distance_x = figure.center.x - Cursor::Pos().x;
-				m_distance_y = figure.center.y - Cursor::Pos().y;*/
-				m_distance = m_sortedShapePtr->center() - Cursor::Pos();
+	//		if (MouseL.pressed())
+	//		{
+	//			// カーソルと図形の中心座標の差をとる.
+	//			/*m_distance_x = figure.center.x - Cursor::Pos().x;
+	//			m_distance_y = figure.center.y - Cursor::Pos().y;*/
+	//			m_distance = m_sortedShapePtr->center() - Cursor::Pos();
 
-				m_currentFigureSwitch = FigureSwitch::Catch;
-			}
-		}
+	//			m_currentFigureSwitch = FigureSwitch::Catch;
+	//		}
+	//	}
 
-		break;
+	//	break;
 
-	case FigureSwitch::Catch: // 図形をつかんで運ぶとき.
+	//case FigureSwitch::Catch: // 図形をつかんで運ぶとき.
 
-		Cursor::RequestStyle(CursorStyle::Hand);
+	//	Cursor::RequestStyle(CursorStyle::Hand);
 
-		// 図形を離したとき.
-		if (MouseL.up())
-		{
-			//// 図形の中心座標を離した座標に更新.
-			//figure.center.x = check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure);
-			//figure.center.y = check_wally(wally, Cursor::Pos().y + m_distance_y, figure);
-			//circle.center = figure.center;
-			//triangle = { figure.center, culc_Length(triangle) };
-			//rect.x = culc_lx(figure);
-			//rect.y = culc_ly(figure);
-			// 図形の中心座標を離した座標に更新.
-			Vec2 pos = Cursor::Pos() + m_distance - (m_sortedShapePtr->size() / 2);
-			//m_sortedShapePtr->move(checkWall(SortedArea, Cursor::Pos() + m_distance, *m_sortedShapePtr));
-			m_sortedShapePtr->move(pos.clamped(SortedArea));
+	//	// 図形を離したとき.
+	//	if (MouseL.up())
+	//	{
+	//		//// 図形の中心座標を離した座標に更新.
+	//		//figure.center.x = check_wallx(wallx, Cursor::Pos().x + m_distance_x, figure);
+	//		//figure.center.y = check_wally(wally, Cursor::Pos().y + m_distance_y, figure);
+	//		//circle.center = figure.center;
+	//		//triangle = { figure.center, culc_Length(triangle) };
+	//		//rect.x = culc_lx(figure);
+	//		//rect.y = culc_ly(figure);
+	//		// 図形の中心座標を離した座標に更新.
+	//		Vec2 pos = Cursor::Pos() + m_distance - (m_sortedShapePtr->size() / 2);
+	//		//m_sortedShapePtr->move(checkWall(SortedArea, Cursor::Pos() + m_distance, *m_sortedShapePtr));
+	//		m_sortedShapePtr->move(pos.clamped(SortedArea));
 
-			m_currentFigureSwitch = FigureSwitch::Release;
+	//		m_currentFigureSwitch = FigureSwitch::Release;
 
-			break;
-		}
-		break;
-	default:
-		break;
-	}
+	//		break;
+	//	}
+	//	break;
+	//default:
+	//	break;
+	//}
 
-	// 正誤判定.
-	// 時間という概念？の取得.
-	int32 t_tf = (m_truefalse.ms() / 30);
-	switch (m_tof)
-	{
-	case TrueOrFalse::WaitSort: // 仕分け待ち.
-		break;
+	//// 正誤判定.
+	//// 時間という概念？の取得.
+	//int32 t_tf = (m_truefalse.ms() / 30);
+	//switch (m_tof)
+	//{
+	//case TrueOrFalse::WaitSort: // 仕分け待ち.
+	//	break;
 
-	case TrueOrFalse::TrueSort: // 正解した時.
+	//case TrueOrFalse::TrueSort: // 正解した時.
 
-		// 正解したエフェクト.
-		effect_TrueOrFalse(t_tf, m_scoreManager.comboNum(), kuro, FontAsset(FontText), 30);
+	//	// 正解したエフェクト.
+	//	effect_TrueOrFalse(t_tf, m_scoreManager.comboNum(), kuro, FontAsset(FontText), 30);
 
-		// 時間経過で消す.
-		if (t_tf > 20)
-		{
-			m_truefalse.reset();
-			m_tof = TrueOrFalse::WaitSort;
-		}
+	//	// 時間経過で消す.
+	//	if (t_tf > 20)
+	//	{
+	//		m_truefalse.reset();
+	//		m_tof = TrueOrFalse::WaitSort;
+	//	}
 
-		break;
+	//	break;
 
-	case TrueOrFalse::FalseSort: // 間違えたとき.
+	//case TrueOrFalse::FalseSort: // 間違えたとき.
 
-		// 間違えた時のエフェクト.
-		effect_TrueOrFalse(t_tf, m_scoreManager.comboNum(), kuro, FontAsset(FontText), 30);
+	//	// 間違えた時のエフェクト.
+	//	effect_TrueOrFalse(t_tf, m_scoreManager.comboNum(), kuro, FontAsset(FontText), 30);
 
-		if (t_tf > 20)
-		{
-			m_truefalse.reset();
-			m_tof = TrueOrFalse::WaitSort;
-		}
+	//	if (t_tf > 20)
+	//	{
+	//		m_truefalse.reset();
+	//		m_tof = TrueOrFalse::WaitSort;
+	//	}
 
-		break;
+	//	break;
 
-	default:
-		break;
-	}
+	//default:
+	//	break;
+	//}
+}
+
+void GameManager::generateFigure()
+{
+	m_sortedShapePtr = m_figureGen.generate(m_stageLevel, m_currentSortRule, m_isChangedColor);
 }
 
 void GameManager::draw() const
@@ -292,7 +366,7 @@ void GameManager::draw() const
 	// 分別はこ下側.
 	for (size_t i = 0; i < static_cast<EnumValue>(SortingBoxIdx::Count); ++i)
 	{
-		box_under(SortingBoxes[static_cast<EnumValue>(SortingBoxLayerIdx::Lowerside)][i], (m_isChangedColor) ? m_scoreManager.SortingAnswers[i].colors.colorChanged : m_scoreManager.SortingAnswers[i].colors.colorDefault);
+		box_under(SortingBoxes[static_cast<EnumValue>(SortingBoxLayerIdx::Lowerside)][i], (m_isChangedColor) ? ScoreManager::SortingAnswers[i].colors.colorChanged : ScoreManager::SortingAnswers[i].colors.colorDefault);
 	}
 
 	// 動かす図形.
@@ -304,11 +378,11 @@ void GameManager::draw() const
 		const RectF box = SortingBoxes[static_cast<EnumValue>(SortingBoxLayerIdx::Upperside)][i];
 		box_over(
 			box,
-			(m_isChangedColor) ? m_scoreManager.SortingAnswers[i].colors.colorChanged : m_scoreManager.SortingAnswers[i].colors.colorDefault,
+			(m_isChangedColor) ? ScoreManager::SortingAnswers[i].colors.colorChanged : ScoreManager::SortingAnswers[i].colors.colorDefault,
 			FontAsset(FontText),
 			SortingBoxesMarks[i]);
 
-		const String text = (m_isChangedColor) ? m_scoreManager.SortingAnswers[i].texts.textChanged : m_scoreManager.SortingAnswers[i].texts.textDefault;
+		const String text = (m_isChangedColor) ? ScoreManager::SortingAnswers[i].texts.textChanged : ScoreManager::SortingAnswers[i].texts.textDefault;
 		FontAsset(FontText)(U"\n{}"_fmt(text)).drawAt(box.x + box.w / 2, box.y + box.h * 3 / 5, kuro);
 	}
 
@@ -349,31 +423,9 @@ void GameManager::setSortRule(const EnumValue nextStageIdx)
 	m_currentSortRule = static_cast<SortRule>(idx);
 }
 
-std::unique_ptr<SortedShapeBase> GameManager::generateFigure()
-{
-	return m_figureGen.generate(m_stageLevel, m_currentSortRule, m_isChangedColor);
-}
-
-void GameManager::effect_TrueOrFalse(double t, const uint8& comboNum, const ColorF& colorf, const Font& font, const uint8& textsize)
-{
-	const String combo3 = U"Perfect!!!";
-	const String combo2 = U"Great!!";
-	const String combo1 = U"Good!";
-	const String combo0 = U"Miss";
-	constexpr uint16 effect_X = 400;
-	constexpr uint16 effect_Y = 570;
-	if (comboNum >= 3) {
-		font(combo3.substr(0, t)).drawAt(textsize, effect_X, effect_Y, colorf);
-	}
-	else if (comboNum == 2) {
-		font(combo2.substr(0, t)).drawAt(textsize, effect_X, effect_Y, colorf);
-	}
-	else if (comboNum == 0) {
-		font(combo0.substr(0, t)).drawAt(textsize, effect_X, effect_Y, colorf);
-	}
-	else {
-		font(combo1.substr(0, t)).drawAt(textsize, effect_X, effect_Y, colorf);
-	}
-}
+//std::unique_ptr<SortedShapeBase> GameManager::generateFigure()
+//{
+//	return m_figureGen.generate(m_stageLevel, m_currentSortRule, m_isChangedColor);
+//}
 
 /*	End GameManager			********************************************************************************************************/

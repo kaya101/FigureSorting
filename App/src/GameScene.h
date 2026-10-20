@@ -163,6 +163,7 @@ private:
 	uint8 m_gt = 0;									// 制限時間のカウントダウン時間.
 	Stopwatch m_countdown{ StartImmediately::Yes };	// ゲーム開始のカウントダウン.
 	Stopwatch m_playtime{ StartImmediately::No };	// 制限時間.
+	Stopwatch m_truefalse{ StartImmediately::Yes };	// 正誤判定のエフェクト.
 	LetsPlayFlow m_currentFlow;
 
 	HashTable<LetsPlayFlow, std::function<void()>> m_updateTable;
@@ -172,6 +173,9 @@ private:
 	void initDrawTable();
 
 	void MoveNextFlow(const LetsPlayFlow next);
+
+	// 正誤判定のエフェクト.
+	void effect_TrueOrFalse(double t, const uint8& comboNum, const ColorF& colorf, const Font& font, const uint8& textsize);
 
 	// ゲーム結果画面の幕が上がるやつ.
 	void m_boxOutQuad_adu(const double t, const RectF& rect, const ColorF& colorf) const { RectF{ rect.pos, rect.w, rect.h * (1 - easeOutQuad(t)) }.draw(colorf); }

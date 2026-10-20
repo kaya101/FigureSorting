@@ -27,8 +27,7 @@ public:
 	};
 	static const std::array<AnswerData, static_cast<EnumValue>(SortingBoxIdx::Count)> SortingAnswers;
 
-	explicit ScoreManager(GameManager& gameManager)
-		: m_gameManager(gameManager)
+	explicit ScoreManager()
 	{
 		init();
 	}
@@ -36,7 +35,9 @@ public:
 	~ScoreManager() = default;
 
 	void init();
-	void classify(const EnumValue boxIdx);
+	void reset();
+	void retry();
+	void classify(const SortingBoxIdx boxIdx, const SortRule rule, const SortedShapeBase* shapePtr, const StageLevel level);
 	void updateHighScores(const StageLevel level);
 	void draw() const;
 
@@ -46,21 +47,23 @@ public:
 	const uint8 missNum() const { return m_missNum; }
 	const uint8 comboNum() const { return m_comboNum; }
 	const bool newRecord() const { return m_newRecord; }
+	const bool isCorrectSorted() const { return m_isCorrectSorted; }
 	const std::array<ScoreValue, static_cast<EnumValue>(StageLevel::Count)>& highScores() const { return m_highScores; }
 
 private:
-	GameManager& m_gameManager;
+	//GameManager& m_gameManager;
 	ScoreValue m_score;
 	uint8 m_classifyNum;	// 仕分けた個数.
 	uint8 m_correctNum;		// 正解した個数.
 	uint8 m_missNum;		// 間違えた個数.
 	uint8 m_comboNum;		// 連続正解数をカウント.
 	bool m_newRecord;		// 記録を更新したかどうか.
+	bool m_isCorrectSorted;
 	std::array<ScoreValue, static_cast<EnumValue>(StageLevel::Count)> m_highScores;
 
 	void sumScore(const ScoreValue amount) { m_score = Max(0, m_score + amount); }
-	void correct(const size_t stageIdx);
-	void miss(const size_t stageIdx);
+	void correct(const StageLevel level);
+	void miss(const StageLevel level);
 };
 
 class GameManager
@@ -78,7 +81,6 @@ public:
 	static const std::array<String, static_cast<EnumValue>(SortingBoxIdx::Count)> SortingBoxesMarks;
 
 	explicit GameManager()
-		: m_scoreManager(*this)
 	{
 		init();
 	}
@@ -97,20 +99,24 @@ public:
 	void turnOffSkippedExplain() { m_isSkippedExplain = false; }
 	void turnOnPause() { m_isPaused = true; }
 	void turnOffPause() { m_isPaused = false; }
-	void setTF(const TrueOrFalse tf) { m_tof = tf; }
+	void clearClassified() { m_isClassified = false; }
+	//void setTF(const TrueOrFalse tf) { m_tof = tf; }
+	void generateFigure();
 
 	const SortedShapeBase* sortedShapePtr() const { return m_sortedShapePtr.get(); }
-	const ScoreManager& scoreManager() const { return m_scoreManager; }
+	//const ScoreManager& scoreManager() const { return m_scoreManager; }
 	const SortRule currentSortRule() const { return m_currentSortRule; }
 	const bool isChangedColor() const { return m_isChangedColor; }
 	const bool isSkippedExplain() const { return m_isSkippedExplain; }
 	const bool isPaused() const { return m_isPaused; }
+	const bool isClassified() const { return m_isClassified; }
+	const SortingBoxIdx boxIdx() const { return m_boxIdx; }
 	const StageLevel stageLevel() const { return m_stageLevel; }
 
 private:
 	std::unique_ptr<SortedShapeBase> m_sortedShapePtr;	// 動かす図形の素材の受け皿.
 
-	ScoreManager m_scoreManager;
+	//ScoreManager m_scoreManager;
 	NonRepeatRandomGenerator m_sortRuleGen;
 	FigureGenerator m_figureGen;
 
@@ -120,12 +126,14 @@ private:
 	bool m_isSkippedExplain;
 	bool m_canDisplayRule;
 	bool m_isPaused;
+	bool m_isClassified;
+	SortingBoxIdx m_boxIdx;
 	StageLevel m_stageLevel;		// どのステージか.
-	TrueOrFalse m_tof;	// 正誤判定.
-	Stopwatch m_truefalse{ StartImmediately::Yes };	// 正誤判定のエフェクト.
-	FigureSwitch m_currentFigureSwitch;
+	//TrueOrFalse m_tof;	// 正誤判定.
+	//Stopwatch m_truefalse{ StartImmediately::Yes };	// 正誤判定のエフェクト.
+	//FigureSwitch m_currentFigureSwitch;
 
-	std::unique_ptr<SortedShapeBase> generateFigure();
-	// 正誤判定のエフェクト.
-	void effect_TrueOrFalse(double t, const uint8& comboNum, const ColorF& colorf, const Font& font, const uint8& textsize);
+	//std::unique_ptr<SortedShapeBase> generateFigure();
+	//// 正誤判定のエフェクト.
+	//void effect_TrueOrFalse(double t, const uint8& comboNum, const ColorF& colorf, const Font& font, const uint8& textsize);
 };
