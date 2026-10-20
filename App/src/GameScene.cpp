@@ -706,7 +706,7 @@ void Result::draw() const
 			}
 			else
 			{
-				m_textOutExpo_aap(sortedPtr->rate(), sortedTextAppearPoint, sortedText, kuro, FontAsset(FontButton), U"sorted:{}"_fmt(getData().scoreManager().classifyNum() - 1), 30);
+				m_textOutExpo_aap(sortedPtr->rate(), sortedTextAppearPoint, sortedText, kuro, FontAsset(FontButton), U"sorted:{}"_fmt(getData().scoreManager().classifyNum()), 30);
 			}
 		}
 
