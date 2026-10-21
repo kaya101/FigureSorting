@@ -6,6 +6,8 @@ void GameData::initialize()
 	m_gameManager.init();
 	m_scoreManager.init();
 	m_uiManager.init();
+
+	AudioManager::init();
 }
 
 void GameData::reset()
