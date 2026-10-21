@@ -175,6 +175,22 @@ public:
 	const ColorF& color(const SortingBoxIdx boxIdx) const;
 	const String& text(const SortingBoxIdx boxIdx) const;
 
+	void fadeIn(const double t) const
+	{
+		const RectF GameWindow = RectF(Vec2::Zero(), Scene::Size());
+		constexpr ColorF FadeColor = Palette::Black;
+
+		GameWindow.draw(ColorF(FadeColor, 1.0 - t));
+	}
+
+	void fadeOut(const double t) const
+	{
+		const RectF GameWindow = RectF(Vec2::Zero(), Scene::Size());
+		constexpr ColorF FadeColor = Palette::Black;
+
+		GameWindow.draw(ColorF(FadeColor, t));
+	}
+
 private:
 	GameManager& m_gameManager;
 	ScoreManager& m_scoreManager;
