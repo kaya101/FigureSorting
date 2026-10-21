@@ -404,3 +404,19 @@ void UIManager::m_textBounce_aud(const double t, const Vec2& vec2, const Font& f
 }
 
 /*	End UIManager			********************************************************************************************************/
+
+/*	Start AudioManager		********************************************************************************************************/
+
+void AudioManager::init()
+{
+}
+
+void AudioManager::reset()
+{
+}
+
+void AudioManager::retry()
+{
+}
+
+/*	End AudioManager		********************************************************************************************************/

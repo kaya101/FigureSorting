@@ -185,3 +185,20 @@ private:
 	void m_boxBounce_aud(const double t, const RectF& rect, const ColorF& colorf) const;
 	void m_textBounce_aud(const double t, const Vec2& vec2, const Font& font, const String& text, const uint8& size) const;
 };
+
+class AudioManager : IManager
+{
+public:
+	explicit AudioManager()
+	{
+		init();
+	}
+
+	~AudioManager() = default;
+
+	void init() override;
+	void reset() override;
+	void retry() override;
+
+private:
+};
