@@ -23,7 +23,6 @@ public:
 		SortingBoxArray{ RectF(50, 390, 160, 140), RectF(320, 110, 160, 140), RectF(590, 390, 160, 140) },	// 下側.
 		SortingBoxArray{ RectF(50, 410, 160, 120), RectF(320, 130, 160, 120), RectF(590, 410, 160, 120) }	// 上側.
 	};
-	//static const std::array<String, static_cast<EnumValue>(SortingBoxIdx::Count)> SortingBoxesMarks;
 
 	explicit GameManager()
 	{
@@ -38,7 +37,6 @@ public:
 
 	void update();
 	void generateFigure();
-	//void draw() const;
 	void setSortRule(const EnumValue nextStageIdx);
 	void turnOnChangedColor() { m_isChangedColor = true; }
 	void turnOffChangedColor() { m_isChangedColor = false; }
@@ -67,7 +65,6 @@ private:
 	SortRule m_currentSortRule;
 	bool m_isChangedColor;
 	bool m_isSkippedExplain;
-	bool m_canDisplayRule;
 	bool m_isPaused;
 	bool m_isClassified;
 	SortingBoxIdx m_boxIdx;

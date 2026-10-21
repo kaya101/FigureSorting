@@ -5,8 +5,6 @@
 
 /*	Start GameManager		********************************************************************************************************/
 
-//const std::array<String, static_cast<EnumValue>(SortingBoxIdx::Count)> GameManager::SortingBoxesMarks = { U"●", U"▲", U"■" };
-
 void GameManager::init()
 {
 	m_sortedShapePtr = nullptr;
@@ -19,7 +17,6 @@ void GameManager::init()
 	m_currentSortRule = SortRule::Count;
 	m_isChangedColor = false;
 	m_isSkippedExplain = false;
-	m_canDisplayRule = false;
 	m_isPaused = false;
 	m_isClassified = false;
 	m_boxIdx = SortingBoxIdx::Count;
@@ -89,32 +86,6 @@ void GameManager::generateFigure()
 {
 	m_sortedShapePtr = m_figureGen.generate(m_stageLevel, m_currentSortRule, m_isChangedColor);
 }
-
-//void GameManager::draw() const
-//{
-//	//// 分別はこ下側.
-//	//for (size_t i = 0; i < static_cast<EnumValue>(SortingBoxIdx::Count); ++i)
-//	//{
-//	//	box_under(SortingBoxes[static_cast<EnumValue>(SortingBoxLayerIdx::Lowerside)][i], (m_isChangedColor) ? ScoreManager::SortingAnswers[i].colors.colorChanged : ScoreManager::SortingAnswers[i].colors.colorDefault);
-//	//}
-//
-//	//// 動かす図形.
-//	//if (m_sortedShapePtr != nullptr) m_sortedShapePtr->draw();
-//
-//	//// 分別はこ上側.
-//	//for (size_t i = 0; i < static_cast<EnumValue>(SortingBoxIdx::Count); ++i)
-//	//{
-//	//	const RectF box = SortingBoxes[static_cast<EnumValue>(SortingBoxLayerIdx::Upperside)][i];
-//	//	box_over(
-//	//		box,
-//	//		(m_isChangedColor) ? ScoreManager::SortingAnswers[i].colors.colorChanged : ScoreManager::SortingAnswers[i].colors.colorDefault,
-//	//		FontAsset(FontText),
-//	//		SortingBoxesMarks[i]);
-//
-//	//	const String text = (m_isChangedColor) ? ScoreManager::SortingAnswers[i].texts.textChanged : ScoreManager::SortingAnswers[i].texts.textDefault;
-//	//	FontAsset(FontText)(U"\n{}"_fmt(text)).drawAt(box.x + box.w / 2, box.y + box.h * 3 / 5, kuro);
-//	//}
-//}
 
 void GameManager::setSortRule(const EnumValue nextStageIdx)
 {
@@ -287,7 +258,6 @@ void UIManager::init()
 
 			case SortRule::TextRule:
 
-				//if (m_canDisplayRule) FontAsset(U"FontText")(U"もじで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
 				FontAsset(U"FontText")(U"もじで仕分け!!").drawAt(siwakesize, siwakerule, MainTextColor);
 
 				break;
@@ -344,7 +314,9 @@ void UIManager::init()
 			m_textBounce_aud(t, yourscoreText, FontAsset(U"FontButton"), U"Your Score:{}"_fmt(m_scoreManager.score()), 36);
 
 			// ハイスコア.
-			m_textBounce_aud(t, highscoreText, FontAsset(U"FontButton"), U"High Score:{}"_fmt(m_scoreManager.highScores()[static_cast<EnumValue>(m_gameManager.stageLevel())]), 20);
+			const auto idx = m_gameManager.stageLevel();
+			if (idx >= StageLevel::Count) return;
+			m_textBounce_aud(t, highscoreText, FontAsset(U"FontButton"), U"High Score:{}"_fmt(m_scoreManager.highScores()[static_cast<EnumValue>(idx)]), 20);
 
 			// 記録を更新したか.
 			if (m_scoreManager.newRecord())

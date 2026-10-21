@@ -111,12 +111,3 @@ static constexpr double easeOutQuad(double t)
 
 // 分類箱.
 static constexpr uint8 haba = 3;	// 図形の枠.
-//static constexpr void box_under(const RectF& box, const ColorF& colorf)
-//{
-//	box.drawFrame(haba, kuro).draw(colorf * 0.8);
-//}
-//static constexpr void box_over(const RectF& box, const ColorF& colorf, const Font& font, const String& string)
-//{
-//	box.drawFrame(haba, kuro).draw(colorf);
-//	font(U"{}"_fmt(string)).drawAt(box.center(), kuro);
-//}

@@ -224,16 +224,6 @@ private:
 
 	Stopwatch m_resultwindow{ StartImmediately::Yes };
 
-	//// ゲーム結果画面の幕が下りるやつ.
-	//void m_boxBounce_aud(const double t, const RectF& rect, const ColorF& colorf) const
-	//{
-	//	RectF{ rect.pos, rect.w, rect.h * easeOutBounce(t) }.draw(colorf);
-	//}
-	//void m_textBounce_aud(const double t, const Vec2& vec2, const Font& font, const String& text, const uint8& size) const
-	//{
-	//	font(text).drawAt(size, vec2.x, vec2.y * easeOutBounce(t), kuro);
-	//}
-
 	// 結果画面でテキストが任意の座標から出てくるやつ.
 	void m_textOutExpo_aap(double t, const Vec2& from, const Vec2& vec2, const ColorF& colorf, const Font& font, const String& text, const uint8& size) const
 	{
