@@ -185,3 +185,47 @@ private:
 	void m_boxBounce_aud(const double t, const RectF& rect, const ColorF& colorf) const;
 	void m_textBounce_aud(const double t, const Vec2& vec2, const Font& font, const String& text, const uint8& size) const;
 };
+
+class AudioManager
+{
+public:
+	struct AudioData
+	{
+		StringView name;
+		Audio::FileStreaming stream;
+		StringView path;
+		Loop loop;
+	};
+
+	AudioManager(const AudioManager&) = delete;
+	AudioManager& operator=(const AudioManager&) = delete;
+	AudioManager(AudioManager&&) = delete;
+	AudioManager& operator=(AudioManager&&) = delete;
+
+	static AudioManager& get()
+	{
+		static AudioManager instance;
+		return instance;
+	}
+
+	static void init();
+	static const StringView& getName(const BGMID id)
+	{
+		const auto& it = m_bgmTable.find(id);
+		if (it != m_bgmTable.end()) return it->second.name;
+		return U"";
+	}
+	static const StringView& getName(const SEID id)
+	{
+		const auto& it = m_seTable.find(id);
+		if (it != m_seTable.end()) return it->second.name;
+		return U"";
+	}
+
+private:
+	explicit AudioManager() = default;
+	~AudioManager() = default;
+
+	static const HashTable<BGMID, AudioData> m_bgmTable;
+	static const HashTable<SEID, AudioData> m_seTable;
+};

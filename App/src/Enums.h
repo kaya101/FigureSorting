@@ -70,3 +70,24 @@ enum class UILayer : EnumValue
 	ResultTexts,
 	ResultButtons,
 };
+
+enum class BGMID : EnumValue
+{
+	Title,
+	Stage,
+	Explain,
+	LetsPlay,
+	Result,
+	Count
+};
+
+enum class SEID : EnumValue
+{
+	ClickButton,
+	CorrectSortCombo1,
+	CorrectSortCombo2,
+	CorrectSortCombo3,
+	WrongSort,
+	ResultCurtain,
+	Count
+};

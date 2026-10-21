@@ -17,6 +17,8 @@ public:
 	void virtual initialize() = 0;
 
 protected:
+	static constexpr SecondsF FadeTime = 1.0s;
+
 	HashTable<ButtonTableKey, Array<std::unique_ptr<ButtonBase>>> m_buttonTable;
 
 	void makeButton(const ButtonTableKey key, const ButtonCtx& ctx, ButtonWorkCallBack workCallBack);

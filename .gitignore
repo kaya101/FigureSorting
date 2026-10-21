@@ -413,3 +413,6 @@ gmon.out
 #**/App/example
 #**/App/engine
 #**/App/dll
+
+# 二次配布をしない為.
+**/App/audio/*

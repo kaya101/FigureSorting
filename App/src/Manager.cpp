@@ -216,6 +216,8 @@ void ScoreManager::correct(const StageLevel level)
 	++m_comboNum;
 
 	m_isCorrectSorted = true;
+
+	AudioAsset(AudioManager::get().getName(SEID::CorrectSortCombo1)).playOneShot();
 }
 
 void ScoreManager::miss(const StageLevel level)
@@ -228,6 +230,8 @@ void ScoreManager::miss(const StageLevel level)
 	m_comboNum = 0;
 
 	m_isCorrectSorted = false;
+
+	AudioAsset(AudioManager::get().getName(SEID::WrongSort)).playOneShot();
 }
 
 /*	End ScoreManager		********************************************************************************************************/
@@ -404,3 +408,39 @@ void UIManager::m_textBounce_aud(const double t, const Vec2& vec2, const Font& f
 }
 
 /*	End UIManager			********************************************************************************************************/
+
+/*	Start AudioManager		********************************************************************************************************/
+
+void AudioManager::init()
+{
+	for (const auto& it : m_bgmTable)
+	{
+		const auto& data = it.second;
+		AudioAsset::Register(data.name, data.stream, data.path, data.loop);
+	}
+
+	for (const auto& it : m_seTable)
+	{
+		const auto& data = it.second;
+		AudioAsset::Register(data.name, data.stream, data.path, data.loop);
+	}
+}
+
+const HashTable<BGMID, AudioManager::AudioData> AudioManager::m_bgmTable = {
+	{ BGMID::Title,		{ U"Title",		Audio::Stream, U"audio/Action.mp3",				Loop::Yes } },// https://www.youtube.com/watch?v=srx4u883Dys
+	{ BGMID::Stage,		{ U"Stage",		Audio::Stream, U"audio/Self-care.mp3",			Loop::Yes } },// https://zukisuzukibgm.com/self-care/
+	{ BGMID::Explain,	{ U"Explain",	Audio::Stream, U"audio/Gump.mp3",				Loop::Yes } },// https://zukisuzukibgm.com/gump/
+	{ BGMID::LetsPlay,	{ U"LetsPlay",	Audio::Stream, U"audio/Charge.mp3",				Loop::Yes } },// https://zukisuzukibgm.com/charge/
+	{ BGMID::Result,	{ U"Result",	Audio::Stream, U"audio/Keep-It-A-Secret.mp3",	Loop::Yes } } // https://zukisuzukibgm.com/keep-it-a-secret/ 
+};
+
+const HashTable<SEID, AudioManager::AudioData> AudioManager::m_seTable = {
+	{ SEID::ClickButton,		{ U"ClickButton",		Audio::Stream , U"audio/決定ボタンを押す51.mp3", Loop::No } },// https://soundeffect-lab.info/sound/button/
+	{ SEID::CorrectSortCombo1,	{ U"CorrectSortCombo1",	Audio::Stream , U"audio/クイズ正解2.mp3", Loop::No } },// https://soundeffect-lab.info/sound/anime/
+	{ SEID::CorrectSortCombo2,	{ U"CorrectSortCombo2",	Audio::Stream , U"audio/クイズ正解2.mp3", Loop::No } },// https://soundeffect-lab.info/sound/anime/
+	{ SEID::CorrectSortCombo3,	{ U"CorrectSortCombo3",	Audio::Stream , U"audio/クイズ正解2.mp3", Loop::No } },// https://soundeffect-lab.info/sound/anime/
+	{ SEID::WrongSort,			{ U"WrongSort",			Audio::Stream , U"audio/クイズ不正解1.mp3", Loop::No } },// https://soundeffect-lab.info/sound/anime/
+	{ SEID::ResultCurtain,		{ U"ResultCurtain",		Audio::Stream , U"audio/小鼓（こつづみ）.mp3", Loop::No } }// https://soundeffect-lab.info/sound/anime/
+};
+
+/*	End AudioManager		********************************************************************************************************/

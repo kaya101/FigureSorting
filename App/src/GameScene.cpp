@@ -74,6 +74,8 @@ Title::Title(const InitData& init)
 
 void Title::update()
 {
+	AudioAsset(AudioManager::get().getName(BGMID::Title)).play();
+
 	updateButtonsAt(static_cast<ButtonTableKey>(TitleFlow::Default));
 }
 
@@ -90,6 +92,7 @@ void Title::drawFadeIn(double t) const
 
 void Title::drawFadeOut(double t) const
 {
+	AudioAsset(AudioManager::get().getName(BGMID::Title)).stop(FadeTime);
 }
 
 void Title::initialize()
@@ -103,7 +106,7 @@ void Title::initialize()
 		ButtonCtx(m_gameStart, botan * 1.4, U"はじめる", FontButton),
 		[this](ButtonBase* self)
 		{
-			changeScene(SceneSwitch::Stage, 0.0);
+			changeScene(SceneSwitch::Stage, FadeTime);
 		});
 
 	makeButton(
@@ -129,6 +132,8 @@ Stage::Stage(const InitData& init)
 
 void Stage::update()
 {
+	AudioAsset(AudioManager::get().getName(BGMID::Stage)).play(FadeTime);
+
 	updateButtonsAt(static_cast<ButtonTableKey>(UILayer::Default));
 }
 
@@ -171,6 +176,7 @@ void Stage::drawFadeIn(double t) const
 
 void Stage::drawFadeOut(double t) const
 {
+	AudioAsset(AudioManager::get().getName(BGMID::Stage)).stop(FadeTime);
 }
 
 void Stage::initialize()
@@ -183,7 +189,7 @@ void Stage::initialize()
 		[this](ButtonBase* self)
 		{
 			setupSortRule(StageLevel::Level01, getData());
-			changeScene(SceneSwitch::Letsplay, 0.0);
+			changeScene(SceneSwitch::Letsplay, FadeTime);
 		});
 
 	makeButton(
@@ -192,7 +198,7 @@ void Stage::initialize()
 		[this](ButtonBase* self)
 		{
 			setupSortRule(StageLevel::Level02, getData());
-			changeScene(SceneSwitch::Letsplay, 0.0);
+			changeScene(SceneSwitch::Letsplay, FadeTime);
 		});
 
 	makeButton(
@@ -201,7 +207,7 @@ void Stage::initialize()
 		[this](ButtonBase* self)
 		{
 			setupSortRule(StageLevel::LevelMAX, getData());
-			changeScene(SceneSwitch::Letsplay, 0.0);
+			changeScene(SceneSwitch::Letsplay, FadeTime);
 		});
 
 	makeButton(
@@ -286,6 +292,7 @@ void LetsPlay::drawFadeIn(double t) const
 
 void LetsPlay::drawFadeOut(double t) const
 {
+	AudioAsset(AudioManager::get().getName(BGMID::LetsPlay)).stop(0.0s);
 }
 
 void LetsPlay::initialize()
@@ -390,16 +397,22 @@ void LetsPlay::initUpdateTable()
 {
 	m_updateTable[LetsPlayFlow::ExplainPage1] = [this]()
 		{
+			AudioAsset(AudioManager::get().getName(BGMID::Explain)).play();
+
 			updateButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
 		};
 
 	m_updateTable[LetsPlayFlow::ExplainPage2] = [this]()
 		{
+			AudioAsset(AudioManager::get().getName(BGMID::Explain)).play();
+
 			updateButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
 		};
 
 	m_updateTable[LetsPlayFlow::Start] = [this]()
 		{
+			AudioAsset(AudioManager::get().getName(BGMID::Explain)).stop(FadeTime);
+
 			updateButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
 		};
 
@@ -426,6 +439,8 @@ void LetsPlay::initUpdateTable()
 
 	m_updateTable[LetsPlayFlow::Play] = [this]()
 		{
+			AudioAsset(AudioManager::get().getName(BGMID::LetsPlay)).play();
+
 			updateButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
 
 			// 制限時間.
@@ -613,16 +628,20 @@ void LetsPlay::effect_TrueOrFalse(double t, const uint8& comboNum, const ColorF&
 	const String combo0 = U"Miss";
 	constexpr uint16 effect_X = 400;
 	constexpr uint16 effect_Y = 570;
-	if (comboNum >= 3) {
+	if (comboNum >= 3)
+	{
 		font(combo3.substr(0, t)).drawAt(textsize, effect_X, effect_Y, colorf);
 	}
-	else if (comboNum == 2) {
+	else if (comboNum == 2)
+	{
 		font(combo2.substr(0, t)).drawAt(textsize, effect_X, effect_Y, colorf);
 	}
-	else if (comboNum == 0) {
+	else if (comboNum == 0)
+	{
 		font(combo0.substr(0, t)).drawAt(textsize, effect_X, effect_Y, colorf);
 	}
-	else {
+	else
+	{
 		font(combo1.substr(0, t)).drawAt(textsize, effect_X, effect_Y, colorf);
 	}
 }
@@ -660,6 +679,8 @@ Result::Result(const InitData& init)
 
 void Result::update()
 {
+	AudioAsset(AudioManager::get().getName(BGMID::Result)).play(2.0s);
+
 	updateButtonsAt(static_cast<ButtonTableKey>(ResultFlow::Default));
 }
 
@@ -737,6 +758,7 @@ void Result::drawFadeIn(double t) const
 
 void Result::drawFadeOut(double t) const
 {
+	AudioAsset(AudioManager::get().getName(BGMID::Result)).stop(FadeTime);
 }
 
 void Result::initialize()
@@ -755,7 +777,7 @@ void Result::initialize()
 			
 			m_resultwindow.reset();
 			
-			changeScene(SceneSwitch::Letsplay, 0.0);
+			changeScene(SceneSwitch::Letsplay, FadeTime);
 		},
 		m_playAgainAppearPoint, 1.0, easeOutExpo);
 
@@ -769,7 +791,7 @@ void Result::initialize()
 			
 			m_resultwindow.reset();
 			
-			changeScene(SceneSwitch::Stage, 0.0);
+			changeScene(SceneSwitch::Stage, FadeTime);
 		},
 		m_backStageAppearPoint, 1.1, easeOutExpo);
 
@@ -783,7 +805,7 @@ void Result::initialize()
 			
 			m_resultwindow.reset();
 			
-			changeScene(SceneSwitch::Title, 0.0);
+			changeScene(SceneSwitch::Title, FadeTime);
 		},
 		m_backTitleAppearPoint, 1.2, easeOutExpo);
 }
