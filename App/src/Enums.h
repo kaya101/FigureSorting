@@ -59,3 +59,14 @@ enum class ScoreChange : EnumValue
 	Decrease = 1,
 	Count = 2
 };
+
+enum class UILayer : EnumValue
+{
+	SortRule,
+	SortBoxesUpperside,
+	SortBoxesLowerside,
+	SortedShape,
+	ResultCurtain,		// 結果画面の幕.
+	ResultTexts,
+	ResultButtons,
+};

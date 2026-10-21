@@ -541,8 +541,14 @@ void LetsPlay::initDrawTable()
 		{
 			const double t_cdmaku = Min(m_countdown.sF() / 2, 1.0);
 
+			getData().uiManager().draw(UILayer::SortBoxesLowerside);
+			getData().uiManager().draw(UILayer::SortBoxesUpperside);
+
 			// 開幕演出.
 			m_boxOutQuad_adu(t_cdmaku, makuSize, makuColor);
+
+			getData().uiManager().draw(UILayer::SortRule);
+
 			if (m_t_cd <= 1)
 			{
 				FontAsset(U"FontText")(U"3").drawAt(countdownsize, countdownpoint, kuro);
@@ -574,7 +580,8 @@ void LetsPlay::initDrawTable()
 	m_drawTable[LetsPlayFlow::Play] = [this]()
 		{
 			// 動かす図形.
-			getData().gameManager().draw();
+			//getData().gameManager().draw();
+			getData().uiManager().drawPlayingScene();
 
 			// 制限時間.
 			FontAsset(U"FontText")(U"time(s):{}"_fmt(m_timelimit - m_gt)).draw(20, 60, kuro);
@@ -663,26 +670,29 @@ void Result::draw() const
 	const double t_rw = Min(m_resultwindow.sF(), 1.0);
 
 	// さっきまでの背景たち.
-	getData().gameManager().draw();
+	//getData().gameManager().draw();
+	getData().uiManager().drawPlayingScene();
 
 	// 幕を下ろす.
-	m_boxBounce_aud(t_rw, makuSize, makuColor);
+	//m_boxBounce_aud(t_rw, makuSize, makuColor);
+	getData().uiManager().draw(UILayer::ResultCurtain, t_rw);
 
 	// 結果表示.
-	// 結果.
-	m_textBounce_aud(t_rw, resultText, FontAsset(FontButton), U"★RESULT★", 80);
+	getData().uiManager().draw(UILayer::ResultTexts, t_rw);
+	//// 結果.
+	//m_textBounce_aud(t_rw, resultText, FontAsset(FontButton), U"★RESULT★", 80);
 
-	// 獲得スコア.
-	m_textBounce_aud(t_rw, yourscoreText, FontAsset(FontButton), U"Your Score:{}"_fmt(getData().scoreManager().score()), 36);
+	//// 獲得スコア.
+	//m_textBounce_aud(t_rw, yourscoreText, FontAsset(FontButton), U"Your Score:{}"_fmt(getData().scoreManager().score()), 36);
 
-	// ハイスコア.
-	m_textBounce_aud(t_rw, highscoreText, FontAsset(FontButton), U"High Score:{}"_fmt(getData().scoreManager().highScores()[static_cast<EnumValue>(getData().gameManager().stageLevel())]), 20);
+	//// ハイスコア.
+	//m_textBounce_aud(t_rw, highscoreText, FontAsset(FontButton), U"High Score:{}"_fmt(getData().scoreManager().highScores()[static_cast<EnumValue>(getData().gameManager().stageLevel())]), 20);
 
-	// 記録を更新したか.
-	if (getData().scoreManager().newRecord())
-	{
-		m_textBounce_aud(t_rw, newrecordText, FontAsset(FontButton), U"New Record!!", 20);
-	}
+	//// 記録を更新したか.
+	//if (getData().scoreManager().newRecord())
+	//{
+	//	m_textBounce_aud(t_rw, newrecordText, FontAsset(FontButton), U"New Record!!", 20);
+	//}
 
 	// 最大コンボ数.
 	//m_textOutExpo_aap(t_rt01, sortedTextAppearPoint, sortedText, kuro, text, U"combo:{}"_fmt(comboNum), 30);

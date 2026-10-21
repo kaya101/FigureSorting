@@ -48,6 +48,7 @@ class GameData
 {
 public:
 	explicit GameData()
+		: m_uiManager(m_gameManager, m_scoreManager)
 	{
 		initialize();
 	}
@@ -58,12 +59,14 @@ public:
 	void reset();
 	void retry();
 
-	ScoreManager& scoreManager() { return m_scoreManager; }
 	GameManager& gameManager() { return m_gameManager; }
+	ScoreManager& scoreManager() { return m_scoreManager; }
+	UIManager& uiManager() { return m_uiManager; }
 
 private:
-	ScoreManager m_scoreManager;
 	GameManager m_gameManager;
+	ScoreManager m_scoreManager;
+	UIManager m_uiManager;
 };
 
 using App = SceneManager<SceneSwitch, GameData>;
@@ -108,12 +111,12 @@ static constexpr double easeOutQuad(double t)
 
 // 分類箱.
 static constexpr uint8 haba = 3;	// 図形の枠.
-static constexpr void box_under(const RectF& box, const ColorF& colorf)
-{
-	box.drawFrame(haba, kuro).draw(colorf * 0.8);
-}
-static constexpr void box_over(const RectF& box, const ColorF& colorf, const Font& font, const String& string)
-{
-	box.drawFrame(haba, kuro).draw(colorf);
-	font(U"{}"_fmt(string)).drawAt(box.center(), kuro);
-}
+//static constexpr void box_under(const RectF& box, const ColorF& colorf)
+//{
+//	box.drawFrame(haba, kuro).draw(colorf * 0.8);
+//}
+//static constexpr void box_over(const RectF& box, const ColorF& colorf, const Font& font, const String& string)
+//{
+//	box.drawFrame(haba, kuro).draw(colorf);
+//	font(U"{}"_fmt(string)).drawAt(box.center(), kuro);
+//}

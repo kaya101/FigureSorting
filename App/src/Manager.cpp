@@ -1,10 +1,11 @@
 ﻿#include "stdafx.h"
 #include "Manager.h"
 #include "Common.h"
+#include "GameScene.h"
 
 /*	Start GameManager		********************************************************************************************************/
 
-const std::array<String, static_cast<EnumValue>(SortingBoxIdx::Count)> GameManager::SortingBoxesMarks = { U"●", U"▲", U"■" };
+//const std::array<String, static_cast<EnumValue>(SortingBoxIdx::Count)> GameManager::SortingBoxesMarks = { U"●", U"▲", U"■" };
 
 void GameManager::init()
 {
@@ -89,57 +90,31 @@ void GameManager::generateFigure()
 	m_sortedShapePtr = m_figureGen.generate(m_stageLevel, m_currentSortRule, m_isChangedColor);
 }
 
-void GameManager::draw() const
-{
-	// 分別はこ下側.
-	for (size_t i = 0; i < static_cast<EnumValue>(SortingBoxIdx::Count); ++i)
-	{
-		box_under(SortingBoxes[static_cast<EnumValue>(SortingBoxLayerIdx::Lowerside)][i], (m_isChangedColor) ? ScoreManager::SortingAnswers[i].colors.colorChanged : ScoreManager::SortingAnswers[i].colors.colorDefault);
-	}
-
-	// 動かす図形.
-	if (m_sortedShapePtr != nullptr) m_sortedShapePtr->draw();
-
-	// 分別はこ上側.
-	for (size_t i = 0; i < static_cast<EnumValue>(SortingBoxIdx::Count); ++i)
-	{
-		const RectF box = SortingBoxes[static_cast<EnumValue>(SortingBoxLayerIdx::Upperside)][i];
-		box_over(
-			box,
-			(m_isChangedColor) ? ScoreManager::SortingAnswers[i].colors.colorChanged : ScoreManager::SortingAnswers[i].colors.colorDefault,
-			FontAsset(FontText),
-			SortingBoxesMarks[i]);
-
-		const String text = (m_isChangedColor) ? ScoreManager::SortingAnswers[i].texts.textChanged : ScoreManager::SortingAnswers[i].texts.textDefault;
-		FontAsset(FontText)(U"\n{}"_fmt(text)).drawAt(box.x + box.w / 2, box.y + box.h * 3 / 5, kuro);
-	}
-
-
-	// ルール内容の表示.
-	switch (m_currentSortRule)
-	{
-	case SortRule::ShapeRule:
-
-		if (m_canDisplayRule) FontAsset(FontText)(U"かたちで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
-
-		break;
-
-	case SortRule::ColorRule:
-
-		if (m_canDisplayRule) FontAsset(FontText)(U"いろで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
-
-		break;
-
-	case SortRule::TextRule:
-
-		if (m_canDisplayRule) FontAsset(FontText)(U"もじで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
-
-		break;
-
-	default:
-		break;
-	}
-}
+//void GameManager::draw() const
+//{
+//	//// 分別はこ下側.
+//	//for (size_t i = 0; i < static_cast<EnumValue>(SortingBoxIdx::Count); ++i)
+//	//{
+//	//	box_under(SortingBoxes[static_cast<EnumValue>(SortingBoxLayerIdx::Lowerside)][i], (m_isChangedColor) ? ScoreManager::SortingAnswers[i].colors.colorChanged : ScoreManager::SortingAnswers[i].colors.colorDefault);
+//	//}
+//
+//	//// 動かす図形.
+//	//if (m_sortedShapePtr != nullptr) m_sortedShapePtr->draw();
+//
+//	//// 分別はこ上側.
+//	//for (size_t i = 0; i < static_cast<EnumValue>(SortingBoxIdx::Count); ++i)
+//	//{
+//	//	const RectF box = SortingBoxes[static_cast<EnumValue>(SortingBoxLayerIdx::Upperside)][i];
+//	//	box_over(
+//	//		box,
+//	//		(m_isChangedColor) ? ScoreManager::SortingAnswers[i].colors.colorChanged : ScoreManager::SortingAnswers[i].colors.colorDefault,
+//	//		FontAsset(FontText),
+//	//		SortingBoxesMarks[i]);
+//
+//	//	const String text = (m_isChangedColor) ? ScoreManager::SortingAnswers[i].texts.textChanged : ScoreManager::SortingAnswers[i].texts.textDefault;
+//	//	FontAsset(FontText)(U"\n{}"_fmt(text)).drawAt(box.x + box.w / 2, box.y + box.h * 3 / 5, kuro);
+//	//}
+//}
 
 void GameManager::setSortRule(const EnumValue nextStageIdx)
 {
@@ -288,8 +263,98 @@ void ScoreManager::miss(const StageLevel level)
 
 /*	Start UIManager			********************************************************************************************************/
 
+const std::array<String, static_cast<EnumValue>(SortingBoxIdx::Count)> UIManager::SortingBoxesMarks = { U"●", U"▲", U"■" };
+
+
 void UIManager::init()
 {
+	m_drawTable[UILayer::SortRule] = [this]()
+		{
+			// ルール内容の表示.
+			switch (m_gameManager.currentSortRule())
+			{
+			case SortRule::ShapeRule:
+
+				FontAsset(U"FontText")(U"かたちで仕分け!!").drawAt(siwakesize, siwakerule, MainTextColor);
+
+				break;
+
+			case SortRule::ColorRule:
+
+				FontAsset(U"FontText")(U"いろで仕分け!!").drawAt(siwakesize, siwakerule, MainTextColor);
+
+				break;
+
+			case SortRule::TextRule:
+
+				//if (m_canDisplayRule) FontAsset(U"FontText")(U"もじで仕分け!!").drawAt(siwakesize, siwakerule, kuro);
+				FontAsset(U"FontText")(U"もじで仕分け!!").drawAt(siwakesize, siwakerule, MainTextColor);
+
+				break;
+
+			default:
+				break;
+			}
+		};
+
+	m_drawTable[UILayer::SortBoxesUpperside] = [this]()
+		{
+			for (size_t i = 0; i < static_cast<EnumValue>(SortingBoxIdx::Count); ++i)
+			{
+				const auto idx = static_cast<SortingBoxIdx>(i);
+				const RectF box = m_gameManager.SortingBoxes[static_cast<EnumValue>(SortingBoxLayerIdx::Upperside)][i];
+
+				box.drawFrame(haba, MainTextColor).draw(color(idx));
+
+				FontAsset(U"FontText")(U"{}"_fmt(SortingBoxesMarks[i])).drawAt(box.center(), MainTextColor);
+
+				FontAsset(U"FontText")(U"\n{}"_fmt(text(idx))).drawAt(box.x + box.w / 2, box.y + box.h * 3 / 5, MainTextColor);
+			}
+		};
+
+	m_drawTable[UILayer::SortBoxesLowerside] = [this]()
+		{
+			for (size_t i = 0; i < static_cast<EnumValue>(SortingBoxIdx::Count); ++i)
+			{
+				m_gameManager.SortingBoxes[static_cast<EnumValue>(SortingBoxLayerIdx::Lowerside)][i]
+					.drawFrame(haba, MainTextColor)
+					.draw(color(static_cast<SortingBoxIdx>(i)) * 0.8);
+			}
+		};
+
+	m_drawTable[UILayer::SortedShape] = [this]()
+		{
+			if (m_gameManager.sortedShapePtr() != nullptr)
+			{
+				m_gameManager.sortedShapePtr()->draw();
+			}
+		};
+
+	m_drawEasingTable[UILayer::ResultCurtain] = [this](const double t)
+		{
+			m_boxBounce_aud(t, makuSize, makuColor);
+		};
+
+	m_drawEasingTable[UILayer::ResultTexts] = [this](const double t)
+		{
+			// 結果.
+			m_textBounce_aud(t, resultText, FontAsset(U"FontButton"), U"★RESULT★", 80);
+
+			// 獲得スコア.
+			m_textBounce_aud(t, yourscoreText, FontAsset(U"FontButton"), U"Your Score:{}"_fmt(m_scoreManager.score()), 36);
+
+			// ハイスコア.
+			m_textBounce_aud(t, highscoreText, FontAsset(U"FontButton"), U"High Score:{}"_fmt(m_scoreManager.highScores()[static_cast<EnumValue>(m_gameManager.stageLevel())]), 20);
+
+			// 記録を更新したか.
+			if (m_scoreManager.newRecord())
+			{
+				m_textBounce_aud(t, newrecordText, FontAsset(U"FontButton"), U"New Record!!", 20);
+			}
+
+			// 最大コンボ数.
+			//m_textOutExpo_aap(t_rt01, sortedTextAppearPoint, sortedText, kuro, text, U"combo:{}"_fmt(comboNum), 30);
+		};
 }
 
 void UIManager::reset()
@@ -298,6 +363,72 @@ void UIManager::reset()
 
 void UIManager::retry()
 {
+}
+
+void UIManager::draw(const UILayer layer) const
+{
+	const auto& it = m_drawTable.find(layer);
+	if (it != m_drawTable.end()) it->second();
+}
+
+void UIManager::draw(const UILayer layer, const double t) const
+{
+	const auto& it = m_drawEasingTable.find(layer);
+	if (it != m_drawEasingTable.end()) it->second(t);
+}
+
+void UIManager::drawPlayingScene() const
+{
+	// 仕分けルール.
+	draw(UILayer::SortRule);
+
+	// 分類箱の下側.
+	draw(UILayer::SortBoxesLowerside);
+
+	// 仕分け中の図形.
+	draw(UILayer::SortedShape);
+
+	// 分類箱の上側.
+	draw(UILayer::SortBoxesUpperside);
+}
+
+const ColorF& UIManager::color(const SortingBoxIdx boxIdx) const
+{
+	if (boxIdx == SortingBoxIdx::Count) return Palette::White;
+
+	const auto idx = static_cast<EnumValue>(boxIdx);
+
+	if (m_gameManager.isChangedColor())
+	{
+		return ScoreManager::SortingAnswers[idx].colors.colorChanged;
+	}
+
+	return ScoreManager::SortingAnswers[idx].colors.colorDefault;
+}
+
+const String& UIManager::text(const SortingBoxIdx boxIdx) const
+{
+	if (boxIdx == SortingBoxIdx::Count) return U"text";
+
+	const auto idx = static_cast<EnumValue>(boxIdx);
+
+	if (m_gameManager.isChangedColor())
+	{
+		return ScoreManager::SortingAnswers[idx].texts.textChanged;
+	}
+
+	return ScoreManager::SortingAnswers[idx].texts.textDefault;
+}
+
+// ゲーム結果画面の幕が下りるやつ.
+void UIManager::m_boxBounce_aud(const double t, const RectF& rect, const ColorF& colorf) const
+{
+	RectF{ rect.pos, rect.w, rect.h * easeOutBounce(t) }.draw(colorf);
+}
+
+void UIManager::m_textBounce_aud(const double t, const Vec2& vec2, const Font& font, const String& text, const uint8& size) const
+{
+	font(text).drawAt(size, vec2.x, vec2.y * easeOutBounce(t), kuro);
 }
 
 /*	End UIManager			********************************************************************************************************/

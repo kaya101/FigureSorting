@@ -17,15 +17,13 @@ class GameManager : public IManager
 {
 public:
 	static constexpr RectF SortedArea = { Vec2(50, 130), SizeF(700, 400) };	// 見えない壁の当たり判定.
-	static constexpr Vec2 siwakerule = { 400, 60 };	// 仕分けルールの表示位置.
-	static constexpr uint8 siwakesize = 48;			// 仕分けルールの文字の大きさ.
 
 	using SortingBoxArray = std::array<RectF, static_cast<EnumValue>(SortingBoxIdx::Count)>;
 	static constexpr std::array<SortingBoxArray, static_cast<EnumValue>(SortingBoxLayerIdx::Count)> SortingBoxes = {
 		SortingBoxArray{ RectF(50, 390, 160, 140), RectF(320, 110, 160, 140), RectF(590, 390, 160, 140) },	// 下側.
 		SortingBoxArray{ RectF(50, 410, 160, 120), RectF(320, 130, 160, 120), RectF(590, 410, 160, 120) }	// 上側.
 	};
-	static const std::array<String, static_cast<EnumValue>(SortingBoxIdx::Count)> SortingBoxesMarks;
+	//static const std::array<String, static_cast<EnumValue>(SortingBoxIdx::Count)> SortingBoxesMarks;
 
 	explicit GameManager()
 	{
@@ -40,7 +38,7 @@ public:
 
 	void update();
 	void generateFigure();
-	void draw() const;
+	//void draw() const;
 	void setSortRule(const EnumValue nextStageIdx);
 	void turnOnChangedColor() { m_isChangedColor = true; }
 	void turnOffChangedColor() { m_isChangedColor = false; }
@@ -141,7 +139,28 @@ private:
 class UIManager : public IManager
 {
 public:
-	explicit UIManager()
+	static constexpr Vec2 siwakerule = { 400, 60 };	// 仕分けルールの表示位置.
+	static constexpr uint8 siwakesize = 48;			// 仕分けルールの文字の大きさ.
+	static constexpr ColorF MainTextColor = Palette::Black;
+	static const std::array<String, static_cast<EnumValue>(SortingBoxIdx::Count)> SortingBoxesMarks;
+
+	static constexpr Vec2 resultText = { 400, 100 };
+	static constexpr Vec2 yourscoreText = { 400, 200 };
+	static constexpr Vec2 highscoreText = { 120, 205 };
+	static constexpr Vec2 newrecordText = { 120, 230 };
+	static constexpr Vec2 sortedText = { 60, 380 };
+	static constexpr Vec2 trueText{ 60, 440 };
+	static constexpr Vec2 missText = { 60, 500 };
+	// 結果画面の飛び出すボタンの出現位置.
+	static constexpr Vec2 resultTextAppearPoint = resultText - Vec2(800, 0);
+	static constexpr Vec2 yourscoreTextAppearPoint = yourscoreText - Vec2(800, 0);
+	static constexpr Vec2 sortedTextAppearPoint = sortedText - Vec2(800, 0);
+	static constexpr Vec2 trueTextAppearPoint = trueText - Vec2(800, 0);
+	static constexpr Vec2 missTextAppearPoint = missText - Vec2(800, 0);
+
+	explicit UIManager(GameManager& gm, ScoreManager& sm)
+		: m_gameManager(gm)
+		, m_scoreManager(sm)
 	{
 		init();
 	}
@@ -152,5 +171,20 @@ public:
 	void reset() override;
 	void retry() override;
 
+	void draw(const UILayer layer) const;
+	void draw(const UILayer layer, const double t) const;
+	void drawPlayingScene() const;
+
 private:
+	GameManager& m_gameManager;
+	ScoreManager& m_scoreManager;
+	HashTable<UILayer, std::function<void()>> m_drawTable;
+	HashTable<UILayer, std::function<void(const double t)>> m_drawEasingTable;
+
+	const ColorF& color(const SortingBoxIdx boxIdx) const;
+	const String& text(const SortingBoxIdx boxIdx) const;
+
+	// ゲーム結果画面の幕が下りるやつ.
+	void m_boxBounce_aud(const double t, const RectF& rect, const ColorF& colorf) const;
+	void m_textBounce_aud(const double t, const Vec2& vec2, const Font& font, const String& text, const uint8& size) const;
 };
