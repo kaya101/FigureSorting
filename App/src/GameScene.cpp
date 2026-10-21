@@ -158,9 +158,9 @@ void Stage::draw() const
 	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける\n・色でわける\n・文字でわける"_fmt(getData().scoreManager().highScores()[static_cast<EnumValue>(StageLevel::LevelMAX)])).draw(stagetextsubSize, stageMAXtextsub);
 
 	// 図形の見本.
-	m_sampleCircle.drawFrame(haba, kuro).draw(FigureGenerator::SortingColorsDefault[0]);// 色変えに対応するように !!.
-	m_sampleTriangle.drawFrame(haba, kuro).draw(FigureGenerator::SortingColorsDefault[1]);
-	m_sampleRect.drawFrame(haba, kuro).draw(FigureGenerator::SortingColorsDefault[2]);
+	m_sampleCircle.drawFrame(haba, kuro).draw(getData().uiManager().color(SortingBoxIdx::Left));
+	m_sampleTriangle.drawFrame(haba, kuro).draw(getData().uiManager().color(SortingBoxIdx::Midle));
+	m_sampleRect.drawFrame(haba, kuro).draw(getData().uiManager().color(SortingBoxIdx::Right));
 
 	FontAsset(FontTitle)(U"色が見づらい場合：").drawAt(16, colorchangeText, kuro);
 
