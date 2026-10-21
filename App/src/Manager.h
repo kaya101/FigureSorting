@@ -172,14 +172,14 @@ public:
 	void draw(const UILayer layer, const double t) const;
 	void drawPlayingScene() const;
 
+	const ColorF& color(const SortingBoxIdx boxIdx) const;
+	const String& text(const SortingBoxIdx boxIdx) const;
+
 private:
 	GameManager& m_gameManager;
 	ScoreManager& m_scoreManager;
 	HashTable<UILayer, std::function<void()>> m_drawTable;
 	HashTable<UILayer, std::function<void(const double t)>> m_drawEasingTable;
-
-	const ColorF& color(const SortingBoxIdx boxIdx) const;
-	const String& text(const SortingBoxIdx boxIdx) const;
 
 	// ゲーム結果画面の幕が下りるやつ.
 	void m_boxBounce_aud(const double t, const RectF& rect, const ColorF& colorf) const;

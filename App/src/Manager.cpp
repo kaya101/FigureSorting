@@ -376,10 +376,10 @@ const ColorF& UIManager::color(const SortingBoxIdx boxIdx) const
 
 	if (m_gameManager.isChangedColor())
 	{
-		return ScoreManager::SortingAnswers[idx].colors.colorChanged;
+		return m_scoreManager.SortingAnswers[idx].colors.colorChanged;
 	}
 
-	return ScoreManager::SortingAnswers[idx].colors.colorDefault;
+	return m_scoreManager.SortingAnswers[idx].colors.colorDefault;
 }
 
 const String& UIManager::text(const SortingBoxIdx boxIdx) const
@@ -390,10 +390,10 @@ const String& UIManager::text(const SortingBoxIdx boxIdx) const
 
 	if (m_gameManager.isChangedColor())
 	{
-		return ScoreManager::SortingAnswers[idx].texts.textChanged;
+		return m_scoreManager.SortingAnswers[idx].texts.textChanged;
 	}
 
-	return ScoreManager::SortingAnswers[idx].texts.textDefault;
+	return m_scoreManager.SortingAnswers[idx].texts.textDefault;
 }
 
 // ゲーム結果画面の幕が下りるやつ.
