@@ -88,11 +88,14 @@ void Title::draw() const
 
 void Title::drawFadeIn(double t) const
 {
+	getData().uiManager().fadeIn(t);
 }
 
 void Title::drawFadeOut(double t) const
 {
 	AudioAsset(AudioManager::get().getName(BGMID::Title)).stop(FadeTime);
+
+	getData().uiManager().fadeOut(t);
 }
 
 void Title::initialize()
@@ -172,11 +175,14 @@ void Stage::draw() const
 
 void Stage::drawFadeIn(double t) const
 {
+	getData().uiManager().fadeIn(t);
 }
 
 void Stage::drawFadeOut(double t) const
 {
 	AudioAsset(AudioManager::get().getName(BGMID::Stage)).stop(FadeTime);
+
+	getData().uiManager().fadeOut(t);
 }
 
 void Stage::initialize()
@@ -288,6 +294,7 @@ void LetsPlay::draw() const
 
 void LetsPlay::drawFadeIn(double t) const
 {
+	getData().uiManager().fadeIn(t);
 }
 
 void LetsPlay::drawFadeOut(double t) const
@@ -759,6 +766,8 @@ void Result::drawFadeIn(double t) const
 void Result::drawFadeOut(double t) const
 {
 	AudioAsset(AudioManager::get().getName(BGMID::Result)).stop(FadeTime);
+
+	getData().uiManager().fadeOut(t);
 }
 
 void Result::initialize()
