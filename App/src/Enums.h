@@ -91,3 +91,26 @@ enum class SEID : EnumValue
 	ResultCurtain,
 	Count
 };
+
+enum class ButtonID : EnumValue
+{
+	TitleStartGame,
+	TitleQuitGame,
+	StageSelectLevel01,
+	StageSelectLevel02,
+	StageSelectLevelMAX,
+	StageChangeColor,
+	StageSkipExplain,
+	LetsPlayMoveNextExplain,
+	LetsPlayMovePrevExplain,
+	LetsPlayOK,
+	LetsPlayStart,
+	LetsPlayOpenPause,
+	LetsPlayClosePause,
+	LetsPlayRetire,
+	LetsPlayContinue,
+	ResultTryAgain,
+	ResultBackStage,
+	ResultBackTitle,
+	Count
+};

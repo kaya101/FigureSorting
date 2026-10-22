@@ -96,9 +96,10 @@ private:
 	const Circle m_sampleCircle = { stage01textback.x + stage01textback.w / 2, stage01textback.y - stage01textback.w / 4 - 10 , stage01textback.w / 4 };
 	const Triangle m_sampleTriangle = { (double)(stage02textback.x + stage02textback.w / 2), (double)(stage02textback.y - stage02textback.w / 2 + 66) , (double)(stage02textback.w / 2) };
 	const RectF m_sampleRect = { Arg::center(stageMAXtextback.x + stageMAXtextback.w / 2, stageMAXtextback.y - stageMAXtextback.w / 2 + 40) , stageMAXtextback.w / 2 };
-	const String m_markedText = U"〆";
+	const String MarkedText = U"〆";
 
 	void setupSortRule(const StageLevel level, GameData& gd) const;
+	void syncButtonState() const;
 };
 
 class LetsPlay
@@ -157,8 +158,8 @@ private:
 	static constexpr Vec2 yondeyoLeft = { 280, 120 };					// ルールの読み忘れ防止.
 	static constexpr Vec2 yondeyoRight = { 520, 120 };
 	static constexpr Rect pauseWindow = { 200, 130, 400, 240 };			// 一時中止のウィンドウ.
-	static constexpr Rect pauseRetire = { 230, 290, 160, 50 };			// やめてステージに戻るボタン.
-	static constexpr Rect pauseContinue = { 404, 290, 160, 50 };		// 再開するボタン.
+	static constexpr Rect pauseRetire = { 210, 290, 180, 50 };			// やめてステージに戻るボタン.
+	static constexpr Rect pauseContinue = { 410, 290, 180, 50 };		// 再開するボタン.
 	static constexpr uint8 m_timelimit = 15;							// 制限時間.
 
 	double m_t_cd = 0.0;							// カウントダウンの時間.

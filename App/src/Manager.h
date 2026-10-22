@@ -16,7 +16,7 @@ public:
 class GameManager : public IManager
 {
 public:
-	static constexpr RectF SortedArea = { Vec2(50, 130), SizeF(700, 400) };	// 見えない壁の当たり判定.
+	static constexpr RectF SortedArea = { Arg::center(400, 360), SizeF(650, 270) };	// 見えない壁の当たり判定.
 
 	using SortingBoxArray = std::array<RectF, static_cast<EnumValue>(SortingBoxIdx::Count)>;
 	static constexpr std::array<SortingBoxArray, static_cast<EnumValue>(SortingBoxLayerIdx::Count)> SortingBoxes = {

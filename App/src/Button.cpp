@@ -10,6 +10,7 @@ ButtonBase::ButtonBase(const ButtonCtx& ctx)
 	, m_bodyColor(ctx.bodyColor)
 	, m_text(ctx.text)
 	, m_fontName(ctx.fontName)
+	, m_id(ctx.id)
 {
 	turnOffDraw();
 	turnOffPerform();

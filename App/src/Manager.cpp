@@ -106,11 +106,11 @@ void GameManager::setSortRule(const StageLevel nextStageIdx)
 
 const std::array<ScoreManager::AnswerData, static_cast<EnumValue>(SortingBoxIdx::Count)> ScoreManager::SortingAnswers = {
 	// 左 に仕分けると正解になるデータ群.
-	ScoreManager::AnswerData(SortingShapeType::Cricle, ScoreManager::AnswerData::Colors{ aka, red }, ScoreManager::AnswerData::Texts{ U"あか", U"まる" }),
+	ScoreManager::AnswerData(SortingShapeType::Cricle, ScoreManager::AnswerData::Colors{ MainRed, ChangedColorOrange }, ScoreManager::AnswerData::Texts{ U"あか", U"まる" }),
 	// 真ん中 に仕分けると正解になるデータ群.
-	ScoreManager::AnswerData(SortingShapeType::Triangle, ScoreManager::AnswerData::Colors{ midori, yelow }, ScoreManager::AnswerData::Texts{ U"みどり", U"さんかく" }),
+	ScoreManager::AnswerData(SortingShapeType::Triangle, ScoreManager::AnswerData::Colors{ MainGreen, ChangedColorBluishgreen }, ScoreManager::AnswerData::Texts{ U"みどり", U"さんかく" }),
 	// 右 に仕分けると正解になるデータ群.
-	ScoreManager::AnswerData(SortingShapeType::Square, ScoreManager::AnswerData::Colors{ ao, blue }, ScoreManager::AnswerData::Texts{ U"あお", U"しかく" })
+	ScoreManager::AnswerData(SortingShapeType::Square, ScoreManager::AnswerData::Colors{ MainBlue, ChangedColorBlue }, ScoreManager::AnswerData::Texts{ U"あお", U"しかく" })
 };
 
 void ScoreManager::init()
@@ -134,7 +134,7 @@ void ScoreManager::reset()
 	m_comboNum = 0;
 	m_newRecord = false;
 	m_isCorrectSorted = false;
-	m_highScores = std::array<ScoreValue, static_cast<EnumValue>(StageLevel::Count)>{ 0, 0, 0 };
+	//m_highScores = std::array<ScoreValue, static_cast<EnumValue>(StageLevel::Count)>{ 0, 0, 0 };
 }
 
 void ScoreManager::retry()
@@ -281,9 +281,9 @@ void UIManager::init()
 				const auto idx = static_cast<SortingBoxIdx>(i);
 				const RectF box = m_gameManager.SortingBoxes[static_cast<EnumValue>(SortingBoxLayerIdx::Upperside)][i];
 
-				box.drawFrame(haba, MainTextColor).draw(color(idx));
+				box.rounded(16).drawFrame(FrameWidth, MainTextColor).draw(color(idx));
 
-				FontAsset(U"FontText")(U"{}"_fmt(SortingBoxesMarks[i])).drawAt(box.center(), MainTextColor);
+				FontAsset(U"FontText")(U"{}"_fmt(SortingBoxesMarks[i])).drawAt(78, box.center() + Vec2(0.0, -18.0), MainTextColor);
 
 				FontAsset(U"FontText")(U"\n{}"_fmt(text(idx))).drawAt(box.x + box.w / 2, box.y + box.h * 3 / 5, MainTextColor);
 			}
@@ -294,7 +294,7 @@ void UIManager::init()
 			for (size_t i = 0; i < static_cast<EnumValue>(SortingBoxIdx::Count); ++i)
 			{
 				m_gameManager.SortingBoxes[static_cast<EnumValue>(SortingBoxLayerIdx::Lowerside)][i]
-					.drawFrame(haba, MainTextColor)
+					.drawFrame(FrameWidth, MainTextColor)
 					.draw(color(static_cast<SortingBoxIdx>(i)) * 0.8);
 			}
 		};
@@ -309,7 +309,7 @@ void UIManager::init()
 
 	m_drawEasingTable[UILayer::ResultCurtain] = [this](const double t)
 		{
-			m_boxBounce_aud(t, makuSize, makuColor);
+			m_boxBounce_aud(t, GameWindow, CurtainColor);
 		};
 
 	m_drawEasingTable[UILayer::ResultTexts] = [this](const double t)
@@ -362,7 +362,7 @@ void UIManager::drawPlayingScene() const
 	draw(UILayer::SortRule);
 
 	// 分類箱の下側.
-	draw(UILayer::SortBoxesLowerside);
+	//draw(UILayer::SortBoxesLowerside);
 
 	// 仕分け中の図形.
 	draw(UILayer::SortedShape);
@@ -407,7 +407,7 @@ void UIManager::m_boxBounce_aud(const double t, const RectF& rect, const ColorF&
 
 void UIManager::m_textBounce_aud(const double t, const Vec2& vec2, const Font& font, const String& text, const uint8& size) const
 {
-	font(text).drawAt(size, vec2.x, vec2.y * easeOutBounce(t), kuro);
+	font(text).drawAt(size, vec2.x, vec2.y * easeOutBounce(t), MainBlack);
 }
 
 /*	End UIManager			********************************************************************************************************/
@@ -419,13 +419,13 @@ void AudioManager::init()
 	for (const auto& it : m_bgmTable)
 	{
 		const auto& data = it.second;
-		AudioAsset::Register(data.name, data.stream, data.path, data.loop);
+		AudioAsset::Register(data.name, data.stream, Resource(data.path), data.loop);
 	}
 
 	for (const auto& it : m_seTable)
 	{
 		const auto& data = it.second;
-		AudioAsset::Register(data.name, data.stream, data.path, data.loop);
+		AudioAsset::Register(data.name, data.stream, Resource(data.path), data.loop);
 	}
 }
 
@@ -438,12 +438,12 @@ const HashTable<BGMID, AudioManager::AudioData> AudioManager::m_bgmTable = {
 };
 
 const HashTable<SEID, AudioManager::AudioData> AudioManager::m_seTable = {
-	{ SEID::ClickButton,		{ U"ClickButton",		Audio::Stream , U"audio/決定ボタンを押す51.mp3", Loop::No } },// https://soundeffect-lab.info/sound/button/
-	{ SEID::CorrectSortCombo1,	{ U"CorrectSortCombo1",	Audio::Stream , U"audio/クイズ正解2.mp3", Loop::No } },// https://soundeffect-lab.info/sound/anime/
-	{ SEID::CorrectSortCombo2,	{ U"CorrectSortCombo2",	Audio::Stream , U"audio/クイズ正解2.mp3", Loop::No } },// https://soundeffect-lab.info/sound/anime/
-	{ SEID::CorrectSortCombo3,	{ U"CorrectSortCombo3",	Audio::Stream , U"audio/クイズ正解2.mp3", Loop::No } },// https://soundeffect-lab.info/sound/anime/
-	{ SEID::WrongSort,			{ U"WrongSort",			Audio::Stream , U"audio/クイズ不正解1.mp3", Loop::No } },// https://soundeffect-lab.info/sound/anime/
-	{ SEID::ResultCurtain,		{ U"ResultCurtain",		Audio::Stream , U"audio/小鼓（こつづみ）.mp3", Loop::No } }// https://soundeffect-lab.info/sound/anime/
+	{ SEID::ClickButton,		{ U"ClickButton",		Audio::Stream , U"audio/Button51.mp3", Loop::No } },// https://soundeffect-lab.info/sound/button/
+	{ SEID::CorrectSortCombo1,	{ U"CorrectSortCombo1",	Audio::Stream , U"audio/Correct.mp3", Loop::No } },// https://soundeffect-lab.info/sound/anime/
+	{ SEID::CorrectSortCombo2,	{ U"CorrectSortCombo2",	Audio::Stream , U"audio/Correct.mp3", Loop::No } },// https://soundeffect-lab.info/sound/anime/
+	{ SEID::CorrectSortCombo3,	{ U"CorrectSortCombo3",	Audio::Stream , U"audio/Correct.mp3", Loop::No } },// https://soundeffect-lab.info/sound/anime/
+	{ SEID::WrongSort,			{ U"WrongSort",			Audio::Stream , U"audio/Wrong.mp3", Loop::No } },// https://soundeffect-lab.info/sound/anime/
+	{ SEID::ResultCurtain,		{ U"ResultCurtain",		Audio::Stream , U"audio/Kodutumi.mp3", Loop::No } }// https://soundeffect-lab.info/sound/anime/
 };
 
 /*	End AudioManager		********************************************************************************************************/
