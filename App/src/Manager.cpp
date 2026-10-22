@@ -106,9 +106,9 @@ void GameManager::setSortRule(const StageLevel nextStageIdx)
 
 const std::array<ScoreManager::AnswerData, static_cast<EnumValue>(SortingBoxIdx::Count)> ScoreManager::SortingAnswers = {
 	// 左 に仕分けると正解になるデータ群.
-	ScoreManager::AnswerData(SortingShapeType::Cricle, ScoreManager::AnswerData::Colors{ MainRed, ChangedColorRed }, ScoreManager::AnswerData::Texts{ U"あか", U"まる" }),
+	ScoreManager::AnswerData(SortingShapeType::Cricle, ScoreManager::AnswerData::Colors{ MainRed, ChangedColorOrange }, ScoreManager::AnswerData::Texts{ U"あか", U"まる" }),
 	// 真ん中 に仕分けると正解になるデータ群.
-	ScoreManager::AnswerData(SortingShapeType::Triangle, ScoreManager::AnswerData::Colors{ MainGreen, ChangedColorYellow }, ScoreManager::AnswerData::Texts{ U"みどり", U"さんかく" }),
+	ScoreManager::AnswerData(SortingShapeType::Triangle, ScoreManager::AnswerData::Colors{ MainGreen, ChangedColorBluishgreen }, ScoreManager::AnswerData::Texts{ U"みどり", U"さんかく" }),
 	// 右 に仕分けると正解になるデータ群.
 	ScoreManager::AnswerData(SortingShapeType::Square, ScoreManager::AnswerData::Colors{ MainBlue, ChangedColorBlue }, ScoreManager::AnswerData::Texts{ U"あお", U"しかく" })
 };

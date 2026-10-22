@@ -58,7 +58,7 @@ const std::array<std::function<std::unique_ptr<SortedShapeBase>(const SortedShap
 
 // 使用する色.
 const std::array<ColorF, FigureGenerator::N> FigureGenerator::SortingColorsDefault = { MainRed, MainGreen, MainBlue };
-const std::array<ColorF, FigureGenerator::N> FigureGenerator::SortingColorsChanged = { ChangedColorRed, ChangedColorYellow, ChangedColorBlue };
+const std::array<ColorF, FigureGenerator::N> FigureGenerator::SortingColorsChanged = { ChangedColorOrange, ChangedColorBluishgreen, ChangedColorBlue };
 
 // 使用する文字.
 const std::array<String, FigureGenerator::N> FigureGenerator::SortingTextsDefault = { U"あか", U"みどり"  , U"あお" };
@@ -80,7 +80,7 @@ std::unique_ptr<SortedShapeBase> FigureGenerator::generate(const StageLevel leve
 
 	// 形 による分類パターンの決定.
 	shapeIdx = m_shapeGen.generate();
-	ColorF color = (isChangedColor) ? ChangedColorYellow : MainGreen;
+	ColorF color = (isChangedColor) ? ChangedColorBluishgreen : MainGreen;
 	String text = U"";
 
 	// 色 による分類パターンの追加.

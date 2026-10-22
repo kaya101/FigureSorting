@@ -25,9 +25,10 @@ static constexpr ColorF MainPurple{ U"#9d5b8b" };
 static constexpr ColorF ButtonColor = ColorF{ U"#006e54" } * 1.4;
 
 // 色が分かりにくい人用.
-static constexpr ColorF ChangedColorRed{ U"#ff4b00" };
-static constexpr ColorF ChangedColorYellow{ U"#fff100" };
-static constexpr ColorF ChangedColorBlue{ U"#4dc4ff" };
+// https://scrapbox.io/mandaRa/Okabe-Ito_Scale
+static constexpr ColorF ChangedColorOrange{ U"#E69F00" };
+static constexpr ColorF ChangedColorBlue{ U"#0072B2" };
+static constexpr ColorF ChangedColorBluishgreen{ U"#009E73" };
 
 //static constexpr ColorF shiro{ U"#e8ecef" };
 //static constexpr ColorF kuro{ U"#0d0015" };
