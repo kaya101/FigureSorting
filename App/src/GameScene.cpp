@@ -111,7 +111,7 @@ void Title::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(TitleFlow::Default),
-		ButtonCtx(m_gameStart, botan * 1.4, U"はじめる", FontButton),
+		ButtonCtx(m_gameStart, botan * 1.4, U"はじめる", FontButton, ButtonID::TitleStartGame),
 		[this](ButtonBase* self)
 		{
 			changeScene(SceneSwitch::Stage, FadeTime);
@@ -119,7 +119,7 @@ void Title::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(TitleFlow::Default),
-		ButtonCtx(m_quitGame, botan * 1.4, U"やめる", FontButton),
+		ButtonCtx(m_quitGame, botan * 1.4, U"やめる", FontButton, ButtonID::TitleQuitGame),
 		[this](ButtonBase* self)
 		{
 			System::Exit();
@@ -196,7 +196,7 @@ void Stage::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(UILayer::Default),
-		ButtonCtx(stage01botan, botan * 1.4, U"これ!!", FontButton),
+		ButtonCtx(stage01botan, botan * 1.4, U"これ!!", FontButton, ButtonID::StageSelectLevel01),
 		[this](ButtonBase* self)
 		{
 			setupSortRule(StageLevel::Level01, getData());
@@ -205,7 +205,7 @@ void Stage::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(UILayer::Default),
-		ButtonCtx(stage02botan, botan * 1.4, U"これ!!", FontButton),
+		ButtonCtx(stage02botan, botan * 1.4, U"これ!!", FontButton, ButtonID::StageSelectLevel02),
 		[this](ButtonBase* self)
 		{
 			setupSortRule(StageLevel::Level02, getData());
@@ -214,7 +214,7 @@ void Stage::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(UILayer::Default),
-		ButtonCtx(stageMAXbotan, botan * 1.4, U"これ!!", FontButton),
+		ButtonCtx(stageMAXbotan, botan * 1.4, U"これ!!", FontButton, ButtonID::StageSelectLevelMAX),
 		[this](ButtonBase* self)
 		{
 			setupSortRule(StageLevel::LevelMAX, getData());
@@ -223,7 +223,7 @@ void Stage::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(UILayer::Default),
-		ButtonCtx(colorchangeBox, bg_shiro, U"", FontButton),
+		ButtonCtx(colorchangeBox, bg_shiro, U"", FontButton, ButtonID::StageChangeColor),
 		[this](ButtonBase* self)
 		{
 			if (!getData().gameManager().isChangedColor())
@@ -242,7 +242,7 @@ void Stage::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(UILayer::Default),
-		ButtonCtx(explainskipBox, bg_shiro, U"", FontButton),
+		ButtonCtx(explainskipBox, bg_shiro, U"", FontButton, ButtonID::StageSkipExplain),
 		[this](ButtonBase* self)
 		{
 			if (!getData().gameManager().isSkippedExplain())
@@ -258,12 +258,18 @@ void Stage::initialize()
 				self->setText(U"");
 			}
 		});
+
+	syncButtonState();
 }
 
 void Stage::setupSortRule(const StageLevel level, GameData& gd) const
 {
 	// 素材の準備.
 	gd.gameManager().setSortRule(level);
+}
+
+void Stage::syncButtonState() const
+{
 }
 
 /*	End Stage Scene		********************************************************************************************************/
@@ -317,7 +323,7 @@ void LetsPlay::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(LetsPlayFlow::ExplainPage1),
-		ButtonCtx(explainNextButton, makuColor, U"→", FontButton),
+		ButtonCtx(explainNextButton, makuColor, U"→", FontButton, ButtonID::LetsPlayMoveNextExplain),
 		[this](ButtonBase* self)
 		{
 			MoveNextFlow(LetsPlayFlow::ExplainPage2);
@@ -325,7 +331,7 @@ void LetsPlay::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(LetsPlayFlow::ExplainPage2),
-		ButtonCtx(explainOK, makuColor, U"OK", FontButton),
+		ButtonCtx(explainOK, makuColor, U"OK", FontButton, ButtonID::LetsPlayOK),
 		[this](ButtonBase* self)
 		{
 			MoveNextFlow(LetsPlayFlow::Start);
@@ -333,7 +339,7 @@ void LetsPlay::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(LetsPlayFlow::ExplainPage2),
-		ButtonCtx(explainBackButton, makuColor, U"←", FontButton),
+		ButtonCtx(explainBackButton, makuColor, U"←", FontButton, ButtonID::LetsPlayMovePrevExplain),
 		[this](ButtonBase* self)
 		{
 			MoveNextFlow(LetsPlayFlow::ExplainPage1);
@@ -341,7 +347,7 @@ void LetsPlay::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(LetsPlayFlow::Start),
-		ButtonCtx(startbotan, kuro, U"START", FontButton),
+		ButtonCtx(startbotan, kuro, U"START", FontButton, ButtonID::LetsPlayStart),
 		[this](ButtonBase* self)
 		{
 			// 仕分けルールを表示する.
@@ -353,7 +359,7 @@ void LetsPlay::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(LetsPlayFlow::Play),
-		ButtonCtx(stopbotan, murasaki, U"←", FontButton),
+		ButtonCtx(stopbotan, murasaki, U"←", FontButton, ButtonID::LetsPlayOpenPause),
 		[this](ButtonBase* self)
 		{
 			m_playtime.pause();
@@ -365,7 +371,7 @@ void LetsPlay::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(LetsPlayFlow::Pause),
-		ButtonCtx(pauseRetire, daidai, U"ステージに戻る", FontButton),
+		ButtonCtx(pauseRetire, daidai, U"ステージに戻る", FontButton, ButtonID::LetsPlayRetire),
 		[this](ButtonBase* self)
 		{
 			getData().reset();
@@ -378,7 +384,7 @@ void LetsPlay::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(LetsPlayFlow::Pause),
-		ButtonCtx(pauseContinue, daidai, U"つづける", FontButton),
+		ButtonCtx(pauseContinue, daidai, U"つづける", FontButton, ButtonID::LetsPlayContinue),
 		[this](ButtonBase* self)
 		{
 			m_playtime.resume();
@@ -390,7 +396,7 @@ void LetsPlay::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(LetsPlayFlow::Pause),
-		ButtonCtx(stopbotan, murasaki, U"←", FontButton),
+		ButtonCtx(stopbotan, murasaki, U"←", FontButton, ButtonID::LetsPlayClosePause),
 		[this](ButtonBase* self)
 		{
 			m_playtime.resume();
@@ -784,7 +790,7 @@ void Result::initialize()
 	// 0 番目.
 	makeButton(
 		static_cast<ButtonTableKey>(ResultFlow::Default),
-		ButtonCtx(m_playAgain, kiiro, U"もう一回", FontButton),
+		ButtonCtx(m_playAgain, kiiro, U"もう一回", FontButton, ButtonID::ResultTryAgain),
 		[this](ButtonBase* self)
 		{
 			getData().retry();
@@ -798,7 +804,7 @@ void Result::initialize()
 	// 1 番目.
 	makeButton(
 		static_cast<ButtonTableKey>(ResultFlow::Default),
-		ButtonCtx(m_backStage, kiiro, U"ステージへ", FontButton),
+		ButtonCtx(m_backStage, kiiro, U"ステージへ", FontButton, ButtonID::ResultBackStage),
 		[this](ButtonBase* self)
 		{
 			getData().reset();
@@ -812,7 +818,7 @@ void Result::initialize()
 	// 2 番目.
 	makeButton(
 		static_cast<ButtonTableKey>(ResultFlow::Default),
-		ButtonCtx(m_backTitle, murasaki * 1.4, U"タイトルへ", FontButton),
+		ButtonCtx(m_backTitle, murasaki * 1.4, U"タイトルへ", FontButton, ButtonID::ResultBackTitle),
 		[this](ButtonBase* self)
 		{
 			getData().retry();

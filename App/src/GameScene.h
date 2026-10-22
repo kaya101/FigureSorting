@@ -99,6 +99,7 @@ private:
 	const String m_markedText = U"〆";
 
 	void setupSortRule(const StageLevel level, GameData& gd) const;
+	void syncButtonState() const;
 };
 
 class LetsPlay
