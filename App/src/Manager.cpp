@@ -28,6 +28,7 @@ void GameManager::reset()
 	m_sortedShapePtr = nullptr;
 
 	m_distance = Vec2().Zero();
+	m_isPaused = false;
 	m_isClassified = false;
 	m_boxIdx = SortingBoxIdx::Count;
 	m_currentSortRule = SortRule::Count;
