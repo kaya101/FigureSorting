@@ -50,6 +50,7 @@ public:
 	void setText(const String& text) { m_text = text; }
 	void setWorkCallBack(const Work& cb) { m_workCallBack = cb; }
 
+	const ButtonID id() const { return m_id; }
 	const bool isDrawing() const { return m_isDrawing; }
 	const bool canPerform() const { return m_canPerform; }
 

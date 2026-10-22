@@ -270,6 +270,24 @@ void Stage::setupSortRule(const StageLevel level, GameData& gd) const
 
 void Stage::syncButtonState() const
 {
+	const auto& it = m_buttonTable.find(static_cast<ButtonTableKey>(Stage::UILayer::Default));
+	if (it == m_buttonTable.end()) return;
+
+	for (auto& btnPtr : it->second)
+	{
+		if (btnPtr->id() == ButtonID::StageChangeColor)
+		{
+			if (getData().gameManager().isChangedColor()) btnPtr->setText(m_markedText);
+		}
+		else if (btnPtr->id() == ButtonID::StageSkipExplain)
+		{
+			if (getData().gameManager().isSkippedExplain()) btnPtr->setText(m_markedText);
+		}
+		else
+		{
+			continue;
+		}
+	}
 }
 
 /*	End Stage Scene		********************************************************************************************************/
