@@ -70,6 +70,11 @@ Title::Title(const InitData& init)
 	initialize();
 
 	enableButtonsAt(static_cast<ButtonTableKey>(TitleFlow::Default));
+
+	/*for (const auto& path : EnumResourceFiles())
+	{
+		Console << path;
+	}*/
 }
 
 void Title::update()

@@ -127,7 +127,15 @@ Resource(engine/soundfont/GMGSx.sf2.zstdcmp)
 //
 //////////////////////////////////////////////////////
 
-
+Resource(audio/Action.mp3)
+Resource(audio/Self-care.mp3)
+Resource(audio/Gump.mp3)
+Resource(audio/Charge.mp3)
+Resource(audio/Keep-It-A-Secret.mp3)
+Resource(audio/Button51.mp3)
+Resource(audio/Correct.mp3)
+Resource(audio/Wrong.mp3)
+Resource(audio/Kodutumi.mp3)
 
 /* examples 
 

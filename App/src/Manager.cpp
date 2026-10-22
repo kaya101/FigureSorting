@@ -419,13 +419,13 @@ void AudioManager::init()
 	for (const auto& it : m_bgmTable)
 	{
 		const auto& data = it.second;
-		AudioAsset::Register(data.name, data.stream, data.path, data.loop);
+		AudioAsset::Register(data.name, data.stream, Resource(data.path), data.loop);
 	}
 
 	for (const auto& it : m_seTable)
 	{
 		const auto& data = it.second;
-		AudioAsset::Register(data.name, data.stream, data.path, data.loop);
+		AudioAsset::Register(data.name, data.stream, Resource(data.path), data.loop);
 	}
 }
 
@@ -438,12 +438,12 @@ const HashTable<BGMID, AudioManager::AudioData> AudioManager::m_bgmTable = {
 };
 
 const HashTable<SEID, AudioManager::AudioData> AudioManager::m_seTable = {
-	{ SEID::ClickButton,		{ U"ClickButton",		Audio::Stream , U"audio/決定ボタンを押す51.mp3", Loop::No } },// https://soundeffect-lab.info/sound/button/
-	{ SEID::CorrectSortCombo1,	{ U"CorrectSortCombo1",	Audio::Stream , U"audio/クイズ正解2.mp3", Loop::No } },// https://soundeffect-lab.info/sound/anime/
-	{ SEID::CorrectSortCombo2,	{ U"CorrectSortCombo2",	Audio::Stream , U"audio/クイズ正解2.mp3", Loop::No } },// https://soundeffect-lab.info/sound/anime/
-	{ SEID::CorrectSortCombo3,	{ U"CorrectSortCombo3",	Audio::Stream , U"audio/クイズ正解2.mp3", Loop::No } },// https://soundeffect-lab.info/sound/anime/
-	{ SEID::WrongSort,			{ U"WrongSort",			Audio::Stream , U"audio/クイズ不正解1.mp3", Loop::No } },// https://soundeffect-lab.info/sound/anime/
-	{ SEID::ResultCurtain,		{ U"ResultCurtain",		Audio::Stream , U"audio/小鼓（こつづみ）.mp3", Loop::No } }// https://soundeffect-lab.info/sound/anime/
+	{ SEID::ClickButton,		{ U"ClickButton",		Audio::Stream , U"audio/Button51.mp3", Loop::No } },// https://soundeffect-lab.info/sound/button/
+	{ SEID::CorrectSortCombo1,	{ U"CorrectSortCombo1",	Audio::Stream , U"audio/Correct.mp3", Loop::No } },// https://soundeffect-lab.info/sound/anime/
+	{ SEID::CorrectSortCombo2,	{ U"CorrectSortCombo2",	Audio::Stream , U"audio/Correct.mp3", Loop::No } },// https://soundeffect-lab.info/sound/anime/
+	{ SEID::CorrectSortCombo3,	{ U"CorrectSortCombo3",	Audio::Stream , U"audio/Correct.mp3", Loop::No } },// https://soundeffect-lab.info/sound/anime/
+	{ SEID::WrongSort,			{ U"WrongSort",			Audio::Stream , U"audio/Wrong.mp3", Loop::No } },// https://soundeffect-lab.info/sound/anime/
+	{ SEID::ResultCurtain,		{ U"ResultCurtain",		Audio::Stream , U"audio/Kodutumi.mp3", Loop::No } }// https://soundeffect-lab.info/sound/anime/
 };
 
 /*	End AudioManager		********************************************************************************************************/
