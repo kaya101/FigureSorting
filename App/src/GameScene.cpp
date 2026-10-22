@@ -107,11 +107,11 @@ void Title::initialize()
 {
 	FontAsset(FontTitle).preload(m_TitleName);
 
-	Scene::SetBackground(bg_shiro);
+	Scene::SetBackground(BackGroundColor);
 
 	makeButton(
 		static_cast<ButtonTableKey>(TitleFlow::Default),
-		ButtonCtx(m_gameStart, botan * 1.4, U"はじめる", FontButton, ButtonID::TitleStartGame),
+		ButtonCtx(m_gameStart, ButtonColor, U"はじめる", FontButton, ButtonID::TitleStartGame),
 		[this](ButtonBase* self)
 		{
 			changeScene(SceneSwitch::Stage, FadeTime);
@@ -119,7 +119,7 @@ void Title::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(TitleFlow::Default),
-		ButtonCtx(m_quitGame, botan * 1.4, U"やめる", FontButton, ButtonID::TitleQuitGame),
+		ButtonCtx(m_quitGame, ButtonColor, U"やめる", FontButton, ButtonID::TitleQuitGame),
 		[this](ButtonBase* self)
 		{
 			System::Exit();
@@ -148,31 +148,31 @@ void Stage::update()
 void Stage::draw() const
 {
 	// ステージの説明背景.
-	FontAsset(FontTitle)(m_StageName).draw(48, 50, 30, kuro);
+	FontAsset(FontTitle)(m_StageName).draw(48, 50, 30, MainBlack);
 
 	// 01.
-	stage01textback.drawFrame(haba, kuro).draw(haiiro);
+	stage01textback.drawFrame(FrameWidth, MainBlack).draw(MainGray);
 	FontAsset(FontTitle)(U"Lv.1").drawAt(stagetextSize, stage01text);
 	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける"_fmt(getData().scoreManager().highScores()[static_cast<EnumValue>(StageLevel::Level01)])).draw(stagetextsubSize, stage01textsub);
 
 	// 02.
-	stage02textback.drawFrame(haba, kuro).draw(haiiro);
+	stage02textback.drawFrame(FrameWidth, MainBlack).draw(MainGray);
 	FontAsset(FontTitle)(U"Lv.2").drawAt(stagetextSize, stage02text);
 	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける\n・色でわける"_fmt(getData().scoreManager().highScores()[static_cast<EnumValue>(StageLevel::Level02)])).draw(stagetextsubSize, stage02textsub);
 
 	// MAX.
-	stageMAXtextback.drawFrame(haba, kuro).draw(haiiro);
+	stageMAXtextback.drawFrame(FrameWidth, MainBlack).draw(MainGray);
 	FontAsset(FontTitle)(U"Lv.3").drawAt(stagetextSize, stageMAXtext);
 	FontAsset(FontTitle)(U"High Score:{}\n\n・形でわける\n・色でわける\n・文字でわける"_fmt(getData().scoreManager().highScores()[static_cast<EnumValue>(StageLevel::LevelMAX)])).draw(stagetextsubSize, stageMAXtextsub);
 
 	// 図形の見本.
-	m_sampleCircle.drawFrame(haba, kuro).draw(getData().uiManager().color(SortingBoxIdx::Left));
-	m_sampleTriangle.drawFrame(haba, kuro).draw(getData().uiManager().color(SortingBoxIdx::Midle));
-	m_sampleRect.drawFrame(haba, kuro).draw(getData().uiManager().color(SortingBoxIdx::Right));
+	m_sampleCircle.drawFrame(FrameWidth, MainBlack).draw(getData().uiManager().color(SortingBoxIdx::Left));
+	m_sampleTriangle.drawFrame(FrameWidth, MainBlack).draw(getData().uiManager().color(SortingBoxIdx::Midle));
+	m_sampleRect.drawFrame(FrameWidth, MainBlack).draw(getData().uiManager().color(SortingBoxIdx::Right));
 
-	FontAsset(FontTitle)(U"色が見づらい場合：").drawAt(16, colorchangeText, kuro);
+	FontAsset(FontTitle)(U"色が見づらい場合：").drawAt(16, colorchangeText, MainBlack);
 
-	FontAsset(FontTitle)(U"説明を飛ばすとき：").drawAt(16, explainskipText, kuro);
+	FontAsset(FontTitle)(U"説明を飛ばすとき：").drawAt(16, explainskipText, MainBlack);
 
 	// ボタンのレイヤーが一番上.
 	drawButtonsAt(static_cast<ButtonTableKey>(UILayer::Default));
@@ -192,11 +192,11 @@ void Stage::drawFadeOut(double t) const
 
 void Stage::initialize()
 {
-	Scene::SetBackground(bg_shiro);
+	Scene::SetBackground(BackGroundColor);
 
 	makeButton(
 		static_cast<ButtonTableKey>(UILayer::Default),
-		ButtonCtx(stage01botan, botan * 1.4, U"これ!!", FontButton, ButtonID::StageSelectLevel01),
+		ButtonCtx(stage01botan, ButtonColor, U"これ!!", FontButton, ButtonID::StageSelectLevel01),
 		[this](ButtonBase* self)
 		{
 			setupSortRule(StageLevel::Level01, getData());
@@ -205,7 +205,7 @@ void Stage::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(UILayer::Default),
-		ButtonCtx(stage02botan, botan * 1.4, U"これ!!", FontButton, ButtonID::StageSelectLevel02),
+		ButtonCtx(stage02botan, ButtonColor, U"これ!!", FontButton, ButtonID::StageSelectLevel02),
 		[this](ButtonBase* self)
 		{
 			setupSortRule(StageLevel::Level02, getData());
@@ -214,7 +214,7 @@ void Stage::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(UILayer::Default),
-		ButtonCtx(stageMAXbotan, botan * 1.4, U"これ!!", FontButton, ButtonID::StageSelectLevelMAX),
+		ButtonCtx(stageMAXbotan, ButtonColor, U"これ!!", FontButton, ButtonID::StageSelectLevelMAX),
 		[this](ButtonBase* self)
 		{
 			setupSortRule(StageLevel::LevelMAX, getData());
@@ -223,7 +223,7 @@ void Stage::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(UILayer::Default),
-		ButtonCtx(colorchangeBox, bg_shiro, U"", FontButton, ButtonID::StageChangeColor),
+		ButtonCtx(colorchangeBox, BackGroundColor, U"", FontButton, ButtonID::StageChangeColor),
 		[this](ButtonBase* self)
 		{
 			if (!getData().gameManager().isChangedColor())
@@ -242,7 +242,7 @@ void Stage::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(UILayer::Default),
-		ButtonCtx(explainskipBox, bg_shiro, U"", FontButton, ButtonID::StageSkipExplain),
+		ButtonCtx(explainskipBox, BackGroundColor, U"", FontButton, ButtonID::StageSkipExplain),
 		[this](ButtonBase* self)
 		{
 			if (!getData().gameManager().isSkippedExplain())
@@ -333,7 +333,7 @@ void LetsPlay::drawFadeOut(double t) const
 
 void LetsPlay::initialize()
 {
-	Scene::SetBackground(bg_shiro);
+	Scene::SetBackground(BackGroundColor);
 
 	m_t_cd = 0.0;
 	m_gt = 0;
@@ -341,7 +341,7 @@ void LetsPlay::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(LetsPlayFlow::ExplainPage1),
-		ButtonCtx(explainNextButton, makuColor, U"→", FontButton, ButtonID::LetsPlayMoveNextExplain),
+		ButtonCtx(explainNextButton, CurtainColor, U"→", FontButton, ButtonID::LetsPlayMoveNextExplain),
 		[this](ButtonBase* self)
 		{
 			MoveNextFlow(LetsPlayFlow::ExplainPage2);
@@ -349,7 +349,7 @@ void LetsPlay::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(LetsPlayFlow::ExplainPage2),
-		ButtonCtx(explainOK, makuColor, U"OK", FontButton, ButtonID::LetsPlayOK),
+		ButtonCtx(explainOK, CurtainColor, U"OK", FontButton, ButtonID::LetsPlayOK),
 		[this](ButtonBase* self)
 		{
 			MoveNextFlow(LetsPlayFlow::Start);
@@ -357,7 +357,7 @@ void LetsPlay::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(LetsPlayFlow::ExplainPage2),
-		ButtonCtx(explainBackButton, makuColor, U"←", FontButton, ButtonID::LetsPlayMovePrevExplain),
+		ButtonCtx(explainBackButton, CurtainColor, U"←", FontButton, ButtonID::LetsPlayMovePrevExplain),
 		[this](ButtonBase* self)
 		{
 			MoveNextFlow(LetsPlayFlow::ExplainPage1);
@@ -365,7 +365,7 @@ void LetsPlay::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(LetsPlayFlow::Start),
-		ButtonCtx(startbotan, kuro, U"START", FontButton, ButtonID::LetsPlayStart),
+		ButtonCtx(startbotan, MainBlack, U"START", FontButton, ButtonID::LetsPlayStart),
 		[this](ButtonBase* self)
 		{
 			// 仕分けルールを表示する.
@@ -377,7 +377,7 @@ void LetsPlay::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(LetsPlayFlow::Play),
-		ButtonCtx(stopbotan, murasaki, U"←", FontButton, ButtonID::LetsPlayOpenPause),
+		ButtonCtx(stopbotan, MainPurple, U"←", FontButton, ButtonID::LetsPlayOpenPause),
 		[this](ButtonBase* self)
 		{
 			m_playtime.pause();
@@ -389,7 +389,7 @@ void LetsPlay::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(LetsPlayFlow::Pause),
-		ButtonCtx(pauseRetire, daidai, U"ステージに戻る", FontButton, ButtonID::LetsPlayRetire),
+		ButtonCtx(pauseRetire, MainOrange, U"ステージに戻る", FontButton, ButtonID::LetsPlayRetire),
 		[this](ButtonBase* self)
 		{
 			getData().reset();
@@ -402,7 +402,7 @@ void LetsPlay::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(LetsPlayFlow::Pause),
-		ButtonCtx(pauseContinue, daidai, U"つづける", FontButton, ButtonID::LetsPlayContinue),
+		ButtonCtx(pauseContinue, MainOrange, U"つづける", FontButton, ButtonID::LetsPlayContinue),
 		[this](ButtonBase* self)
 		{
 			m_playtime.resume();
@@ -414,7 +414,7 @@ void LetsPlay::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(LetsPlayFlow::Pause),
-		ButtonCtx(stopbotan, murasaki, U"←", FontButton, ButtonID::LetsPlayClosePause),
+		ButtonCtx(stopbotan, MainPurple, U"←", FontButton, ButtonID::LetsPlayClosePause),
 		[this](ButtonBase* self)
 		{
 			m_playtime.resume();
@@ -513,12 +513,12 @@ void LetsPlay::initUpdateTable()
 			if (getData().scoreManager().isCorrectSorted())
 			{
 				// 正解したエフェクト.
-				effect_TrueOrFalse(t_tf, getData().scoreManager().comboNum(), kuro, FontAsset(U"FontText"), 30);
+				effect_TrueOrFalse(t_tf, getData().scoreManager().comboNum(), MainBlack, FontAsset(U"FontText"), 30);
 			}
 			else
 			{
 				// 間違えた時のエフェクト.
-				effect_TrueOrFalse(t_tf, getData().scoreManager().comboNum(), kuro, FontAsset(U"FontText"), 30);
+				effect_TrueOrFalse(t_tf, getData().scoreManager().comboNum(), MainBlack, FontAsset(U"FontText"), 30);
 			}
 			// 時間経過で消す.
 			if (t_tf > 20) m_truefalse.reset();
@@ -535,31 +535,31 @@ void LetsPlay::initDrawTable()
 	m_drawTable[LetsPlayFlow::ExplainPage1] = [this]()
 		{
 			// ちょっと暗くする.
-			makuSize.draw(makuColor);
+			GameWindow.draw(CurtainColor);
 
 			// 説明窓.
-			explainWindow.drawFrame(haba, kuro).draw(shiro);
-			FontAsset(U"FontText")(U"-ルール説明-").draw(30, explainMain, kuro);
-			FontAsset(U"FontText")(U"「かたち」は\n図形の形").drawAt(26, explainSubShape, kuro);
-			FontAsset(U"FontText")(U"「いろ」は\n図形の色").drawAt(26, explainSubColor, kuro);
-			FontAsset(U"FontText")(U"「もじ」は\n図形の文字").drawAt(26, explainSubText, kuro);
+			explainWindow.drawFrame(FrameWidth, MainBlack).draw(MainWhite);
+			FontAsset(U"FontText")(U"-ルール説明-").draw(30, explainMain, MainBlack);
+			FontAsset(U"FontText")(U"「かたち」は\n図形の形").drawAt(26, explainSubShape, MainBlack);
+			FontAsset(U"FontText")(U"「いろ」は\n図形の色").drawAt(26, explainSubColor, MainBlack);
+			FontAsset(U"FontText")(U"「もじ」は\n図形の文字").drawAt(26, explainSubText, MainBlack);
 
 			// 区切りの線.
-			Line{ explainLineLeftBegin, explainLineLeftEnd }.draw(haba, kuro);
-			Line{ explainLineRightBegin, explainLineRightEnd }.draw(haba, kuro);
+			Line{ explainLineLeftBegin, explainLineLeftEnd }.draw(FrameWidth, MainBlack);
+			Line{ explainLineRightBegin, explainLineRightEnd }.draw(FrameWidth, MainBlack);
 
 			// 飾りの図形.
-			explainShapeCircle.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
-			explainShapeTriangle.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
-			explainShapeRect.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
+			explainShapeCircle.drawFrame(FrameWidth, MainBlack).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
+			explainShapeTriangle.drawFrame(FrameWidth, MainBlack).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
+			explainShapeRect.drawFrame(FrameWidth, MainBlack).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
 
-			explainColorCircle.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[0].colors.colorChanged : ScoreManager::SortingAnswers[0].colors.colorDefault);
-			explainColorTriangle.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
-			explainColorRect.drawFrame(haba, kuro).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[2].colors.colorChanged : ScoreManager::SortingAnswers[2].colors.colorDefault);
+			explainColorCircle.drawFrame(FrameWidth, MainBlack).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[0].colors.colorChanged : ScoreManager::SortingAnswers[0].colors.colorDefault);
+			explainColorTriangle.drawFrame(FrameWidth, MainBlack).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].colors.colorChanged : ScoreManager::SortingAnswers[1].colors.colorDefault);
+			explainColorRect.drawFrame(FrameWidth, MainBlack).draw((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[2].colors.colorChanged : ScoreManager::SortingAnswers[2].colors.colorDefault);
 
-			FontAsset(U"FontText")((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[0].texts.textChanged : ScoreManager::SortingAnswers[0].texts.textDefault).draw(30, explainTextmaru, kuro);
-			FontAsset(U"FontText")((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].texts.textChanged : ScoreManager::SortingAnswers[1].texts.textDefault).draw(30, explainTextsankaku, kuro);
-			FontAsset(U"FontText")((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[2].texts.textChanged : ScoreManager::SortingAnswers[2].texts.textDefault).draw(30, explainTextshikaku, kuro);
+			FontAsset(U"FontText")((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[0].texts.textChanged : ScoreManager::SortingAnswers[0].texts.textDefault).draw(30, explainTextmaru, MainBlack);
+			FontAsset(U"FontText")((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[1].texts.textChanged : ScoreManager::SortingAnswers[1].texts.textDefault).draw(30, explainTextsankaku, MainBlack);
+			FontAsset(U"FontText")((getData().gameManager().isChangedColor()) ? ScoreManager::SortingAnswers[2].texts.textChanged : ScoreManager::SortingAnswers[2].texts.textDefault).draw(30, explainTextshikaku, MainBlack);
 
 			drawButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
 		};
@@ -567,12 +567,12 @@ void LetsPlay::initDrawTable()
 	m_drawTable[LetsPlayFlow::ExplainPage2] = [this]()
 		{
 			// ちょっと暗くする.
-			makuSize.draw(makuColor);
+			GameWindow.draw(CurtainColor);
 
 			// 説明窓.
-			explainWindow.drawFrame(haba, kuro).draw(shiro);
-			FontAsset(U"FontText")(U"-操作方法-").draw(30, explainMain, kuro);
-			FontAsset(U"FontText")(U"左クリックでつかんで移動!!").drawAt(30, 400, 300, kuro);
+			explainWindow.drawFrame(FrameWidth, MainBlack).draw(MainWhite);
+			FontAsset(U"FontText")(U"-操作方法-").draw(30, explainMain, MainBlack);
+			FontAsset(U"FontText")(U"左クリックでつかんで移動!!").drawAt(30, 400, 300, MainBlack);
 
 			drawButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
 		};
@@ -580,10 +580,10 @@ void LetsPlay::initDrawTable()
 	m_drawTable[LetsPlayFlow::Start] = [this]()
 		{
 			// ちょっと暗くする.
-			makuSize.draw(makuColor);
+			GameWindow.draw(CurtainColor);
 
 			// START ボタンがクリックできることを分かりやすく.
-			FontAsset(U"FontText")(U"クリックしてスタート").drawAt(16, 400, 340, kuro);
+			FontAsset(U"FontText")(U"クリックしてスタート").drawAt(16, 400, 340, MainBlack);
 
 			drawButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
 		};
@@ -596,33 +596,33 @@ void LetsPlay::initDrawTable()
 			getData().uiManager().draw(UILayer::SortBoxesUpperside);
 
 			// 開幕演出.
-			m_boxOutQuad_adu(t_cdmaku, makuSize, makuColor);
+			m_boxOutQuad_adu(t_cdmaku, GameWindow, CurtainColor);
 
 			getData().uiManager().draw(UILayer::SortRule);
 
 			if (m_t_cd <= 1)
 			{
-				FontAsset(U"FontText")(U"3").drawAt(countdownsize, countdownpoint, kuro);
+				FontAsset(U"FontText")(U"3").drawAt(countdownsize, countdownpoint, MainBlack);
 
 				// ルールの読み忘れを無くす矢印.
-				FontAsset(U"FontText")(U"↑").drawAt(50, yondeyoLeft, kuro);
-				FontAsset(U"FontText")(U"↑").drawAt(50, yondeyoRight, kuro);
+				FontAsset(U"FontText")(U"↑").drawAt(50, yondeyoLeft, MainBlack);
+				FontAsset(U"FontText")(U"↑").drawAt(50, yondeyoRight, MainBlack);
 			}
 			else if (1 < m_t_cd && m_t_cd <= 2)
 			{
-				FontAsset(U"FontText")(U"2").drawAt(countdownsize, countdownpoint, kuro);
+				FontAsset(U"FontText")(U"2").drawAt(countdownsize, countdownpoint, MainBlack);
 			}
 			else if (2 < m_t_cd && m_t_cd <= 3)
 			{
-				FontAsset(U"FontText")(U"1").drawAt(countdownsize, countdownpoint, kuro);
+				FontAsset(U"FontText")(U"1").drawAt(countdownsize, countdownpoint, MainBlack);
 
 				// ルールの読み忘れを無くす矢印.
-				FontAsset(U"FontText")(U"↑").drawAt(50, yondeyoLeft, kuro);
-				FontAsset(U"FontText")(U"↑").drawAt(50, yondeyoRight, kuro);
+				FontAsset(U"FontText")(U"↑").drawAt(50, yondeyoLeft, MainBlack);
+				FontAsset(U"FontText")(U"↑").drawAt(50, yondeyoRight, MainBlack);
 			}
 			else if (3 < m_t_cd && m_t_cd <= 4)
 			{
-				FontAsset(U"FontText")(U"START!!").drawAt(countdownsize, countdownpoint, kuro);
+				FontAsset(U"FontText")(U"START!!").drawAt(countdownsize, countdownpoint, MainBlack);
 			}
 
 			drawButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
@@ -634,7 +634,7 @@ void LetsPlay::initDrawTable()
 			getData().uiManager().drawPlayingScene();
 
 			// 制限時間.
-			FontAsset(U"FontText")(U"time(s):{}"_fmt(m_timelimit - m_gt)).draw(20, 60, kuro);
+			FontAsset(U"FontText")(U"time(s):{}"_fmt(m_timelimit - m_gt)).draw(20, 60, MainBlack);
 
 			drawButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
 		};
@@ -642,8 +642,8 @@ void LetsPlay::initDrawTable()
 	m_drawTable[LetsPlayFlow::Pause] = [this]()
 		{
 			// 一時停止のウィンドウ.
-			pauseWindow.drawFrame(haba, kuro).draw(ColorF{ 0.7, 0.7, 0.7, 0.8 });
-			FontAsset(U"FontText")(U"--PAUSE--").drawAt(40, (pauseWindow.x + pauseWindow.w / 2), (pauseWindow.y + pauseWindow.h / 3), kuro);
+			pauseWindow.drawFrame(FrameWidth, MainBlack).draw(ColorF{ 0.7, 0.7, 0.7, 0.8 });
+			FontAsset(U"FontText")(U"--PAUSE--").drawAt(40, (pauseWindow.x + pauseWindow.w / 2), (pauseWindow.y + pauseWindow.h / 3), MainBlack);
 
 			drawButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
 		};
@@ -753,7 +753,7 @@ void Result::draw() const
 			}
 			else
 			{
-				m_textOutExpo_aap(sortedPtr->rate(), sortedTextAppearPoint, sortedText, kuro, FontAsset(FontButton), U"sorted:{}"_fmt(getData().scoreManager().classifyNum()), 30);
+				m_textOutExpo_aap(sortedPtr->rate(), sortedTextAppearPoint, sortedText, MainBlack, FontAsset(FontButton), U"sorted:{}"_fmt(getData().scoreManager().classifyNum()), 30);
 			}
 		}
 
@@ -762,7 +762,7 @@ void Result::draw() const
 		{
 			if (truePtr != nullptr)
 			{
-				m_textOutExpo_aap(truePtr->rate(), trueTextAppearPoint, trueText, kuro, FontAsset(FontButton), U"true:{}"_fmt(getData().scoreManager().correctNum()), 30);
+				m_textOutExpo_aap(truePtr->rate(), trueTextAppearPoint, trueText, MainBlack, FontAsset(FontButton), U"true:{}"_fmt(getData().scoreManager().correctNum()), 30);
 			}
 			else
 			{
@@ -775,7 +775,7 @@ void Result::draw() const
 		{
 			if (missPtr != nullptr)
 			{
-				m_textOutExpo_aap(missPtr->rate(), missTextAppearPoint, missText, kuro, FontAsset(FontButton), U"miss:{}"_fmt(getData().scoreManager().missNum()), 30);
+				m_textOutExpo_aap(missPtr->rate(), missTextAppearPoint, missText, MainBlack, FontAsset(FontButton), U"miss:{}"_fmt(getData().scoreManager().missNum()), 30);
 			}
 			else
 			{
@@ -801,14 +801,14 @@ void Result::drawFadeOut(double t) const
 
 void Result::initialize()
 {
-	Scene::SetBackground(bg_shiro);
+	Scene::SetBackground(BackGroundColor);
 
 	m_resultwindow.restart();
 
 	// 0 番目.
 	makeButton(
 		static_cast<ButtonTableKey>(ResultFlow::Default),
-		ButtonCtx(m_playAgain, kiiro, U"もう一回", FontButton, ButtonID::ResultTryAgain),
+		ButtonCtx(m_playAgain, MainYellow, U"もう一回", FontButton, ButtonID::ResultTryAgain),
 		[this](ButtonBase* self)
 		{
 			getData().retry();
@@ -822,7 +822,7 @@ void Result::initialize()
 	// 1 番目.
 	makeButton(
 		static_cast<ButtonTableKey>(ResultFlow::Default),
-		ButtonCtx(m_backStage, kiiro, U"ステージへ", FontButton, ButtonID::ResultBackStage),
+		ButtonCtx(m_backStage, MainYellow, U"ステージへ", FontButton, ButtonID::ResultBackStage),
 		[this](ButtonBase* self)
 		{
 			getData().reset();
@@ -836,7 +836,7 @@ void Result::initialize()
 	// 2 番目.
 	makeButton(
 		static_cast<ButtonTableKey>(ResultFlow::Default),
-		ButtonCtx(m_backTitle, murasaki * 1.4, U"タイトルへ", FontButton, ButtonID::ResultBackTitle),
+		ButtonCtx(m_backTitle, MainPurple * 1.4, U"タイトルへ", FontButton, ButtonID::ResultBackTitle),
 		[this](ButtonBase* self)
 		{
 			getData().retry();

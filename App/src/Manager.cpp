@@ -106,11 +106,11 @@ void GameManager::setSortRule(const StageLevel nextStageIdx)
 
 const std::array<ScoreManager::AnswerData, static_cast<EnumValue>(SortingBoxIdx::Count)> ScoreManager::SortingAnswers = {
 	// 左 に仕分けると正解になるデータ群.
-	ScoreManager::AnswerData(SortingShapeType::Cricle, ScoreManager::AnswerData::Colors{ aka, red }, ScoreManager::AnswerData::Texts{ U"あか", U"まる" }),
+	ScoreManager::AnswerData(SortingShapeType::Cricle, ScoreManager::AnswerData::Colors{ MainRed, ChangedColorRed }, ScoreManager::AnswerData::Texts{ U"あか", U"まる" }),
 	// 真ん中 に仕分けると正解になるデータ群.
-	ScoreManager::AnswerData(SortingShapeType::Triangle, ScoreManager::AnswerData::Colors{ midori, yelow }, ScoreManager::AnswerData::Texts{ U"みどり", U"さんかく" }),
+	ScoreManager::AnswerData(SortingShapeType::Triangle, ScoreManager::AnswerData::Colors{ MainGreen, ChangedColorYellow }, ScoreManager::AnswerData::Texts{ U"みどり", U"さんかく" }),
 	// 右 に仕分けると正解になるデータ群.
-	ScoreManager::AnswerData(SortingShapeType::Square, ScoreManager::AnswerData::Colors{ ao, blue }, ScoreManager::AnswerData::Texts{ U"あお", U"しかく" })
+	ScoreManager::AnswerData(SortingShapeType::Square, ScoreManager::AnswerData::Colors{ MainBlue, ChangedColorBlue }, ScoreManager::AnswerData::Texts{ U"あお", U"しかく" })
 };
 
 void ScoreManager::init()
@@ -281,7 +281,7 @@ void UIManager::init()
 				const auto idx = static_cast<SortingBoxIdx>(i);
 				const RectF box = m_gameManager.SortingBoxes[static_cast<EnumValue>(SortingBoxLayerIdx::Upperside)][i];
 
-				box.drawFrame(haba, MainTextColor).draw(color(idx));
+				box.drawFrame(FrameWidth, MainTextColor).draw(color(idx));
 
 				FontAsset(U"FontText")(U"{}"_fmt(SortingBoxesMarks[i])).drawAt(box.center(), MainTextColor);
 
@@ -294,7 +294,7 @@ void UIManager::init()
 			for (size_t i = 0; i < static_cast<EnumValue>(SortingBoxIdx::Count); ++i)
 			{
 				m_gameManager.SortingBoxes[static_cast<EnumValue>(SortingBoxLayerIdx::Lowerside)][i]
-					.drawFrame(haba, MainTextColor)
+					.drawFrame(FrameWidth, MainTextColor)
 					.draw(color(static_cast<SortingBoxIdx>(i)) * 0.8);
 			}
 		};
@@ -309,7 +309,7 @@ void UIManager::init()
 
 	m_drawEasingTable[UILayer::ResultCurtain] = [this](const double t)
 		{
-			m_boxBounce_aud(t, makuSize, makuColor);
+			m_boxBounce_aud(t, GameWindow, CurtainColor);
 		};
 
 	m_drawEasingTable[UILayer::ResultTexts] = [this](const double t)
@@ -407,7 +407,7 @@ void UIManager::m_boxBounce_aud(const double t, const RectF& rect, const ColorF&
 
 void UIManager::m_textBounce_aud(const double t, const Vec2& vec2, const Font& font, const String& text, const uint8& size) const
 {
-	font(text).drawAt(size, vec2.x, vec2.y * easeOutBounce(t), kuro);
+	font(text).drawAt(size, vec2.x, vec2.y * easeOutBounce(t), MainBlack);
 }
 
 /*	End UIManager			********************************************************************************************************/

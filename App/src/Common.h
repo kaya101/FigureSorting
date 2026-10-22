@@ -7,41 +7,33 @@ static const String FontTitle = U"TitleFont";
 static const String FontButton = U"FontButton";
 inline constexpr StringView FontText = U"FontText";
 
-// 背景の白.
-static constexpr ColorF bg_shiro{ U"#fef4f4" };
+static constexpr uint8 FrameWidth = 3;	// 図形の枠.
 
-// 白と黒.
-static constexpr ColorF shiro{ U"#e8ecef" };
-static constexpr ColorF kuro{ U"#0d0015" };
+static constexpr RectF GameWindow = { 0, 0, 800, 600 };
 
-// ボタンの色.
-static constexpr ColorF botan{ U"#006e54" };
-
-// グレー.
-static constexpr ColorF haiiro{ U"#adadad" };
-
-// 黄緑.
-static constexpr ColorF kimidori{ U"#c3d825" };
-
-// 基本七色 of 私.
-static constexpr ColorF aka{ U"#e2041b" };
-static constexpr ColorF daidai{ U"#f6ad49" };
-static constexpr ColorF kiiro{ U"#ffd900" };
-static constexpr ColorF midori{ U"#38b48b" };
-static constexpr ColorF ao{ U"#2ca9e1" };
-static constexpr ColorF ai{ U"#4d5aaf" };
-static constexpr ColorF murasaki{ U"#9d5b8b" };
+static constexpr ColorF CurtainColor = { 0.6, 0.6, 0.6, 0.8 };
+static constexpr ColorF BackGroundColor{ U"#fef4f4" };
+static constexpr ColorF MainWhite = Palette::White;
+static constexpr ColorF MainBlack = Palette::Black;
+static constexpr ColorF MainGray{ U"#adadad" };
+static constexpr ColorF MainRed{ U"#e2041b" };
+static constexpr ColorF MainOrange{ U"#f6ad49" };
+static constexpr ColorF MainYellow{ U"#ffd900" };
+static constexpr ColorF MainGreen{ U"#38b48b" };
+static constexpr ColorF MainBlue{ U"#2ca9e1" };
+static constexpr ColorF MainPurple{ U"#9d5b8b" };
+static constexpr ColorF ButtonColor = ColorF{ U"#006e54" } * 1.4;
 
 // 色が分かりにくい人用.
-static constexpr ColorF red{ U"#ff4b00" };
-static constexpr ColorF yelow{ U"#fff100" };
-static constexpr ColorF blue{ U"#4dc4ff" };
+static constexpr ColorF ChangedColorRed{ U"#ff4b00" };
+static constexpr ColorF ChangedColorYellow{ U"#fff100" };
+static constexpr ColorF ChangedColorBlue{ U"#4dc4ff" };
 
-// 幕の透ける灰色.
-static constexpr ColorF makuColor = { 0.6, 0.6, 0.6, 0.8 };
-
-// 背景が透ける透明.
-static constexpr ColorF toumei{ 1, 1, 1, 0 };
+//static constexpr ColorF shiro{ U"#e8ecef" };
+//static constexpr ColorF kuro{ U"#0d0015" };
+//static constexpr ColorF kimidori{ U"#c3d825" };
+//static constexpr ColorF ai{ U"#4d5aaf" };
+//static constexpr ColorF toumei{ 1, 1, 1, 0 };
 
 // 共有するデータ.
 class GameData
@@ -70,9 +62,6 @@ private:
 };
 
 using App = SceneManager<SceneSwitch, GameData>;
-
-//幕.
-static constexpr RectF makuSize = { 0, 0, 800, 600 };
 
 // イージング関数.
 // 何度か跳ねるやつ.
@@ -108,6 +97,3 @@ static constexpr double easeOutQuad(double t)
 {
 	return 1 - (1 - t) * (1 - t);
 }
-
-// 分類箱.
-static constexpr uint8 haba = 3;	// 図形の枠.
