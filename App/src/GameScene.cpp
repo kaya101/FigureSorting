@@ -230,7 +230,7 @@ void Stage::initialize()
 			{
 				// on にする.
 				getData().gameManager().turnOnChangedColor();
-				self->setText(m_markedText);
+				self->setText(MarkedText);
 			}
 			else
 			{
@@ -249,7 +249,7 @@ void Stage::initialize()
 			{
 				// スキップする.
 				getData().gameManager().turnOnSkippedExplain();
-				self->setText(m_markedText);
+				self->setText(MarkedText);
 			}
 			else
 			{
@@ -277,11 +277,11 @@ void Stage::syncButtonState() const
 	{
 		if (btnPtr->id() == ButtonID::StageChangeColor)
 		{
-			if (getData().gameManager().isChangedColor()) btnPtr->setText(m_markedText);
+			if (getData().gameManager().isChangedColor()) btnPtr->setText(MarkedText);
 		}
 		else if (btnPtr->id() == ButtonID::StageSkipExplain)
 		{
-			if (getData().gameManager().isSkippedExplain()) btnPtr->setText(m_markedText);
+			if (getData().gameManager().isSkippedExplain()) btnPtr->setText(MarkedText);
 		}
 		else
 		{

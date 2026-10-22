@@ -96,7 +96,7 @@ private:
 	const Circle m_sampleCircle = { stage01textback.x + stage01textback.w / 2, stage01textback.y - stage01textback.w / 4 - 10 , stage01textback.w / 4 };
 	const Triangle m_sampleTriangle = { (double)(stage02textback.x + stage02textback.w / 2), (double)(stage02textback.y - stage02textback.w / 2 + 66) , (double)(stage02textback.w / 2) };
 	const RectF m_sampleRect = { Arg::center(stageMAXtextback.x + stageMAXtextback.w / 2, stageMAXtextback.y - stageMAXtextback.w / 2 + 40) , stageMAXtextback.w / 2 };
-	const String m_markedText = U"〆";
+	const String MarkedText = U"〆";
 
 	void setupSortRule(const StageLevel level, GameData& gd) const;
 	void syncButtonState() const;
