@@ -37,7 +37,7 @@ public:
 
 	void update();
 	void generateFigure();
-	void setSortRule(const EnumValue nextStageIdx);
+	void setSortRule(const StageLevel nextStageIdx);
 	void turnOnChangedColor() { m_isChangedColor = true; }
 	void turnOffChangedColor() { m_isChangedColor = false; }
 	void turnOnSkippedExplain() { m_isSkippedExplain = true; }

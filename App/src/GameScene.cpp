@@ -258,7 +258,7 @@ void Stage::initialize()
 void Stage::setupSortRule(const StageLevel level, GameData& gd) const
 {
 	// 素材の準備.
-	gd.gameManager().setSortRule(static_cast<EnumValue>(level));
+	gd.gameManager().setSortRule(level);
 }
 
 /*	End Stage Scene		********************************************************************************************************/

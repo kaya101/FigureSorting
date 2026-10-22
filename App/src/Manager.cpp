@@ -28,6 +28,7 @@ void GameManager::reset()
 	m_sortedShapePtr = nullptr;
 
 	m_distance = Vec2().Zero();
+	m_isPaused = false;
 	m_isClassified = false;
 	m_boxIdx = SortingBoxIdx::Count;
 	m_currentSortRule = SortRule::Count;
@@ -42,6 +43,8 @@ void GameManager::retry()
 	m_isPaused = false;
 	m_isClassified = false;
 	m_boxIdx = SortingBoxIdx::Count;
+
+	setSortRule(m_stageLevel);
 }
 
 void GameManager::update()
@@ -87,11 +90,11 @@ void GameManager::generateFigure()
 	m_sortedShapePtr = m_figureGen.generate(m_stageLevel, m_currentSortRule, m_isChangedColor);
 }
 
-void GameManager::setSortRule(const EnumValue nextStageIdx)
+void GameManager::setSortRule(const StageLevel nextStageIdx)
 {
-	if (static_cast<EnumValue>(m_stageLevel) != nextStageIdx) m_sortRuleGen.init(nextStageIdx + 1);
+	if (m_stageLevel != nextStageIdx) m_sortRuleGen.init(static_cast<EnumValue>(nextStageIdx) + 1);
 
-	m_stageLevel = static_cast<StageLevel>(nextStageIdx);
+	m_stageLevel = nextStageIdx;
 
 	GenValue idx = m_sortRuleGen.generate();
 	m_currentSortRule = static_cast<SortRule>(idx);
