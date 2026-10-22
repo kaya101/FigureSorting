@@ -134,7 +134,7 @@ void ScoreManager::reset()
 	m_comboNum = 0;
 	m_newRecord = false;
 	m_isCorrectSorted = false;
-	m_highScores = std::array<ScoreValue, static_cast<EnumValue>(StageLevel::Count)>{ 0, 0, 0 };
+	//m_highScores = std::array<ScoreValue, static_cast<EnumValue>(StageLevel::Count)>{ 0, 0, 0 };
 }
 
 void ScoreManager::retry()
