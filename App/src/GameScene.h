@@ -158,8 +158,8 @@ private:
 	static constexpr Vec2 yondeyoLeft = { 280, 120 };					// ルールの読み忘れ防止.
 	static constexpr Vec2 yondeyoRight = { 520, 120 };
 	static constexpr Rect pauseWindow = { 200, 130, 400, 240 };			// 一時中止のウィンドウ.
-	static constexpr Rect pauseRetire = { 230, 290, 160, 50 };			// やめてステージに戻るボタン.
-	static constexpr Rect pauseContinue = { 404, 290, 160, 50 };		// 再開するボタン.
+	static constexpr Rect pauseRetire = { 210, 290, 180, 50 };			// やめてステージに戻るボタン.
+	static constexpr Rect pauseContinue = { 410, 290, 180, 50 };		// 再開するボタン.
 	static constexpr uint8 m_timelimit = 15;							// 制限時間.
 
 	double m_t_cd = 0.0;							// カウントダウンの時間.

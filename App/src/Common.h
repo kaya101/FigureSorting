@@ -11,7 +11,7 @@ static constexpr uint8 FrameWidth = 3;	// 図形の枠.
 
 static constexpr RectF GameWindow = { 0, 0, 800, 600 };
 
-static constexpr ColorF CurtainColor = { 0.6, 0.6, 0.6, 0.8 };
+static constexpr ColorF CurtainColor = { 0.6, 0.6, 0.6, 0.9 };
 static constexpr ColorF BackGroundColor{ U"#fef4f4" };
 static constexpr ColorF MainWhite = Palette::White;
 static constexpr ColorF MainBlack = Palette::Black;

@@ -341,7 +341,7 @@ void LetsPlay::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(LetsPlayFlow::ExplainPage1),
-		ButtonCtx(explainNextButton, CurtainColor, U"→", FontButton, ButtonID::LetsPlayMoveNextExplain),
+		ButtonCtx(explainNextButton, ButtonColor, U"→", FontButton, ButtonID::LetsPlayMoveNextExplain),
 		[this](ButtonBase* self)
 		{
 			MoveNextFlow(LetsPlayFlow::ExplainPage2);
@@ -349,7 +349,7 @@ void LetsPlay::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(LetsPlayFlow::ExplainPage2),
-		ButtonCtx(explainOK, CurtainColor, U"OK", FontButton, ButtonID::LetsPlayOK),
+		ButtonCtx(explainOK, ButtonColor, U"OK", FontButton, ButtonID::LetsPlayOK),
 		[this](ButtonBase* self)
 		{
 			MoveNextFlow(LetsPlayFlow::Start);
@@ -357,7 +357,7 @@ void LetsPlay::initialize()
 
 	makeButton(
 		static_cast<ButtonTableKey>(LetsPlayFlow::ExplainPage2),
-		ButtonCtx(explainBackButton, CurtainColor, U"←", FontButton, ButtonID::LetsPlayMovePrevExplain),
+		ButtonCtx(explainBackButton, ButtonColor, U"←", FontButton, ButtonID::LetsPlayMovePrevExplain),
 		[this](ButtonBase* self)
 		{
 			MoveNextFlow(LetsPlayFlow::ExplainPage1);
@@ -592,7 +592,6 @@ void LetsPlay::initDrawTable()
 		{
 			const double t_cdmaku = Min(m_countdown.sF() / 2, 1.0);
 
-			getData().uiManager().draw(UILayer::SortBoxesLowerside);
 			getData().uiManager().draw(UILayer::SortBoxesUpperside);
 
 			// 開幕演出.
@@ -634,7 +633,7 @@ void LetsPlay::initDrawTable()
 			getData().uiManager().drawPlayingScene();
 
 			// 制限時間.
-			FontAsset(U"FontText")(U"time(s):{}"_fmt(m_timelimit - m_gt)).draw(20, 60, MainBlack);
+			FontAsset(U"FontText")(U"残り時間:{:02} 秒"_fmt(m_timelimit - m_gt)).draw(20, 80, MainBlack);
 
 			drawButtonsAt(static_cast<ButtonTableKey>(m_currentFlow));
 		};
@@ -753,7 +752,7 @@ void Result::draw() const
 			}
 			else
 			{
-				m_textOutExpo_aap(sortedPtr->rate(), sortedTextAppearPoint, sortedText, MainBlack, FontAsset(FontButton), U"sorted:{}"_fmt(getData().scoreManager().classifyNum()), 30);
+				m_textOutExpo_aap(sortedPtr->rate(), sortedTextAppearPoint, sortedText, MainBlack, FontAsset(FontButton), U"仕分けた数:{:02}コ"_fmt(getData().scoreManager().classifyNum()), 30);
 			}
 		}
 
@@ -762,7 +761,7 @@ void Result::draw() const
 		{
 			if (truePtr != nullptr)
 			{
-				m_textOutExpo_aap(truePtr->rate(), trueTextAppearPoint, trueText, MainBlack, FontAsset(FontButton), U"true:{}"_fmt(getData().scoreManager().correctNum()), 30);
+				m_textOutExpo_aap(truePtr->rate(), trueTextAppearPoint, trueText, MainBlack, FontAsset(FontButton), U"正解した数:{:02}回"_fmt(getData().scoreManager().correctNum()), 30);
 			}
 			else
 			{
@@ -775,7 +774,7 @@ void Result::draw() const
 		{
 			if (missPtr != nullptr)
 			{
-				m_textOutExpo_aap(missPtr->rate(), missTextAppearPoint, missText, MainBlack, FontAsset(FontButton), U"miss:{}"_fmt(getData().scoreManager().missNum()), 30);
+				m_textOutExpo_aap(missPtr->rate(), missTextAppearPoint, missText, MainBlack, FontAsset(FontButton), U"間違えた数:{:02}回"_fmt(getData().scoreManager().missNum()), 30);
 			}
 			else
 			{

@@ -281,9 +281,9 @@ void UIManager::init()
 				const auto idx = static_cast<SortingBoxIdx>(i);
 				const RectF box = m_gameManager.SortingBoxes[static_cast<EnumValue>(SortingBoxLayerIdx::Upperside)][i];
 
-				box.drawFrame(FrameWidth, MainTextColor).draw(color(idx));
+				box.rounded(16).drawFrame(FrameWidth, MainTextColor).draw(color(idx));
 
-				FontAsset(U"FontText")(U"{}"_fmt(SortingBoxesMarks[i])).drawAt(box.center(), MainTextColor);
+				FontAsset(U"FontText")(U"{}"_fmt(SortingBoxesMarks[i])).drawAt(78, box.center() + Vec2(0.0, -18.0), MainTextColor);
 
 				FontAsset(U"FontText")(U"\n{}"_fmt(text(idx))).drawAt(box.x + box.w / 2, box.y + box.h * 3 / 5, MainTextColor);
 			}
@@ -362,7 +362,7 @@ void UIManager::drawPlayingScene() const
 	draw(UILayer::SortRule);
 
 	// 分類箱の下側.
-	draw(UILayer::SortBoxesLowerside);
+	//draw(UILayer::SortBoxesLowerside);
 
 	// 仕分け中の図形.
 	draw(UILayer::SortedShape);
