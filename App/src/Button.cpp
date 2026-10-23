@@ -1,5 +1,6 @@
 ﻿#include "stdafx.h"
 #include "Button.h"
+#include "Manager.h"
 
 /*	Start ButtonBase	********************************************************************************************************/
 
@@ -9,6 +10,7 @@ ButtonBase::ButtonBase(const ButtonCtx& ctx)
 	, m_bodyColor(ctx.bodyColor)
 	, m_text(ctx.text)
 	, m_fontName(ctx.fontName)
+	, m_id(ctx.id)
 {
 	turnOffDraw();
 	turnOffPerform();
@@ -26,7 +28,11 @@ ButtonRect::ButtonRect(const ButtonCtx& ctx)
 
 void ButtonRect::update()
 {
-	if (m_canPerform && isReleased()) perform();
+	if (m_canPerform && isReleased())
+	{
+		AudioAsset(AudioManager::get().getName(SEID::ClickButton)).playOneShot();
+		perform();
+	}
 }
 
 void ButtonRect::draw() const
